@@ -34,10 +34,7 @@ const AppBar: React.FC<AppBarProps> = ({ toggleSidebar }) => {
       
       {/* Logo & title */}
       <div className="flex items-center gap-2 md:gap-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white font-semibold">
-          FO
-        </div>
-        <span className="text-lg font-bold md:block">FinOptix</span>
+        <Logo size="md" variant="default" />
       </div>
       
       <div className="ml-auto flex items-center gap-2">

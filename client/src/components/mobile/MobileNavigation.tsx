@@ -1,97 +1,71 @@
 import React from 'react';
-import { Link, useLocation } from 'wouter';
-import { cn } from '@/lib/utils';
+import { useLocation } from 'wouter';
 import { 
   LayoutDashboard, 
-  BarChart, 
-  DollarSign, 
-  LineChart, 
-  FileText, 
-  Users, 
-  AlertCircle, 
-  Database, 
-  Settings
+  BarChart3, 
+  TrendingUp, 
+  Wallet, 
+  Bell, 
+  Settings 
 } from 'lucide-react';
 
-interface MobileNavigationItemProps {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
-  isActive?: boolean;
-}
-
-const MobileNavigationItem: React.FC<MobileNavigationItemProps> = ({
-  href,
-  icon,
-  label,
-  isActive = false
-}) => {
-  return (
-    <Link href={href}>
-      <div 
-        className={cn(
-          "flex flex-col items-center justify-center space-y-1 w-full px-2 py-2",
-          isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
-        )}
-      >
-        <div className="relative">
-          {icon}
-        </div>
-        <span className="text-xs">{label}</span>
-      </div>
-    </Link>
-  );
-};
-
-export interface MobileNavigationProps {
-  className?: string;
-}
-
-const MobileNavigation: React.FC<MobileNavigationProps> = ({ className }) => {
-  const [location] = useLocation();
+const MobileNavigation: React.FC = () => {
+  const [location, navigate] = useLocation();
   
-  const navigationItems = [
+  const navItems = [
     {
-      href: "/mobile-dashboard",
       icon: <LayoutDashboard className="h-5 w-5" />,
-      label: "Dashboard"
+      label: 'Dashboard',
+      path: '/mobile'
     },
     {
-      href: "/anomaly-detection",
-      icon: <AlertCircle className="h-5 w-5" />,
-      label: "Anomalies"
+      icon: <BarChart3 className="h-5 w-5" />,
+      label: 'Reports',
+      path: '/reports'
     },
     {
-      href: "/budgeting",
-      icon: <DollarSign className="h-5 w-5" />,
-      label: "Budget"
+      icon: <TrendingUp className="h-5 w-5" />,
+      label: 'Forecast',
+      path: '/forecasting'
     },
     {
-      href: "/forecasting",
-      icon: <LineChart className="h-5 w-5" />,
-      label: "Forecast"
+      icon: <Wallet className="h-5 w-5" />,
+      label: 'Budget',
+      path: '/budgeting'
     },
     {
-      href: "/enhanced-collaboration",
-      icon: <Users className="h-5 w-5" />,
-      label: "Team"
+      icon: <Bell className="h-5 w-5" />,
+      label: 'Alerts',
+      path: '/notifications'
+    },
+    {
+      icon: <Settings className="h-5 w-5" />,
+      label: 'Settings',
+      path: '/settings'
     }
   ];
   
   return (
-    <div className={cn(
-      "fixed bottom-0 w-full bg-background border-t border-border z-50 flex items-center justify-around",
-      className
-    )}>
-      {navigationItems.map((item) => (
-        <MobileNavigationItem 
-          key={item.href}
-          href={item.href}
-          icon={item.icon}
-          label={item.label}
-          isActive={location === item.href}
-        />
-      ))}
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-background shadow-lg">
+      <div className="flex h-16 items-center justify-around px-2">
+        {navItems.map((item) => (
+          <button
+            key={item.path}
+            className={`flex flex-1 flex-col items-center justify-center h-full ${
+              location === item.path 
+                ? 'text-blue-600' 
+                : 'text-muted-foreground hover:text-primary'
+            }`}
+            onClick={() => navigate(item.path)}
+          >
+            {item.icon}
+            <span className="mt-1 text-xs font-medium">{item.label}</span>
+            {location === item.path && (
+              <div className="absolute bottom-0 h-1 w-6 rounded-t-full bg-blue-600" />
+            )}
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

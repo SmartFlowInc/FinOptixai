@@ -1,168 +1,116 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
+import React, { ReactNode } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { ChevronUp, ChevronDown } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/utils';
-import { TrendingUp, TrendingDown } from 'lucide-react';
-import { formatCurrency, formatPercentage } from '@/data/finance';
 
-export interface MetricCardProps {
+interface MetricCardProps {
   title: string;
-  value: string | number;
-  previousValue?: string | number;
-  changePercentage?: string | number;
-  description?: string;
-  icon?: React.ReactNode;
-  progressValue?: number;
-  progressTarget?: number;
-  format?: 'currency' | 'percentage' | 'number';
-  className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  value: string;
+  changePercentage: string;
+  icon?: ReactNode;
   isLoading?: boolean;
+  format?: 'currency' | 'percentage' | 'number';
   trendIsGood?: boolean;
-  iconPosition?: 'left' | 'top';
-  onClick?: () => void;
+  size?: 'sm' | 'md' | 'lg';
 }
 
 const MetricCard: React.FC<MetricCardProps> = ({
   title,
   value,
-  previousValue,
   changePercentage,
-  description,
   icon,
-  progressValue,
-  progressTarget,
-  format = 'currency',
-  className,
-  size = 'md',
   isLoading = false,
-  trendIsGood,
-  iconPosition = 'left',
-  onClick
+  format = 'currency',
+  trendIsGood = true,
+  size = 'md'
 }) => {
-  // Format the displayed value
-  const formatValue = (val: string | number) => {
+  // Parse change percentage as a number
+  const changeValue = parseFloat(changePercentage);
+  const isPositive = changeValue > 0;
+  const isGood = trendIsGood ? isPositive : !isPositive;
+  
+  // Format the value based on the format prop
+  const formatValue = (val: string): string => {
+    const numValue = parseFloat(val.replace(/,/g, ''));
+    if (isNaN(numValue)) return val;
+    
     if (format === 'currency') {
-      return formatCurrency(val);
+      // Format as currency with dollar sign and commas
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: 0
+      }).format(numValue);
     } else if (format === 'percentage') {
-      return formatPercentage(val);
+      // Format as percentage
+      return `${numValue.toFixed(1)}%`;
+    } else {
+      // Format as number with commas
+      return new Intl.NumberFormat('en-US').format(numValue);
     }
-    return val;
   };
-
-  // Calculate if trend is positive
-  const trendValue = typeof changePercentage === 'string' 
-    ? parseFloat(changePercentage) 
-    : Number(changePercentage || 0);
   
-  const isTrendPositive = trendValue > 0;
-  
-  // Determine if trend is good (if not explicitly provided)
-  const isTrendGood = trendIsGood !== undefined 
-    ? trendIsGood 
-    : true; // Default to true if not specified
-
-  // Calculate progress percentage if target is provided
-  const progressPercentage = progressValue && progressTarget 
-    ? (Number(progressValue) / Number(progressTarget)) * 100
-    : progressValue;
-
-  // Card size classes
+  // Size-based classes
   const sizeClasses = {
-    sm: 'p-3',
-    md: 'p-4',
-    lg: 'p-5'
+    sm: {
+      card: 'p-3',
+      title: 'text-xs',
+      value: 'text-lg font-bold',
+      change: 'text-xs',
+      iconSize: 'h-4 w-4'
+    },
+    md: {
+      card: 'p-4',
+      title: 'text-sm',
+      value: 'text-xl font-bold',
+      change: 'text-sm',
+      iconSize: 'h-5 w-5'
+    },
+    lg: {
+      card: 'p-5',
+      title: 'text-base',
+      value: 'text-2xl font-bold',
+      change: 'text-sm',
+      iconSize: 'h-6 w-6'
+    }
   };
-
-  const valueSizeClasses = {
-    sm: 'text-xl',
-    md: 'text-2xl',
-    lg: 'text-3xl'
-  };
-
-  const titleSizeClasses = {
-    sm: 'text-sm',
-    md: 'text-base',
-    lg: 'text-lg'
-  };
-
-  // Handle loading state
-  if (isLoading) {
-    return (
-      <Card className={cn("animate-pulse", className)}>
-        <CardContent className={sizeClasses[size]}>
-          <div className="bg-muted h-4 w-1/3 rounded mb-3"></div>
-          <div className="bg-muted h-8 w-1/2 rounded mb-2"></div>
-          {description && <div className="bg-muted h-3 w-3/4 rounded"></div>}
-        </CardContent>
-      </Card>
-    );
-  }
-
+  
+  // Get classes for current size
+  const classes = sizeClasses[size];
+  
   return (
-    <Card 
-      className={cn("overflow-hidden", className, onClick && "cursor-pointer hover:shadow-md transition-shadow")}
-      onClick={onClick}
-    >
-      <CardContent className={sizeClasses[size]}>
-        {/* Card header with icon and title */}
-        <div className={cn(
-          "flex items-center",
-          iconPosition === 'left' ? 'flex-row gap-3 mb-2' : 'flex-col items-start gap-1 mb-2'
-        )}>
-          {icon && (
-            <div className={cn(
-              "flex-shrink-0",
-              iconPosition === 'top' && "mb-1"
-            )}>
-              {icon}
-            </div>
-          )}
-          <div>
-            <h3 className={cn("font-medium text-muted-foreground", titleSizeClasses[size])}>
-              {title}
-            </h3>
-            {description && (
-              <p className="text-xs text-muted-foreground mt-0.5">{description}</p>
-            )}
-          </div>
+    <Card>
+      <CardContent className={cn('flex flex-col gap-3', classes.card)}>
+        <div className="flex justify-between items-start">
+          <span className={cn('text-muted-foreground', classes.title)}>{title}</span>
+          {icon && <div className="mt-0.5">{icon}</div>}
         </div>
-
-        {/* Metric value and trend */}
-        <div className="flex items-end justify-between mt-1">
-          <div className={cn("font-bold", valueSizeClasses[size])}>
-            {formatValue(value)}
-          </div>
-
-          {changePercentage && (
-            <div className={cn(
-              "flex items-center text-xs font-medium",
-              (isTrendPositive && isTrendGood) || (!isTrendPositive && !isTrendGood) 
-                ? "text-green-600" 
-                : "text-red-600"
-            )}>
-              {isTrendPositive ? (
-                <TrendingUp className="h-3.5 w-3.5 mr-1" />
-              ) : (
-                <TrendingDown className="h-3.5 w-3.5 mr-1" />
-              )}
-              <span>{formatPercentage(Math.abs(trendValue))}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Progress bar */}
-        {progressPercentage !== undefined && (
-          <div className="mt-2">
-            <Progress value={progressPercentage} className="h-1.5" />
-            {progressValue !== undefined && progressTarget !== undefined && (
-              <div className="flex justify-between mt-1 text-xs text-muted-foreground">
-                <span>{formatValue(progressValue)}</span>
-                <span>{formatValue(progressTarget)}</span>
+        
+        {isLoading ? (
+          <>
+            <Skeleton className={cn('h-7 w-24', size === 'lg' ? 'h-8 w-32' : '')} />
+            <Skeleton className="h-4 w-16" />
+          </>
+        ) : (
+          <>
+            <div className={classes.value}>{formatValue(value)}</div>
+            <div className="flex items-center">
+              <div className={cn(
+                'flex items-center',
+                classes.change,
+                isGood ? 'text-emerald-600' : 'text-red-600'
+              )}>
+                {isPositive ? (
+                  <ChevronUp className="mr-1 h-3 w-3" />
+                ) : (
+                  <ChevronDown className="mr-1 h-3 w-3" />
+                )}
+                {changeValue.toFixed(1)}%
               </div>
-            )}
-          </div>
+              <span className={cn('text-xs text-muted-foreground ml-1')}>vs prev.</span>
+            </div>
+          </>
         )}
       </CardContent>
     </Card>
