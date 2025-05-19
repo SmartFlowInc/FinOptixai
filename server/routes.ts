@@ -5,6 +5,15 @@ import { dashboardFilterSchema, periodEnum, departmentEnum, regionEnum } from "@
 import { ZodError } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Seed the database with initial demo data if needed
+  try {
+    if (storage.seedDemoData) {
+      await storage.seedDemoData();
+      console.log('Database seeded successfully');
+    }
+  } catch (error) {
+    console.error('Error seeding database:', error);
+  }
   // API routes with /api prefix
   
   // Dashboard data endpoint
