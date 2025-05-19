@@ -28,8 +28,8 @@ import { Label } from "@/components/ui/label";
 
 import QuickFilters from "@/components/filters/QuickFilters";
 import KpiCard from "@/components/dashboard/KpiCard";
-import RevenueChart from "@/components/dashboard/RevenueChart";
-import ExpenseBreakdownChart from "@/components/dashboard/ExpenseBreakdownChart";
+import RevenueChart from "@/components/charts/RevenueChart";
+import ExpenseChart from "@/components/charts/ExpenseChart";
 import BudgetVsActual from "@/components/dashboard/BudgetVsActual";
 import FinancialForecast from "@/components/dashboard/FinancialForecast";
 import CashFlowForecast from "@/components/dashboard/CashFlowForecast";
@@ -39,6 +39,7 @@ import DriverAnalysis from "@/components/dashboard/DriverAnalysis";
 import InsightsPanel from "@/components/insights/InsightsPanel";
 
 import { DashboardData, defaultFilters, getKpiByType, formatCurrency } from "@/data/finance";
+import { transformRevenueData, transformExpenseData } from "@/services/data-transformations";
 
 const Dashboard = () => {
   const [filters, setFilters] = useState<{
@@ -236,13 +237,16 @@ const Dashboard = () => {
           insightsPanelExpanded ? "lg:col-span-1" : "lg:col-span-2"
         } grid grid-cols-1 ${dashboardLayout === "expanded" ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6`}>
           <RevenueChart
-            data={data?.revenueData || []}
+            data={data?.revenueData ? transformRevenueData(data.revenueData) : undefined}
             isLoading={isLoading}
+            title="Revenue Trend"
           />
           
-          <ExpenseBreakdownChart
-            data={data?.expenseData || []}
+          <ExpenseChart
+            data={data?.expenseData ? transformExpenseData(data.expenseData) : undefined}
             isLoading={isLoading}
+            title="Expense Breakdown"
+            description="By category"
           />
         </div>
       </div>
