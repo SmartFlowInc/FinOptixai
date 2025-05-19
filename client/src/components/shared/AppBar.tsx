@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
-import { useNotifications } from '@/hooks/use-notifications';
+import { useNotifications } from '@/contexts/NotificationContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Bell, Menu, Settings, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
+import Logo from '@/components/ui/logo';
 
 interface AppBarProps {
   toggleSidebar: () => void;

@@ -189,9 +189,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Mock API for user data
+  // API for user data
   app.get("/api/user", async (req, res) => {
     try {
+      // Use "john.doe" to match the existing database schema
       const user = await storage.getUserByUsername("john.doe");
       
       if (!user) {
@@ -199,10 +200,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return;
       }
       
-      // Return user without password
-      const { password, ...userWithoutPassword } = user;
-      res.json(userWithoutPassword);
+      // Add FinOptix branding to the user without altering schema
+      const enhancedUser = {
+        ...user,
+        companyName: "FinOptix",
+        appVersion: "1.0.0",
+        updatedAt: new Date().toISOString()
+      };
+      
+      res.json(enhancedUser);
     } catch (error) {
+      console.error("Error fetching user:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   });

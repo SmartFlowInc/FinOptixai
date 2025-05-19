@@ -78,9 +78,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    // For compatibility with the old schema, we'll try to find a user by email
-    // since we no longer have a username field
-    const [user] = await db.select().from(users).where(eq(users.email, username));
+    // Use the actual column name from the current database schema
+    const [user] = await db.select().from(users).where(eq(users.username, username));
     return user;
   }
 
