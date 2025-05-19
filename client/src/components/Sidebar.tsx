@@ -121,6 +121,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
               </Link>
             </li>
             <li>
+              <Link href="/data-integration">
+                <div className={`sidebar-link ${location === "/data-integration" ? "active" : ""}`}>
+                  <i className="ri-exchange-line sidebar-icon"></i>
+                  <span>Data Integration</span>
+                </div>
+              </Link>
+            </li>
+            <li>
               <Link href="/calendar">
                 <div className={`sidebar-link ${location === "/calendar" ? "active" : ""}`}>
                   <i className="ri-calendar-line sidebar-icon"></i>
