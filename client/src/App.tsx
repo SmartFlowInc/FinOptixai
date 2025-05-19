@@ -16,6 +16,7 @@ import Insights from "@/pages/Insights";
 import WorkflowApproval from "@/pages/WorkflowApproval";
 import Calendar from "@/pages/Calendar";
 import Settings from "@/pages/Settings";
+import MobileDashboard from "@/pages/MobileDashboard";
 import NotFound from "@/pages/not-found";
 
 function App() {
