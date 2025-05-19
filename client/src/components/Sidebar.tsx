@@ -81,6 +81,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
               </Link>
             </li>
             <li>
+              <Link href="/advanced-dashboard">
+                <div className={`sidebar-link ${location === "/advanced-dashboard" ? "active" : ""}`}>
+                  <i className="ri-bar-chart-2-line sidebar-icon"></i>
+                  <span>Advanced Analytics</span>
+                </div>
+              </Link>
+            </li>
+            <li>
               <Link href="/budgeting">
                 <div className={`sidebar-link ${location === "/budgeting" ? "active" : ""}`}>
                   <i className="ri-money-dollar-circle-line sidebar-icon"></i>

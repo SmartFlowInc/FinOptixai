@@ -1,6 +1,7 @@
 import { Route, Switch } from "wouter";
 import Layout from "@/components/Layout";
 import Dashboard from "@/pages/Dashboard";
+import AdvancedDashboard from "@/pages/AdvancedDashboard";
 import Budgeting from "@/pages/Budgeting";
 import Forecasting from "@/pages/Forecasting";
 import Reports from "@/pages/Reports";
@@ -19,6 +20,7 @@ function App() {
     <Layout>
       <Switch>
         <Route path="/" component={Dashboard} />
+        <Route path="/advanced-dashboard" component={AdvancedDashboard} />
         <Route path="/budgeting" component={Budgeting} />
         <Route path="/forecasting" component={Forecasting} />
         <Route path="/reports" component={Reports} />
