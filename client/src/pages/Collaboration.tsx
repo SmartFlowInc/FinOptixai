@@ -1,642 +1,557 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import React, { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger,
-  DialogFooter,
-  DialogClose
-} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useQuery } from "@tanstack/react-query";
-import { Activity } from "@shared/schema";
-import { MessageSquare, Users, FileEdit, Calendar, Plus, Upload, Clock, Download } from "lucide-react";
-import QuickFilters from "@/components/filters/QuickFilters";
-import { defaultFilters } from "@/data/finance";
-import { useState } from "react";
-import { useToast } from "@/hooks/use-toast";
-import FinancialCalendar from "@/components/calendar/FinancialCalendar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import TaskManagement from "@/components/collaboration/TaskManagement";
+import {
+  BookOpen,
+  CalendarDays,
+  Clock,
+  Copy,
+  Edit,
+  Eye,
+  FileText,
+  ListChecks,
+  MessageSquare,
+  MessagesSquare,
+  PlusCircle,
+  Search,
+  Settings,
+  Trash,
+  Users,
+  Zap
+} from "lucide-react";
 
 const Collaboration = () => {
-  const [filters, setFilters] = useState({
-    period: defaultFilters.period,
-    department: defaultFilters.department,
-    region: defaultFilters.region
-  });
-  
-  const { data: activities, isLoading } = useQuery<Activity[]>({
-    queryKey: ["/api/activities"],
-    queryFn: async () => {
-      const response = await fetch("/api/activities?limit=10");
-      if (!response.ok) {
-        throw new Error('Failed to fetch activities');
-      }
-      return response.json();
+  const [activeTab, setActiveTab] = useState<string>("task-management");
+  const [selectedProcess, setSelectedProcess] = useState<string>("monthly_close");
+
+  // Mock data for recent comments
+  const recentComments = [
+    {
+      id: 1,
+      user: {
+        name: "Jane Smith",
+        avatar: "JS",
+        avatarColor: "bg-green-100 text-green-800"
+      },
+      content: "I've updated the revenue projections based on the new sales data. We're seeing a 15% increase over previous estimates.",
+      time: "2 hours ago",
+      document: "Q2 Financial Forecast"
+    },
+    {
+      id: 2,
+      user: {
+        name: "Michael Brown",
+        avatar: "MB",
+        avatarColor: "bg-purple-100 text-purple-800"
+      },
+      content: "The reconciliation for NA region is complete. There were a few discrepancies in the marketing expenses that I've addressed.",
+      time: "Yesterday",
+      document: "April Account Reconciliation"
+    },
+    {
+      id: 3,
+      user: {
+        name: "Alicia Kim",
+        avatar: "AK",
+        avatarColor: "bg-amber-100 text-amber-800"
+      },
+      content: "I've added notes to the variance explanation for the IT department. They're 15% under budget due to delayed infrastructure upgrades.",
+      time: "2 days ago",
+      document: "Budget Variance Report"
     }
-  });
-  
-  const handleFilterChange = (type: 'period' | 'department' | 'region', value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [type]: value
-    }));
-  };
-  
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    
-    if (diffInDays === 0) {
-      return `Today at ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
-    } else if (diffInDays === 1) {
-      return `Yesterday at ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
-    } else {
-      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + 
-        ` at ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+  ];
+
+  // Mock data for teams
+  const teams = [
+    {
+      id: 1,
+      name: "Finance Core Team",
+      members: 8,
+      activeTasks: 12,
+      lastActive: "Today",
+      icon: <FileText className="h-5 w-5 text-primary" />,
+      description: "Core finance team responsible for financial reporting and analysis"
+    },
+    {
+      id: 2,
+      name: "Accounting & Reconciliation",
+      members: 5,
+      activeTasks: 7,
+      lastActive: "Yesterday",
+      icon: <ListChecks className="h-5 w-5 text-green-600" />,
+      description: "Team focused on account reconciliations and month-end close"
+    },
+    {
+      id: 3,
+      name: "FP&A",
+      members: 6,
+      activeTasks: 9,
+      lastActive: "Today",
+      icon: <Zap className="h-5 w-5 text-amber-600" />,
+      description: "Financial planning and analysis team for forecasting and budgeting"
+    },
+    {
+      id: 4,
+      name: "Executive Review",
+      members: 4,
+      activeTasks: 3,
+      lastActive: "3 days ago",
+      icon: <Users className="h-5 w-5 text-blue-600" />,
+      description: "Executive team for financial review and strategic decisions"
     }
-  };
-  
+  ];
+
+  // Mock data for recent financial documents
+  const recentDocuments = [
+    {
+      id: 1,
+      title: "Q2 Financial Review",
+      type: "Presentation",
+      lastUpdated: "Today",
+      updatedBy: "Jane Smith",
+      comments: 8,
+      status: "In Progress"
+    },
+    {
+      id: 2,
+      title: "April Month-End Close Checklist",
+      type: "Spreadsheet",
+      lastUpdated: "Yesterday",
+      updatedBy: "Michael Brown",
+      comments: 12,
+      status: "Completed"
+    },
+    {
+      id: 3,
+      title: "Budget vs. Actual - Q2",
+      type: "Spreadsheet",
+      lastUpdated: "2 days ago",
+      updatedBy: "John Doe",
+      comments: 5,
+      status: "In Review"
+    },
+    {
+      id: 4,
+      title: "Cash Flow Projections",
+      type: "Spreadsheet",
+      lastUpdated: "3 days ago",
+      updatedBy: "David Chen",
+      comments: 3,
+      status: "Completed"
+    }
+  ];
+
+  // Process dropdown options
+  const processOptions = [
+    { value: "monthly_close", label: "Monthly Close Process" },
+    { value: "quarterly_review", label: "Quarterly Financial Review" },
+    { value: "annual_budget", label: "Annual Budget Planning" },
+    { value: "tax_preparation", label: "Tax Preparation" }
+  ];
+
   return (
-    <>
-      <QuickFilters 
-        period={filters.period}
-        department={filters.department}
-        region={filters.region}
-        onFilterChange={handleFilterChange}
-      />
-      
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl font-semibold text-neutral-500">Collaboration Hub</h2>
-        
-        <div className="flex gap-2">
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Collaboration Hub</h1>
+          <p className="text-neutral-600">
+            Collaborate with your team on financial tasks and processes
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Select value={selectedProcess} onValueChange={setSelectedProcess}>
+            <SelectTrigger className="w-[250px]">
+              <SelectValue placeholder="Select process" />
+            </SelectTrigger>
+            <SelectContent>
+              {processOptions.map(option => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            New Project
-          </Button>
-          
-          <Button variant="outline">
-            <Upload className="mr-2 h-4 w-4" />
-            Share
+            <PlusCircle className="h-4 w-4 mr-2" />
+            New Process
           </Button>
         </div>
       </div>
-      
-      <Tabs defaultValue="activity" className="mb-6">
-        <TabsList>
-          <TabsTrigger value="activity">Activity Feed</TabsTrigger>
-          <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="documents">Documents</TabsTrigger>
-          <TabsTrigger value="calendar">Calendar</TabsTrigger>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="grid grid-cols-1 md:grid-cols-4 h-auto gap-4">
+          <TabsTrigger value="task-management" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <ListChecks className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Task Management</div>
+              <div className="text-xs text-neutral-500">Manage financial tasks</div>
+            </div>
+          </TabsTrigger>
+          
+          <TabsTrigger value="calendar" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <CalendarDays className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Calendar</div>
+              <div className="text-xs text-neutral-500">Financial events & deadlines</div>
+            </div>
+          </TabsTrigger>
+          
+          <TabsTrigger value="documents" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Documents</div>
+              <div className="text-xs text-neutral-500">Shared financial documents</div>
+            </div>
+          </TabsTrigger>
+          
+          <TabsTrigger value="teams" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Teams</div>
+              <div className="text-xs text-neutral-500">Financial team management</div>
+            </div>
+          </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="activity" className="mt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Team Activity</CardTitle>
-                  <CardDescription>
-                    Recent activity from your team
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {isLoading ? (
-                    <div className="text-center py-8">
-                      <p className="text-neutral-400">Loading activities...</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-5">
-                      {activities && activities.map((activity) => (
-                        <div className="flex" key={activity.id}>
-                          <div className="mr-4 flex flex-col items-center">
-                            <Avatar className="h-10 w-10 bg-neutral-100">
-                              <AvatarFallback className="text-xs font-medium text-neutral-500">
-                                {activity.userId === 1 ? "JD" : "UK"}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="w-px h-full bg-neutral-200 my-2"></div>
-                          </div>
-                          <div>
-                            <div className="flex flex-wrap gap-x-2 mb-1">
-                              <p className="text-sm font-medium text-neutral-500">
-                                {activity.userId === 1 ? "John Doe" : "Unknown User"}
-                              </p>
-                              <p className="text-sm text-neutral-400">{activity.description}</p>
-                            </div>
-                            <p className="text-xs text-neutral-400 mb-3">
-                              {formatDate(activity.timestamp.toString())}
-                            </p>
-                            
-                            {activity.hasAttachment && (
-                              <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                                {activity.attachmentType === 'image' && (
-                                  <div className="w-full h-32 bg-neutral-200 rounded-lg mb-3 flex items-center justify-center">
-                                    <p className="text-neutral-400 text-sm">Image attachment</p>
-                                  </div>
-                                )}
-                                <p className="text-sm text-neutral-500">{activity.additionalText}</p>
-                              </div>
-                            )}
-                            
-                            {!activity.hasAttachment && activity.additionalText && (
-                              <div className="p-3 bg-neutral-50 rounded-lg border border-neutral-200">
-                                <p className="text-sm text-neutral-500">{activity.additionalText}</p>
-                              </div>
-                            )}
-                            
-                            <div className="flex gap-4 mt-3">
-                              <button className="text-xs text-neutral-400 hover:text-neutral-500 flex items-center gap-1">
-                                <i className="ri-chat-1-line"></i>
-                                <span>Comment</span>
-                              </button>
-                              <button className="text-xs text-neutral-400 hover:text-neutral-500 flex items-center gap-1">
-                                <i className="ri-share-line"></i>
-                                <span>Share</span>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  <Button variant="ghost" className="w-full mt-5 text-primary">
-                    <span>View More Activity</span>
-                    <i className="ri-arrow-down-s-line ml-1"></i>
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-            
-            <div>
-              <Card className="mb-6">
-                <CardHeader>
-                  <CardTitle>Team Members</CardTitle>
-                  <CardDescription>
-                    People working on this project
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <Avatar>
-                          <AvatarFallback className="bg-primary/10 text-primary">JD</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium">John Doe</p>
-                          <p className="text-xs text-neutral-400">Financial Director</p>
-                        </div>
-                      </div>
-                      <div className="h-2 w-2 rounded-full bg-success"></div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <Avatar>
-                          <AvatarFallback className="bg-secondary/10 text-secondary">AK</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium">Alicia Kim</p>
-                          <p className="text-xs text-neutral-400">Financial Analyst</p>
-                        </div>
-                      </div>
-                      <div className="h-2 w-2 rounded-full bg-success"></div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <Avatar>
-                          <AvatarFallback className="bg-accent/10 text-accent">MB</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium">Michael Brown</p>
-                          <p className="text-xs text-neutral-400">Budget Manager</p>
-                        </div>
-                      </div>
-                      <div className="h-2 w-2 rounded-full bg-neutral-300"></div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <Avatar>
-                          <AvatarFallback className="bg-warning/10 text-warning">JS</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium">Jane Smith</p>
-                          <p className="text-xs text-neutral-400">Sales Director</p>
-                        </div>
-                      </div>
-                      <div className="h-2 w-2 rounded-full bg-success"></div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4 pt-4 border-t border-neutral-200">
-                    <Button variant="outline" className="w-full">
-                      <Users className="mr-2 h-4 w-4" />
-                      Invite Team Member
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Upcoming Deadlines</CardTitle>
-                  <CardDescription>
-                    Financial planning milestones
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <div className="min-w-fit pt-1">
-                        <div className="flex flex-col items-center">
-                          <div className="bg-primary/10 text-primary text-sm font-semibold h-10 w-10 rounded flex items-center justify-center">
-                            20
-                          </div>
-                          <div className="text-xs text-neutral-400 mt-1">Oct</div>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">Q3 Financial Review</p>
-                        <p className="text-xs text-neutral-400 mt-1">Complete quarterly financial analysis</p>
-                        <div className="flex gap-2 mt-2">
-                          <div className="flex -space-x-2">
-                            <Avatar className="h-6 w-6 border-2 border-white">
-                              <AvatarFallback className="text-[10px]">JD</AvatarFallback>
-                            </Avatar>
-                            <Avatar className="h-6 w-6 border-2 border-white">
-                              <AvatarFallback className="text-[10px]">AK</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="text-xs text-neutral-400 flex items-center">
-                            <Clock className="h-3 w-3 mr-1" />
-                            2 days left
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="min-w-fit pt-1">
-                        <div className="flex flex-col items-center">
-                          <div className="bg-accent/10 text-accent text-sm font-semibold h-10 w-10 rounded flex items-center justify-center">
-                            25
-                          </div>
-                          <div className="text-xs text-neutral-400 mt-1">Oct</div>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">Budget Planning</p>
-                        <p className="text-xs text-neutral-400 mt-1">Finalize Q4 departmental budgets</p>
-                        <div className="flex gap-2 mt-2">
-                          <div className="flex -space-x-2">
-                            <Avatar className="h-6 w-6 border-2 border-white">
-                              <AvatarFallback className="text-[10px]">MB</AvatarFallback>
-                            </Avatar>
-                            <Avatar className="h-6 w-6 border-2 border-white">
-                              <AvatarFallback className="text-[10px]">JS</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="text-xs text-neutral-400 flex items-center">
-                            <Clock className="h-3 w-3 mr-1" />
-                            1 week left
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-start gap-3">
-                      <div className="min-w-fit pt-1">
-                        <div className="flex flex-col items-center">
-                          <div className="bg-warning/10 text-warning text-sm font-semibold h-10 w-10 rounded flex items-center justify-center">
-                            31
-                          </div>
-                          <div className="text-xs text-neutral-400 mt-1">Oct</div>
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">Forecast Presentation</p>
-                        <p className="text-xs text-neutral-400 mt-1">Present Q4 forecast to leadership</p>
-                        <div className="flex gap-2 mt-2">
-                          <div className="flex -space-x-2">
-                            <Avatar className="h-6 w-6 border-2 border-white">
-                              <AvatarFallback className="text-[10px]">JD</AvatarFallback>
-                            </Avatar>
-                          </div>
-                          <div className="text-xs text-neutral-400 flex items-center">
-                            <Clock className="h-3 w-3 mr-1" />
-                            2 weeks left
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+        {/* Task Management Tab */}
+        <TabsContent value="task-management">
+          <TaskManagement activeProcess={selectedProcess} />
         </TabsContent>
         
-        <TabsContent value="projects" className="mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <CardTitle>Q4 Budget Planning</CardTitle>
-                  <div className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full">In Progress</div>
-                </div>
-                <CardDescription>
-                  Finalizing Q4 budgets for all departments
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-1">Progress</p>
-                    <div className="w-full bg-neutral-100 rounded-full h-2 overflow-hidden">
-                      <div className="bg-primary h-2 rounded-full" style={{ width: "65%" }}></div>
-                    </div>
-                    <p className="text-xs text-neutral-400 mt-1">65% Complete</p>
-                  </div>
-                  
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-2">Team</p>
-                    <div className="flex -space-x-2">
-                      <Avatar className="h-8 w-8 border-2 border-white">
-                        <AvatarFallback className="text-xs">JD</AvatarFallback>
-                      </Avatar>
-                      <Avatar className="h-8 w-8 border-2 border-white">
-                        <AvatarFallback className="text-xs">MB</AvatarFallback>
-                      </Avatar>
-                      <Avatar className="h-8 w-8 border-2 border-white">
-                        <AvatarFallback className="text-xs">AK</AvatarFallback>
-                      </Avatar>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-2">Deadline</p>
-                    <div className="flex items-center text-sm">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      <span>October 25, 2023</span>
-                    </div>
-                  </div>
-                  
-                  <Button variant="outline" className="w-full">View Project</Button>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <CardTitle>Financial Forecasting</CardTitle>
-                  <div className="px-2 py-1 bg-accent/10 text-accent text-xs rounded-full">Active</div>
-                </div>
-                <CardDescription>
-                  Developing Q1 2024 financial projections
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-1">Progress</p>
-                    <div className="w-full bg-neutral-100 rounded-full h-2 overflow-hidden">
-                      <div className="bg-accent h-2 rounded-full" style={{ width: "40%" }}></div>
-                    </div>
-                    <p className="text-xs text-neutral-400 mt-1">40% Complete</p>
-                  </div>
-                  
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-2">Team</p>
-                    <div className="flex -space-x-2">
-                      <Avatar className="h-8 w-8 border-2 border-white">
-                        <AvatarFallback className="text-xs">AK</AvatarFallback>
-                      </Avatar>
-                      <Avatar className="h-8 w-8 border-2 border-white">
-                        <AvatarFallback className="text-xs">JD</AvatarFallback>
-                      </Avatar>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-2">Deadline</p>
-                    <div className="flex items-center text-sm">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      <span>November 15, 2023</span>
-                    </div>
-                  </div>
-                  
-                  <Button variant="outline" className="w-full">View Project</Button>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <CardTitle>Cost Optimization</CardTitle>
-                  <div className="px-2 py-1 bg-warning/10 text-warning text-xs rounded-full">Planning</div>
-                </div>
-                <CardDescription>
-                  Identifying cost-saving opportunities
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-1">Progress</p>
-                    <div className="w-full bg-neutral-100 rounded-full h-2 overflow-hidden">
-                      <div className="bg-warning h-2 rounded-full" style={{ width: "15%" }}></div>
-                    </div>
-                    <p className="text-xs text-neutral-400 mt-1">15% Complete</p>
-                  </div>
-                  
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-2">Team</p>
-                    <div className="flex -space-x-2">
-                      <Avatar className="h-8 w-8 border-2 border-white">
-                        <AvatarFallback className="text-xs">MB</AvatarFallback>
-                      </Avatar>
-                      <Avatar className="h-8 w-8 border-2 border-white">
-                        <AvatarFallback className="text-xs">JS</AvatarFallback>
-                      </Avatar>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <p className="text-sm text-neutral-500 mb-2">Deadline</p>
-                    <div className="flex items-center text-sm">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      <span>December 10, 2023</span>
-                    </div>
-                  </div>
-                  
-                  <Button variant="outline" className="w-full">View Project</Button>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Dialog>
-              <DialogTrigger asChild>
-                <div className="border-2 border-dashed border-neutral-200 rounded-xl flex flex-col items-center justify-center p-10 hover:border-primary/50 transition-colors cursor-pointer">
-                  <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-3">
-                    <Plus className="h-6 w-6 text-primary" />
-                  </div>
-                  <p className="text-base font-medium text-neutral-500">Create New Project</p>
-                  <p className="text-sm text-neutral-400 mt-1">Start a new financial collaboration</p>
-                </div>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Create New Project</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Project Name</label>
-                    <Input placeholder="Enter project name" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Description</label>
-                    <Textarea placeholder="Enter project description" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Start Date</label>
-                      <Input type="date" />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Deadline</label>
-                      <Input type="date" />
-                    </div>
-                  </div>
-                </div>
-                <DialogFooter>
-                  <DialogClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </DialogClose>
-                  <Button>Create Project</Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="documents" className="mt-4">
+        {/* Calendar Tab */}
+        <TabsContent value="calendar">
           <Card>
             <CardHeader>
-              <CardTitle>Shared Documents</CardTitle>
+              <CardTitle>Financial Calendar</CardTitle>
               <CardDescription>
-                Financial documents shared with your team
+                View and manage financial deadlines, events, and meetings
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center p-3 rounded-lg hover:bg-neutral-50">
-                  <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center mr-3">
-                    <FileEdit className="h-5 w-5 text-primary" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-neutral-500">Q3 Financial Review.xlsx</p>
-                      <span className="text-xs text-neutral-400">2.4 MB</span>
-                    </div>
-                    <div className="flex items-center mt-1">
-                      <span className="text-xs text-neutral-400">Updated 2 days ago by John Doe</span>
-                    </div>
-                  </div>
-                  <button className="p-2 text-neutral-400 hover:text-primary">
-                    <Download className="h-4 w-4" />
-                  </button>
-                </div>
-                
-                <div className="flex items-center p-3 rounded-lg hover:bg-neutral-50">
-                  <div className="h-10 w-10 rounded-lg bg-secondary/10 flex items-center justify-center mr-3">
-                    <FileEdit className="h-5 w-5 text-secondary" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-neutral-500">Marketing Budget Proposal.pptx</p>
-                      <span className="text-xs text-neutral-400">4.8 MB</span>
-                    </div>
-                    <div className="flex items-center mt-1">
-                      <span className="text-xs text-neutral-400">Updated 4 days ago by Jane Smith</span>
-                    </div>
-                  </div>
-                  <button className="p-2 text-neutral-400 hover:text-primary">
-                    <Download className="h-4 w-4" />
-                  </button>
-                </div>
-                
-                <div className="flex items-center p-3 rounded-lg hover:bg-neutral-50">
-                  <div className="h-10 w-10 rounded-lg bg-accent/10 flex items-center justify-center mr-3">
-                    <FileEdit className="h-5 w-5 text-accent" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-neutral-500">Annual Budget Template.xlsx</p>
-                      <span className="text-xs text-neutral-400">1.2 MB</span>
-                    </div>
-                    <div className="flex items-center mt-1">
-                      <span className="text-xs text-neutral-400">Updated 1 week ago by Michael Brown</span>
-                    </div>
-                  </div>
-                  <button className="p-2 text-neutral-400 hover:text-primary">
-                    <Download className="h-4 w-4" />
-                  </button>
-                </div>
-                
-                <div className="flex items-center p-3 rounded-lg hover:bg-neutral-50">
-                  <div className="h-10 w-10 rounded-lg bg-warning/10 flex items-center justify-center mr-3">
-                    <FileEdit className="h-5 w-5 text-warning" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                      <p className="text-sm font-medium text-neutral-500">Q4 Sales Forecast.docx</p>
-                      <span className="text-xs text-neutral-400">950 KB</span>
-                    </div>
-                    <div className="flex items-center mt-1">
-                      <span className="text-xs text-neutral-400">Updated 2 weeks ago by Alicia Kim</span>
-                    </div>
-                  </div>
-                  <button className="p-2 text-neutral-400 hover:text-primary">
-                    <Download className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-              
-              <div className="mt-6 pt-6 border-t border-neutral-200">
-                <div className="flex justify-between">
-                  <Button variant="outline">
-                    <Upload className="mr-2 h-4 w-4" />
-                    Upload Document
-                  </Button>
-                  <Button variant="ghost">View All Documents</Button>
-                </div>
+              <div className="bg-neutral-50 p-8 rounded-lg text-center">
+                <CalendarDays className="h-12 w-12 mx-auto mb-3 text-neutral-400" />
+                <h3 className="text-lg font-medium mb-2">Calendar View Coming Soon</h3>
+                <p className="text-neutral-500 max-w-md mx-auto mb-4">
+                  Our enhanced financial calendar is under development. It will include deadline tracking, 
+                  event management, and integration with your financial workflows.
+                </p>
+                <Button>
+                  View Calendar (Preview)
+                </Button>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
         
-        <TabsContent value="calendar" className="mt-4">
-          <FinancialCalendar />
+        {/* Documents Tab */}
+        <TabsContent value="documents">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2">
+              <Card>
+                <CardHeader className="pb-3">
+                  <div className="flex justify-between items-center">
+                    <CardTitle>Recent Documents</CardTitle>
+                    <div className="flex gap-2">
+                      <div className="relative w-[200px]">
+                        <Search className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
+                        <Input placeholder="Search documents..." className="pl-8" />
+                      </div>
+                      <Button>
+                        <PlusCircle className="h-4 w-4 mr-2" />
+                        New Document
+                      </Button>
+                    </div>
+                  </div>
+                  <CardDescription>
+                    Recently updated financial documents and reports
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="rounded-md border">
+                    <table className="w-full">
+                      <thead className="bg-neutral-50">
+                        <tr className="border-b">
+                          <th className="py-3 px-4 text-left text-sm font-medium text-neutral-500">Title</th>
+                          <th className="py-3 px-4 text-left text-sm font-medium text-neutral-500">Type</th>
+                          <th className="py-3 px-4 text-left text-sm font-medium text-neutral-500">Last Updated</th>
+                          <th className="py-3 px-4 text-left text-sm font-medium text-neutral-500">Status</th>
+                          <th className="py-3 px-4 text-left text-sm font-medium text-neutral-500">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y">
+                        {recentDocuments.map(doc => (
+                          <tr key={doc.id} className="hover:bg-neutral-50">
+                            <td className="py-3 px-4">
+                              <div className="font-medium">{doc.title}</div>
+                              <div className="text-sm text-neutral-500">Updated by {doc.updatedBy}</div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-2">
+                                <FileText className="h-4 w-4 text-neutral-400" />
+                                <span className="text-sm">{doc.type}</span>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-2">
+                                <Clock className="h-4 w-4 text-neutral-400" />
+                                <span className="text-sm">{doc.lastUpdated}</span>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <Badge 
+                                className={`
+                                  ${doc.status === 'In Progress' ? 'bg-blue-100 text-blue-800' : 
+                                    doc.status === 'Completed' ? 'bg-green-100 text-green-800' : 
+                                    'bg-amber-100 text-amber-800'}
+                                `}
+                              >
+                                {doc.status}
+                              </Badge>
+                            </td>
+                            <td className="py-3 px-4">
+                              <div className="flex items-center gap-1">
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <Copy className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                                  <MessageSquare className="h-4 w-4" />
+                                  <span className="ml-1 text-xs">{doc.comments}</span>
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Recent Comments</CardTitle>
+                  <CardDescription>Recent comments on financial documents</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[400px] pr-4">
+                    <div className="space-y-4">
+                      {recentComments.map(comment => (
+                        <div key={comment.id} className="border rounded-lg p-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-7 w-7">
+                                <AvatarFallback className={comment.user.avatarColor + " text-xs"}>
+                                  {comment.user.avatar}
+                                </AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">{comment.user.name}</span>
+                            </div>
+                            <span className="text-xs text-neutral-500">{comment.time}</span>
+                          </div>
+                          <p className="text-sm text-neutral-600 mb-2">{comment.content}</p>
+                          <div className="flex items-center justify-between mt-2 pt-2 border-t text-xs text-neutral-500">
+                            <span>On: {comment.document}</span>
+                            <div className="flex items-center gap-2">
+                              <Button variant="ghost" size="sm" className="h-6 px-2 text-xs">Reply</Button>
+                              <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                <Eye className="h-3 w-3" />
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+        
+        {/* Teams Tab */}
+        <TabsContent value="teams">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2">
+              <Card>
+                <CardHeader>
+                  <div className="flex justify-between items-center">
+                    <CardTitle>Financial Teams</CardTitle>
+                    <Button>
+                      <PlusCircle className="h-4 w-4 mr-2" />
+                      Create Team
+                    </Button>
+                  </div>
+                  <CardDescription>
+                    Manage your financial teams and their tasks
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {teams.map(team => (
+                      <Card key={team.id} className="border">
+                        <CardContent className="p-4">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                {team.icon}
+                              </div>
+                              <div>
+                                <h3 className="font-medium">{team.name}</h3>
+                                <p className="text-xs text-neutral-500">{team.description}</p>
+                              </div>
+                            </div>
+                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                              <Settings className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          
+                          <div className="mt-4 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <div className="text-center">
+                                <div className="text-lg font-medium">{team.members}</div>
+                                <div className="text-xs text-neutral-500">Members</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-lg font-medium">{team.activeTasks}</div>
+                                <div className="text-xs text-neutral-500">Tasks</div>
+                              </div>
+                              <div className="text-center">
+                                <div className="text-sm">{team.lastActive}</div>
+                                <div className="text-xs text-neutral-500">Last Active</div>
+                              </div>
+                            </div>
+                            <div className="flex -space-x-2">
+                              {[...Array(Math.min(3, team.members))].map((_, i) => (
+                                <Avatar key={i} className="h-7 w-7 border-2 border-background">
+                                  <AvatarFallback className="bg-primary/10 text-primary text-xs">
+                                    {String.fromCharCode(65 + i)}
+                                  </AvatarFallback>
+                                </Avatar>
+                              ))}
+                              {team.members > 3 && (
+                                <Avatar className="h-7 w-7 border-2 border-background">
+                                  <AvatarFallback className="bg-neutral-100 text-neutral-600 text-xs">
+                                    +{team.members - 3}
+                                  </AvatarFallback>
+                                </Avatar>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="mt-4 flex justify-between">
+                            <Button variant="outline" size="sm">
+                              <ListChecks className="h-4 w-4 mr-2" />
+                              View Tasks
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <Users className="h-4 w-4 mr-2" />
+                              Team Details
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Team Activity</CardTitle>
+                  <CardDescription>Recent activity across all teams</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ScrollArea className="h-[400px] pr-4">
+                    <div className="space-y-4">
+                      <div className="border-l-2 border-primary pl-4 py-1 relative">
+                        <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-primary"></div>
+                        <div className="text-sm">
+                          <span className="font-medium">Jane Smith</span> completed task <span className="font-medium">April Reconciliation</span>
+                        </div>
+                        <div className="text-xs text-neutral-500">Today, 2:30 PM</div>
+                      </div>
+                      
+                      <div className="border-l-2 border-blue-500 pl-4 py-1 relative">
+                        <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-blue-500"></div>
+                        <div className="text-sm">
+                          <span className="font-medium">FP&A Team</span> created 3 new forecast scenarios for <span className="font-medium">Q3 Planning</span>
+                        </div>
+                        <div className="text-xs text-neutral-500">Today, 11:15 AM</div>
+                      </div>
+                      
+                      <div className="border-l-2 border-amber-500 pl-4 py-1 relative">
+                        <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-amber-500"></div>
+                        <div className="text-sm">
+                          <span className="font-medium">Michael Brown</span> added comments to <span className="font-medium">Budget Variance Report</span>
+                        </div>
+                        <div className="text-xs text-neutral-500">Yesterday, 4:45 PM</div>
+                      </div>
+                      
+                      <div className="border-l-2 border-green-500 pl-4 py-1 relative">
+                        <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-green-500"></div>
+                        <div className="text-sm">
+                          <span className="font-medium">David Chen</span> shared <span className="font-medium">Cash Flow Projections</span> with Executive Team
+                        </div>
+                        <div className="text-xs text-neutral-500">Yesterday, 2:20 PM</div>
+                      </div>
+                      
+                      <div className="border-l-2 border-purple-500 pl-4 py-1 relative">
+                        <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-purple-500"></div>
+                        <div className="text-sm">
+                          <span className="font-medium">Finance Core Team</span> scheduled meeting <span className="font-medium">Monthly Close Review</span>
+                        </div>
+                        <div className="text-xs text-neutral-500">2 days ago</div>
+                      </div>
+                      
+                      <div className="border-l-2 border-red-500 pl-4 py-1 relative">
+                        <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-red-500"></div>
+                        <div className="text-sm">
+                          <span className="font-medium">Alicia Kim</span> flagged issue in <span className="font-medium">Intercompany Reconciliation</span>
+                        </div>
+                        <div className="text-xs text-neutral-500">2 days ago</div>
+                      </div>
+                      
+                      <div className="border-l-2 border-neutral-500 pl-4 py-1 relative">
+                        <div className="absolute -left-1.5 top-2 h-3 w-3 rounded-full bg-neutral-500"></div>
+                        <div className="text-sm">
+                          <span className="font-medium">New Team Member</span> joined <span className="font-medium">Accounting & Reconciliation</span>
+                        </div>
+                        <div className="text-xs text-neutral-500">3 days ago</div>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 
