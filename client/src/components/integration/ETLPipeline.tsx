@@ -1175,7 +1175,7 @@ const ETLPipeline: React.FC<ETLPipelineProps> = ({
             {pipelines.length === 0 ? (
               <Card>
                 <CardContent className="pt-6 pb-6 text-center">
-                  <FlowChart className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                  <Workflow className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
                   <h3 className="text-lg font-medium mb-2">No Pipelines Found</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     You don't have any data integration pipelines yet. Create a pipeline to start automating your data workflows.
@@ -1621,7 +1621,7 @@ const ETLPipeline: React.FC<ETLPipelineProps> = ({
                   <CardContent>
                     {selectedPipeline.steps.length === 0 ? (
                       <div className="text-center py-8">
-                        <FlowChart className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+                        <Workflow className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
                         <h3 className="text-lg font-medium mb-2">No Steps Defined</h3>
                         <p className="text-sm text-muted-foreground mb-4">
                           Add steps to build your data pipeline workflow.
