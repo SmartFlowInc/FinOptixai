@@ -93,30 +93,47 @@ const AnomalyDetection: React.FC<AnomalyDetectionProps> = ({ financialData: init
   const isLoadingData = initialLoading || isDashboardLoading;
 
   // Detect anomalies using AI
-  const { data: anomalies, isLoading: isAnomaliesLoading, refetch: refetchAnomalies } = useQuery({
+  const { data: anomalyResponse, isLoading: isAnomaliesLoading, refetch: refetchAnomalies } = useQuery({
     queryKey: ['/api/ai/anomalies'],
     enabled: !!financialData,
     queryFn: async () => {
-      if (!financialData) return [];
+      if (!financialData) return { anomalies: [] };
       
       try {
-        const response = await apiRequest('/api/ai/anomalies', {
+        const res = await fetch('/api/ai/anomalies', {
           method: 'POST',
-          body: JSON.stringify({ financialData }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ financialData })
         });
         
-        // Format dates
-        return response.map((anomaly: any) => ({
-          ...anomaly,
-          detectedAt: new Date(anomaly.detectedAt),
-          updatedAt: new Date(anomaly.updatedAt),
-        }));
+        if (!res.ok) {
+          throw new Error('API request failed');
+        }
+        
+        const data = await res.json();
+        return data;
       } catch (error) {
         console.error('Failed to detect anomalies:', error);
-        return [];
+        return { anomalies: [] };
       }
     },
   });
+  
+  // Process anomalies data
+  const anomalies = React.useMemo(() => {
+    if (!anomalyResponse) return [];
+    
+    // Format dates if we have data
+    if (Array.isArray(anomalyResponse)) {
+      return anomalyResponse.map((anomaly: any) => ({
+        ...anomaly,
+        detectedAt: new Date(anomaly.detectedAt),
+        updatedAt: new Date(anomaly.updatedAt),
+      }));
+    }
+    
+    return [];
+  }, [anomalyResponse]);
 
   // Update anomaly status
   const updateStatusMutation = useMutation({
@@ -140,11 +157,11 @@ const AnomalyDetection: React.FC<AnomalyDetectionProps> = ({ financialData: init
   });
 
   // Handler for changing anomaly status
-  const handleStatusChange = (id: number, newStatus: AnomalyStatus) => {
-    updateStatusMutation.mutate({ id, newStatus });
+  const handleStatusChange = (id: number, status: AnomalyStatus) => {
+    updateStatusMutation.mutate({ id, status });
     
     if (selectedAnomaly && selectedAnomaly.id === id) {
-      setSelectedAnomaly({ ...selectedAnomaly, status: newStatus });
+      setSelectedAnomaly({ ...selectedAnomaly, status });
     }
   };
 
@@ -154,7 +171,14 @@ const AnomalyDetection: React.FC<AnomalyDetectionProps> = ({ financialData: init
   const checkApiKey = useQuery({
     queryKey: ['/api/ai/health'],
     queryFn: async () => {
-      return await apiRequest('/api/ai/health');
+      try {
+        const res = await fetch('/api/ai/health');
+        if (!res.ok) throw new Error('Health check failed');
+        return res.json();
+      } catch (error) {
+        console.error('Failed to check API health:', error);
+        throw error;
+      }
     }
   });
 
@@ -178,6 +202,66 @@ const AnomalyDetection: React.FC<AnomalyDetectionProps> = ({ financialData: init
       </Alert>
     );
   }
+  
+  // Mock anomalies for testing the UI when real API calls fail
+  const mockAnomalies: AnomalyItem[] = [
+    {
+      id: 1,
+      title: "Q3 Marketing Budget Overspend",
+      description: "Marketing expenses exceeded budgeted amount by 28% in Q3 2023",
+      type: "variance",
+      severity: "high",
+      status: "detected",
+      metric: "expenses",
+      detectedAt: new Date("2023-10-01"),
+      updatedAt: new Date("2023-10-01"),
+      impact: {
+        description: "Significant impact on quarterly profits due to unplanned marketing costs",
+        value: 82500,
+        isMonetary: true
+      },
+      affectedPeriods: ["Q3 2023"],
+      historicalContext: "Marketing spend has historically been within 5% of budget over the past 8 quarters",
+      potentialCauses: [
+        "New product launch campaign costs were underestimated",
+        "Additional digital advertising was approved without proper budget amendment",
+        "Agency fees increased mid-quarter without budget adjustment"
+      ],
+      recommendedActions: [
+        "Review marketing approval process for ad-hoc campaigns",
+        "Implement budget threshold alerts for department heads",
+        "Reallocate Q4 budget to accommodate Q3 overspend"
+      ]
+    },
+    {
+      id: 2,
+      title: "Declining Sales in European Region",
+      description: "European region showing consistent downward trend in revenue for past 3 quarters",
+      type: "trend",
+      severity: "critical",
+      status: "investigating",
+      metric: "revenue",
+      detectedAt: new Date("2023-09-15"),
+      updatedAt: new Date("2023-09-20"),
+      impact: {
+        description: "Consistent decline representing significant revenue loss to the organization",
+        value: 18.5,
+        isMonetary: false
+      },
+      affectedPeriods: ["Q1 2023", "Q2 2023", "Q3 2023"],
+      historicalContext: "European market was previously the second strongest region with reliable growth",
+      potentialCauses: [
+        "Increased regional competition",
+        "Economic factors affecting consumer spending in EU countries",
+        "Possible product-market fit issues with latest offerings"
+      ],
+      recommendedActions: [
+        "Conduct market analysis focused on European competitors",
+        "Review pricing strategy for European markets",
+        "Allocate additional resources to European sales team"
+      ]
+    }
+  ];
 
   return (
     <div className="space-y-6">
