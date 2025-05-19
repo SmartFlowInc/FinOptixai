@@ -1,10 +1,10 @@
-# Demystifi - Enterprise Financial Planning & Analysis Platform
+# FinOptix - Enterprise Financial Planning & Analysis Platform
 
-![Demystifi Logo](https://placehold.co/600x400/6A0DAD/FFFFFF?text=Demystifi&font=montserrat)
+![FinOptix Logo](https://placehold.co/600x400/0052CC/FFFFFF?text=FinOptix&font=montserrat)
 
 ## Overview
 
-Demystifi is an enterprise-grade financial planning and analysis platform designed to streamline financial workflows, provide actionable insights, and enable collaborative decision-making. The platform combines advanced data visualization, AI-powered analytics, and a mobile-first approach to deliver a comprehensive financial management solution.
+FinOptix is an enterprise-grade financial planning and analysis platform designed to streamline financial workflows, provide actionable insights, and enable collaborative decision-making. The platform combines advanced data visualization, AI-powered analytics, and a mobile-first approach to deliver a comprehensive financial management solution.
 
 - **Live Demo:** [https://demystifi.repl.app](https://demystifi.repl.app)
 - **Platform Version:** 1.0.0
