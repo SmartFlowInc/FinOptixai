@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { dashboardFilterSchema, periodEnum, departmentEnum, regionEnum } from "@shared/schema";
 import { ZodError } from "zod";
+import { registerAIRoutes } from "./ai-routes";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Seed the database with initial demo data if needed
@@ -14,6 +15,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   } catch (error) {
     console.error('Error seeding database:', error);
   }
+  
+  // Register AI routes
+  registerAIRoutes(app);
+  
   // API routes with /api prefix
   
   // Dashboard data endpoint
