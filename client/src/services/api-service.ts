@@ -1,6 +1,6 @@
 import { Period, Department, Region } from '@shared/schema';
 
-// Helper function for API requests since apiRequest in queryClient was overloaded incorrectly
+// Helper function for API requests since we need consistent handling
 async function makeApiRequest<T>(url: string, options?: { 
   method?: string;
   params?: Record<string, any>;
@@ -100,7 +100,7 @@ export const api = {
       period?: Period;
       department?: Department;
     }) => {
-      return apiRequest('/api/budget-items', { params: filters });
+      return makeApiRequest('/api/budget-items', { params: filters });
     },
     
     /**
@@ -113,7 +113,7 @@ export const api = {
       department: string;
       period: string;
     }) => {
-      return apiRequest('/api/budget-items', { 
+      return makeApiRequest('/api/budget-items', { 
         method: 'POST', 
         data: budgetItem 
       });
@@ -126,7 +126,7 @@ export const api = {
       actualAmount?: string;
       budgetedAmount?: string;
     }) => {
-      return apiRequest(`/api/budget-items/${id}`, { 
+      return makeApiRequest(`/api/budget-items/${id}`, { 
         method: 'PUT', 
         data: updates 
       });
@@ -139,7 +139,7 @@ export const api = {
      * Get all reports
      */
     getAll: () => {
-      return apiRequest('/api/reports');
+      return makeApiRequest('/api/reports');
     },
     
     /**
@@ -150,7 +150,7 @@ export const api = {
       type: string;
       parameters: any;
     }) => {
-      return apiRequest('/api/reports', { 
+      return makeApiRequest('/api/reports', { 
         method: 'POST', 
         data: report 
       });
@@ -163,7 +163,7 @@ export const api = {
      * Get recent activities
      */
     getRecent: (limit: number = 10) => {
-      return apiRequest('/api/activities', { 
+      return makeApiRequest('/api/activities', { 
         params: { limit } 
       });
     }
@@ -181,7 +181,7 @@ export const api = {
         comparisonType: string;
       }
     }) => {
-      return apiRequest('/api/ai/anomalies', { 
+      return makeApiRequest('/api/ai/anomalies', { 
         method: 'POST', 
         data: params 
       });
@@ -201,7 +201,7 @@ export const api = {
         insightDepth?: string;
       };
     }) => {
-      return apiRequest('/api/ai/insights', { 
+      return makeApiRequest('/api/ai/insights', { 
         method: 'POST', 
         data: params 
       });
@@ -215,7 +215,7 @@ export const api = {
       timeframe: string;
       contextData?: any;
     }) => {
-      return apiRequest('/api/ai/explain-trend', { 
+      return makeApiRequest('/api/ai/explain-trend', { 
         method: 'POST', 
         data: params 
       });
@@ -231,7 +231,7 @@ export const api = {
       includeFundamentals?: boolean;
       includeFactors?: boolean;
     }) => {
-      return apiRequest('/api/ai/forecast', { 
+      return makeApiRequest('/api/ai/forecast', { 
         method: 'POST', 
         data: params 
       });
@@ -241,7 +241,7 @@ export const api = {
      * Check AI service health
      */
     checkHealth: () => {
-      return apiRequest('/api/ai/health');
+      return makeApiRequest('/api/ai/health');
     }
   },
   
@@ -251,7 +251,7 @@ export const api = {
      * Get all data sources
      */
     getDataSources: () => {
-      return apiRequest('/api/data-sources');
+      return makeApiRequest('/api/data-sources');
     },
     
     /**
@@ -263,7 +263,7 @@ export const api = {
       connectionParameters: any;
       entities: string[];
     }) => {
-      return apiRequest('/api/data-sources', { 
+      return makeApiRequest('/api/data-sources', { 
         method: 'POST', 
         data: source 
       });
@@ -273,7 +273,7 @@ export const api = {
      * Get sync status for a data source
      */
     getSyncStatus: (sourceId: string) => {
-      return apiRequest(`/api/data-sources/${sourceId}/sync-status`);
+      return makeApiRequest(`/api/data-sources/${sourceId}/sync-status`);
     },
     
     /**
@@ -289,7 +289,7 @@ export const api = {
         };
       };
     }) => {
-      return apiRequest(`/api/data-sources/${sourceId}/sync`, { 
+      return makeApiRequest(`/api/data-sources/${sourceId}/sync`, { 
         method: 'POST', 
         data: options 
       });
@@ -299,7 +299,7 @@ export const api = {
      * Get all ETL pipelines
      */
     getPipelines: () => {
-      return apiRequest('/api/pipelines');
+      return makeApiRequest('/api/pipelines');
     },
     
     /**
@@ -312,7 +312,7 @@ export const api = {
       schedule: string;
       steps: any[];
     }) => {
-      return apiRequest('/api/pipelines', { 
+      return makeApiRequest('/api/pipelines', { 
         method: 'POST', 
         data: pipeline 
       });
@@ -322,7 +322,7 @@ export const api = {
      * Execute a pipeline manually
      */
     executePipeline: (pipelineId: string) => {
-      return apiRequest(`/api/pipelines/${pipelineId}/execute`, { 
+      return makeApiRequest(`/api/pipelines/${pipelineId}/execute`, { 
         method: 'POST' 
       });
     }
@@ -337,7 +337,7 @@ export const api = {
       limit?: number;
       unreadOnly?: boolean;
     }) => {
-      return apiRequest('/api/notifications', { 
+      return makeApiRequest('/api/notifications', { 
         params 
       });
     },
@@ -346,7 +346,7 @@ export const api = {
      * Mark a notification as read
      */
     markAsRead: (notificationId: string) => {
-      return apiRequest(`/api/notifications/read/${notificationId}`, { 
+      return makeApiRequest(`/api/notifications/read/${notificationId}`, { 
         method: 'POST' 
       });
     },
@@ -355,7 +355,7 @@ export const api = {
      * Mark all notifications as read
      */
     markAllAsRead: () => {
-      return apiRequest('/api/notifications/read-all', { 
+      return makeApiRequest('/api/notifications/read-all', { 
         method: 'POST' 
       });
     }
@@ -367,7 +367,7 @@ export const api = {
      * Get current user
      */
     getCurrentUser: () => {
-      return apiRequest('/api/auth/user');
+      return makeApiRequest('/api/auth/user');
     },
     
     /**
@@ -375,7 +375,7 @@ export const api = {
      */
     isAuthenticated: async () => {
       try {
-        const response = await apiRequest('/api/auth/user');
+        const response = await makeApiRequest('/api/auth/user');
         return !!response;
       } catch (error) {
         return false;

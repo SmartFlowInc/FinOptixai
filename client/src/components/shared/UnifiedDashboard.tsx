@@ -104,7 +104,7 @@ const UnifiedDashboard: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold">
-              {view === 'advanced' ? 'Advanced Financial Dashboard' : 'Financial Dashboard'}
+              {view === 'advanced' ? 'Advanced FinOptix Dashboard' : 'FinOptix Dashboard'}
             </h1>
             <p className="text-neutral-600">
               {view === 'advanced' 

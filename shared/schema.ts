@@ -1,15 +1,29 @@
-import { pgTable, text, serial, integer, numeric, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, numeric, timestamp, boolean, varchar, jsonb, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Session storage table for authentication
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)]
+);
+
 // Users table
 export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-  fullName: text("full_name").notNull(),
+  id: varchar("id").primaryKey().notNull(),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
   jobTitle: text("job_title"),
-  avatarInitials: text("avatar_initials"),
+  department: text("department"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 // Financial KPIs table
@@ -101,6 +115,7 @@ export const cashFlowData = pgTable("cash_flow_data", {
 
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users);
+export const upsertUserSchema = createInsertSchema(users);
 export const insertKpiSchema = createInsertSchema(kpis);
 export const insertBudgetItemSchema = createInsertSchema(budgetItems);
 export const insertReportSchema = createInsertSchema(reports);
@@ -112,6 +127,7 @@ export const insertCashFlowDataSchema = createInsertSchema(cashFlowData);
 
 // Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
+export type UpsertUser = z.infer<typeof upsertUserSchema>;
 export type User = typeof users.$inferSelect;
 
 export type InsertKpi = z.infer<typeof insertKpiSchema>;

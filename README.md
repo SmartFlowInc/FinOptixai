@@ -6,7 +6,7 @@
 
 FinOptix is an enterprise-grade financial planning and analysis platform designed to streamline financial workflows, provide actionable insights, and enable collaborative decision-making. The platform combines advanced data visualization, AI-powered analytics, and a mobile-first approach to deliver a comprehensive financial management solution.
 
-- **Live Demo:** [https://demystifi.repl.app](https://demystifi.repl.app)
+- **Live Demo:** [https://finoptix.repl.app](https://finoptix.repl.app)
 - **Platform Version:** 1.0.0
 - **Last Updated:** May 19, 2025
 
