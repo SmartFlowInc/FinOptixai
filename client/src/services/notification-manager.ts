@@ -23,7 +23,7 @@ type NotificationSubscriber = (event: NotificationEvent) => void;
 class NotificationManager {
   private subscribers: NotificationSubscriber[] = [];
   private notificationStorage: Notification[] = [];
-  private storageKey = 'financial_hub_notifications';
+  private storageKey = 'demystifi_notifications';
   
   constructor() {
     this.loadFromStorage();

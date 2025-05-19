@@ -95,7 +95,7 @@ const MobileDashboard: React.FC = () => {
             <div className="mr-3 rounded-lg bg-primary p-1.5">
               <BarChart3 className="h-5 w-5 text-white" />
             </div>
-            <h1 className="text-xl font-semibold">Financial Hub</h1>
+            <h1 className="text-xl font-semibold">Demystifi</h1>
           </div>
           
           <div className="flex items-center space-x-3">

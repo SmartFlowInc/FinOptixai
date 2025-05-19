@@ -1,15 +1,15 @@
-# Financial Hub API Documentation
+# Demystifi API Documentation
 
-This document provides detailed specifications for all API endpoints in the Financial Hub platform.
+This document provides detailed specifications for all API endpoints in the Demystifi platform.
 
 ## API Overview
 
-The Financial Hub API follows RESTful principles with JSON as the primary data exchange format. All endpoints are prefixed with `/api`.
+The Demystifi API follows RESTful principles with JSON as the primary data exchange format. All endpoints are prefixed with `/api`.
 
 ### Base URL
 
 ```
-https://financial-hub.repl.app/api
+https://demystifi.repl.app/api
 ```
 
 ### Authentication

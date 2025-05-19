@@ -644,7 +644,7 @@ async function sendFinancialAlert(userId, alertData) {
 
 ## Testing Strategy
 
-Financial Hub employs a comprehensive testing strategy to ensure reliability.
+Demystifi employs a comprehensive testing strategy to ensure reliability.
 
 ### Testing Pyramid
 
@@ -686,7 +686,7 @@ Continuous Integration includes:
 
 ### Deployment Architecture
 
-Financial Hub is designed for deployment on Replit:
+Demystifi is designed for deployment on Replit:
 
 ```
 ┌─────────────────────────┐
@@ -780,7 +780,7 @@ For larger deployments, consider:
 
 ## Contributing
 
-We welcome contributions to the Financial Hub platform!
+We welcome contributions to the Demystifi platform!
 
 ### Contribution Guidelines
 

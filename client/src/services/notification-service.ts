@@ -15,7 +15,7 @@ export interface Notification {
 }
 
 // Local storage key for notifications
-const NOTIFICATIONS_STORAGE_KEY = 'financial_hub_notifications';
+const NOTIFICATIONS_STORAGE_KEY = 'demystifi_notifications';
 
 // Function to get notifications from local storage
 export const getStoredNotifications = (): Notification[] => {
