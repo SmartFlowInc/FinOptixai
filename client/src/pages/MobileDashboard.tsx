@@ -3,6 +3,9 @@ import { useQuery } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import MobileMetrics from '@/components/mobile/MobileMetrics';
 import MobileNavigation from '@/components/mobile/MobileNavigation';
+import NotificationCenter from '@/components/mobile/NotificationCenter';
+import NotificationSettings from '@/components/mobile/NotificationSettings';
+import { useNotifications } from '@/hooks/use-notifications';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -33,6 +36,7 @@ const MobileDashboard: React.FC = () => {
   const [department, setDepartment] = useState<Department | undefined>(undefined);
   const [region, setRegion] = useState<Region | undefined>(undefined);
   const [activeTab, setActiveTab] = useState('overview');
+  const { isSupported: notificationsSupported } = useNotifications();
   
   const { toast } = useToast();
   const isMobile = useIsMobile();
@@ -137,10 +141,11 @@ const MobileDashboard: React.FC = () => {
         
         {/* Tabs for different views */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="cashflow">Cash Flow</TabsTrigger>
             <TabsTrigger value="budget">Budget</TabsTrigger>
+            <TabsTrigger value="notifications">Alerts</TabsTrigger>
           </TabsList>
           
           <TabsContent value="overview" className="mt-4 space-y-4">
@@ -390,6 +395,20 @@ const MobileDashboard: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+          
+          {/* Notifications Tab */}
+          <TabsContent value="notifications" className="mt-4 space-y-6">
+            <NotificationCenter />
+            
+            <Tabs defaultValue="settings" className="mt-6">
+              <TabsList className="w-full">
+                <TabsTrigger value="settings">Notification Settings</TabsTrigger>
+              </TabsList>
+              <TabsContent value="settings" className="mt-4">
+                <NotificationSettings />
+              </TabsContent>
+            </Tabs>
           </TabsContent>
         </Tabs>
       </div>
