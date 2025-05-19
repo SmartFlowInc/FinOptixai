@@ -7,6 +7,7 @@ import Reports from "@/pages/Reports";
 import Collaboration from "@/pages/Collaboration";
 import DataSources from "@/pages/DataSources";
 import DataIntegration from "@/pages/DataIntegration";
+import Insights from "@/pages/Insights";
 import Calendar from "@/pages/Calendar";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/not-found";
@@ -22,6 +23,7 @@ function App() {
         <Route path="/collaboration" component={Collaboration} />
         <Route path="/data-sources" component={DataSources} />
         <Route path="/data-integration" component={DataIntegration} />
+        <Route path="/insights" component={Insights} />
         <Route path="/calendar" component={Calendar} />
         <Route path="/settings" component={Settings} />
         <Route component={NotFound} />
