@@ -26,6 +26,7 @@ import QuickFilters from "@/components/filters/QuickFilters";
 import { defaultFilters } from "@/data/finance";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import FinancialCalendar from "@/components/calendar/FinancialCalendar";
 
 const Collaboration = () => {
   const [filters, setFilters] = useState({
@@ -632,25 +633,7 @@ const Collaboration = () => {
         </TabsContent>
         
         <TabsContent value="calendar" className="mt-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Financial Calendar</CardTitle>
-              <CardDescription>
-                Important dates and deadlines
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="text-center py-12">
-                <Calendar className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Calendar Coming Soon</h3>
-                <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                  Our financial calendar feature is currently under development. 
-                  It will help you track important financial dates and deadlines.
-                </p>
-                <Button>Notify Me When Available</Button>
-              </div>
-            </CardContent>
-          </Card>
+          <FinancialCalendar />
         </TabsContent>
       </Tabs>
     </>
