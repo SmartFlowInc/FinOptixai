@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useQuery } from "@tanstack/react-query";
 import { Activity } from "@shared/schema";
-import { MessageSquare, Users, FileEdit, Calendar, Plus, Upload, Clock } from "lucide-react";
+import { MessageSquare, Users, FileEdit, Calendar, Plus, Upload, Clock, Download } from "lucide-react";
 import QuickFilters from "@/components/filters/QuickFilters";
 import { defaultFilters } from "@/data/finance";
 import { useState } from "react";
