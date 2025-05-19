@@ -1,12 +1,12 @@
-# Financial Hub - Enterprise Financial Planning & Analysis Platform
+# Demystifi - Enterprise Financial Planning & Analysis Platform
 
-![Financial Hub Logo](https://placehold.co/600x400/00A3E0/FFFFFF?text=Financial+Hub&font=montserrat)
+![Demystifi Logo](https://placehold.co/600x400/6A0DAD/FFFFFF?text=Demystifi&font=montserrat)
 
 ## Overview
 
-Financial Hub is an enterprise-grade financial planning and analysis platform designed to streamline financial workflows, provide actionable insights, and enable collaborative decision-making. The platform combines advanced data visualization, AI-powered analytics, and a mobile-first approach to deliver a comprehensive financial management solution.
+Demystifi is an enterprise-grade financial planning and analysis platform designed to streamline financial workflows, provide actionable insights, and enable collaborative decision-making. The platform combines advanced data visualization, AI-powered analytics, and a mobile-first approach to deliver a comprehensive financial management solution.
 
-- **Live Demo:** [https://financial-hub.repl.app](https://financial-hub.repl.app)
+- **Live Demo:** [https://demystifi.repl.app](https://demystifi.repl.app)
 - **Platform Version:** 1.0.0
 - **Last Updated:** May 19, 2025
 
