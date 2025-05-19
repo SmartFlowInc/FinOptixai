@@ -26,6 +26,7 @@ import CashFlowForecast from "@/components/dashboard/CashFlowForecast";
 import FinancialReports from "@/components/dashboard/FinancialReports";
 import RecentActivity from "@/components/dashboard/RecentActivity";
 import DriverAnalysis from "@/components/dashboard/DriverAnalysis";
+import InsightsPanel from "@/components/insights/InsightsPanel";
 
 import { DashboardData, defaultFilters, getKpiByType, formatCurrency } from "@/data/finance";
 
@@ -37,6 +38,7 @@ const Dashboard = () => {
   }>(defaultFilters);
   
   const [forecastTimeframe, setForecastTimeframe] = useState<string>("6_months");
+  const [insightsPanelExpanded, setInsightsPanelExpanded] = useState<boolean>(false);
   
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -145,17 +147,26 @@ const Dashboard = () => {
         />
       </div>
       
-      {/* Chart Sections */}
+      {/* Insights and Chart Sections */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <RevenueChart
-          data={data?.revenueData || []}
-          isLoading={isLoading}
-        />
+        <div className={`${insightsPanelExpanded ? 'lg:col-span-2' : ''}`}>
+          <InsightsPanel 
+            isExpanded={insightsPanelExpanded} 
+            onToggleExpand={() => setInsightsPanelExpanded(!insightsPanelExpanded)} 
+          />
+        </div>
         
-        <ExpenseBreakdownChart
-          data={data?.expenseData || []}
-          isLoading={isLoading}
-        />
+        <div className={`${insightsPanelExpanded ? 'lg:col-span-1' : 'lg:col-span-2'} grid grid-cols-1 lg:grid-cols-2 gap-6`}>
+          <RevenueChart
+            data={data?.revenueData || []}
+            isLoading={isLoading}
+          />
+          
+          <ExpenseBreakdownChart
+            data={data?.expenseData || []}
+            isLoading={isLoading}
+          />
+        </div>
       </div>
       
       {/* Financial Planning and Budget Section */}
