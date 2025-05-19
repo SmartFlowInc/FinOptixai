@@ -61,7 +61,7 @@ import {
   StarHalf,
   ThumbsUp,
   Trash,
-  Trending,
+  TrendingDown,
   TrendingUp,
   Users,
   X,
@@ -764,7 +764,7 @@ const getTrendIcon = (trend: KpiTrend) => {
     case 'stable':
       return <ChartLine className="h-4 w-4 text-blue-600" />;
     case 'declining':
-      return <Trending className="h-4 w-4 text-red-600" />;
+      return <TrendingDown className="h-4 w-4 text-red-600" />;
     default:
       return <ChartLine className="h-4 w-4 text-neutral-600" />;
   }
