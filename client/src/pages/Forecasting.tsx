@@ -110,8 +110,82 @@ const Forecasting = () => {
                 <CardDescription>Factors influencing your financial forecast</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center p-12">
-                  <p className="text-muted-foreground mb-4">Advanced driver analysis coming soon</p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex gap-2 items-center">
+                      <div className="h-3 w-3 bg-blue-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Labor Costs</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="font-medium">85</div>
+                      <div className="text-xs text-neutral-500">impact</div>
+                    </div>
+                  </div>
+                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
+                    <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: "85%" }}></div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex gap-2 items-center">
+                      <div className="h-3 w-3 bg-green-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Raw Materials</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="font-medium">75</div>
+                      <div className="text-xs text-neutral-500">impact</div>
+                    </div>
+                  </div>
+                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
+                    <div className="bg-green-500 h-1.5 rounded-full" style={{ width: "75%" }}></div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex gap-2 items-center">
+                      <div className="h-3 w-3 bg-purple-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Energy</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="font-medium">62</div>
+                      <div className="text-xs text-neutral-500">impact</div>
+                    </div>
+                  </div>
+                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
+                    <div className="bg-purple-500 h-1.5 rounded-full" style={{ width: "62%" }}></div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex gap-2 items-center">
+                      <div className="h-3 w-3 bg-amber-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Logistics</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="font-medium">58</div>
+                      <div className="text-xs text-neutral-500">impact</div>
+                    </div>
+                  </div>
+                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
+                    <div className="bg-amber-500 h-1.5 rounded-full" style={{ width: "58%" }}></div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between pt-2">
+                    <div className="flex gap-2 items-center">
+                      <div className="h-3 w-3 bg-red-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Marketing</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="font-medium">45</div>
+                      <div className="text-xs text-neutral-500">impact</div>
+                    </div>
+                  </div>
+                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
+                    <div className="bg-red-500 h-1.5 rounded-full" style={{ width: "45%" }}></div>
+                  </div>
+                  
+                  <div className="pt-4 mt-2 border-t">
+                    <Button variant="outline" size="sm" className="w-full">
+                      View Full Driver Analysis
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
