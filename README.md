@@ -10,6 +10,38 @@ Financial Hub is an enterprise-grade financial planning and analysis platform de
 - **Platform Version:** 1.0.0
 - **Last Updated:** May 19, 2025
 
+## Technology Stack
+
+### Frontend
+- **React**: 18.2.0 (with TypeScript)
+- **Tailwind CSS**: 3.3.0 for responsive styling
+- **Shadcn UI**: Component library for consistent design
+- **TanStack Query**: 5.0.0 for data fetching and caching
+- **Nivo**: Data visualization library for charts and graphs
+- **Wouter**: Lightweight routing library
+- **React Hook Form**: Form state management with Zod validation
+- **Framer Motion**: Animation and transitions
+
+### Backend
+- **Node.js**: 20.x runtime environment
+- **Express**: 4.18.0 web framework
+- **Drizzle ORM**: Type-safe database queries with PostgreSQL
+- **OpenAI API**: GPT-4o integration for AI-powered insights
+- **Passport.js**: Authentication middleware for OIDC
+- **Replit Authentication**: OpenID Connect provider
+
+### Database
+- **PostgreSQL**: Relational database for data storage
+- **Drizzle Kit**: Schema migrations and management
+- **Connection Pooling**: For efficient database connections
+
+### DevOps & Tooling
+- **TypeScript**: 5.0.0 for static type checking
+- **Vite**: Fast bundling and development server
+- **ESBuild**: JavaScript bundler and minifier
+- **PostCSS**: CSS processing with plugins
+- **Replit**: Hosting and deployment platform
+
 ## Table of Contents
 1. [Core Features](#core-features)
 2. [Technical Architecture](#technical-architecture)
