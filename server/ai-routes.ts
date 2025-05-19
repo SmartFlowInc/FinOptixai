@@ -23,7 +23,7 @@ export function registerAIRoutes(app: any) {
     }
   });
   
-  // Generate personalized insights
+  // Generate personalized insights based on financial data and user preferences
   app.post('/api/ai/insights', async (req: Request, res: Response) => {
     try {
       const { financialData, userPreferences } = req.body;
@@ -32,6 +32,7 @@ export function registerAIRoutes(app: any) {
         return res.status(400).json({ error: 'Financial data is required' });
       }
       
+      log('Generating personalized insights with AI', 'ai-routes');
       const result = await generateInsights(financialData, userPreferences);
       return res.json(result);
     } catch (error) {
