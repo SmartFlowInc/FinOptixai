@@ -9,6 +9,7 @@ import Collaboration from "@/pages/Collaboration";
 import EnhancedCollaboration from "@/pages/EnhancedCollaboration";
 import DataSources from "@/pages/DataSources";
 import DataIntegration from "@/pages/DataIntegration";
+import EnhancedDataIntegration from "@/pages/EnhancedDataIntegration";
 import ContinuousImprovement from "@/pages/ContinuousImprovement";
 import AnomalyDetection from "@/pages/AnomalyDetection";
 import Insights from "@/pages/Insights";
@@ -29,6 +30,7 @@ function App() {
         <Route path="/collaboration" component={Collaboration} />
         <Route path="/data-sources" component={DataSources} />
         <Route path="/data-integration" component={DataIntegration} />
+        <Route path="/enhanced-data-integration" component={EnhancedDataIntegration} />
         <Route path="/continuous-improvement" component={ContinuousImprovement} />
         <Route path="/anomaly-detection" component={AnomalyDetection} />
         <Route path="/insights" component={Insights} />
