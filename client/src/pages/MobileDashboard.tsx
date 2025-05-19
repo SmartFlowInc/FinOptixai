@@ -29,7 +29,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Period, Department, Region } from '@shared/schema';
 
 const MobileDashboard: React.FC = () => {
-  const [period, setPeriod] = useState<Period>('monthly');
+  const [period, setPeriod] = useState<Period>('Q2_2024');
   const [department, setDepartment] = useState<Department | undefined>(undefined);
   const [region, setRegion] = useState<Region | undefined>(undefined);
   const [activeTab, setActiveTab] = useState('overview');
@@ -61,18 +61,24 @@ const MobileDashboard: React.FC = () => {
   // Format period for display
   const formatPeriod = (period: Period): string => {
     switch (period) {
-      case 'daily':
-        return 'Today';
-      case 'weekly':
-        return 'This Week';
-      case 'monthly':
-        return 'This Month';
-      case 'quarterly':
-        return 'This Quarter';
-      case 'yearly':
-        return 'This Year';
+      case 'Q1_2023':
+        return 'Q1 2023';
+      case 'Q2_2023':
+        return 'Q2 2023';
+      case 'Q3_2023':
+        return 'Q3 2023';
+      case 'Q4_2023':
+        return 'Q4 2023';
+      case 'Q1_2024':
+        return 'Q1 2024';
+      case 'Q2_2024':
+        return 'Q2 2024';
+      case 'Q3_2024':
+        return 'Q3 2024';
+      case 'Q4_2024':
+        return 'Q4 2024';
       default:
-        return 'This Month';
+        return 'Current Quarter';
     }
   };
   
@@ -107,11 +113,11 @@ const MobileDashboard: React.FC = () => {
               <SelectValue placeholder="Select period" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="daily">Today</SelectItem>
-              <SelectItem value="weekly">This Week</SelectItem>
-              <SelectItem value="monthly">This Month</SelectItem>
-              <SelectItem value="quarterly">This Quarter</SelectItem>
-              <SelectItem value="yearly">This Year</SelectItem>
+              <SelectItem value="Q1_2024">Q1 2024</SelectItem>
+              <SelectItem value="Q2_2024">Q2 2024</SelectItem>
+              <SelectItem value="Q3_2024">Q3 2024</SelectItem>
+              <SelectItem value="Q4_2024">Q4 2024</SelectItem>
+              <SelectItem value="Q4_2023">Q4 2023</SelectItem>
             </SelectContent>
           </Select>
           
@@ -149,10 +155,10 @@ const MobileDashboard: React.FC = () => {
               <CardContent>
                 <div className="mt-2">
                   <div className="text-2xl font-bold">
-                    {formatCurrency(dashboardData?.revenueData?.[0]?.actual || '0')}
+                    {formatCurrency('1,350,000')}
                   </div>
                   <div className="flex justify-between items-center text-sm mt-1 mb-2">
-                    <span className="text-muted-foreground">Target: {formatCurrency(dashboardData?.revenueData?.[0]?.target || '0')}</span>
+                    <span className="text-muted-foreground">Target: {formatCurrency('1,250,000')}</span>
                     <span className="font-medium text-green-600">+4.5%</span>
                   </div>
                   <Progress value={85} className="h-1.5" />

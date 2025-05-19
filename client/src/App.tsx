@@ -39,6 +39,7 @@ function App() {
         <Route path="/enhanced-collaboration" component={EnhancedCollaboration} />
         <Route path="/calendar" component={Calendar} />
         <Route path="/settings" component={Settings} />
+        <Route path="/mobile-dashboard" component={MobileDashboard} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
