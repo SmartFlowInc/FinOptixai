@@ -15,6 +15,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 import QuickFilters from "@/components/filters/QuickFilters";
 import KpiCard from "@/components/dashboard/KpiCard";
@@ -39,7 +49,8 @@ const Dashboard = () => {
   
   const [forecastTimeframe, setForecastTimeframe] = useState<string>("6_months");
   const [insightsPanelExpanded, setInsightsPanelExpanded] = useState<boolean>(false);
-  const [dashboardLayout, setDashboardLayout] = useState<"default" | "compact" | "expanded" | "custom">("default");
+  const [dashboardLayout, setDashboardLayout] = useState<string>("default");
+  const [showAddWidgetDialog, setShowAddWidgetDialog] = useState(false);
   
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -96,7 +107,7 @@ const Dashboard = () => {
     setForecastTimeframe(timeframe);
   };
   
-  const handleLayoutChange = (layout: "default" | "compact" | "expanded" | "custom") => {
+  const handleLayoutChange = (layout: string) => {
     setDashboardLayout(layout);
     
     // Save user preference
@@ -134,7 +145,10 @@ const Dashboard = () => {
           onExport={handleExport}
         />
         
-        <div className="flex items-center gap-2 mt-4 md:mt-0">
+        <div className="flex flex-wrap items-center gap-2 mt-4 md:mt-0">
+          <div className="flex items-center mr-2">
+            <span className="text-sm mr-2 text-neutral-500">Layout:</span>
+          </div>
           <Button variant="outline" size="sm" onClick={() => handleLayoutChange("default")} className={dashboardLayout === "default" ? "bg-primary/10" : ""}>
             <i className="ri-layout-grid-line mr-1"></i>
             Default
@@ -150,6 +164,17 @@ const Dashboard = () => {
           <Button variant="outline" size="sm" onClick={() => handleLayoutChange("custom")} className={dashboardLayout === "custom" ? "bg-primary/10" : ""}>
             <i className="ri-drag-move-line mr-1"></i>
             Custom
+          </Button>
+          
+          <div className="border-l mx-2 h-6"></div>
+          
+          <Button variant="outline" size="sm">
+            <i className="ri-save-line mr-1"></i>
+            Save As Custom
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setShowAddWidgetDialog(true)}>
+            <i className="ri-add-line mr-1"></i>
+            Add Widget
           </Button>
         </div>
       </div>
@@ -259,7 +284,7 @@ const Dashboard = () => {
           />
         </div>
         
-        {(dashboardLayout !== "compact" || dashboardLayout === "custom") && (
+        {(dashboardLayout !== "compact") && (
           <div>
             <Card>
               <CardHeader>
@@ -369,6 +394,153 @@ const Dashboard = () => {
           </div>
         )}
       </div>
+      
+      {/* Add Widget Dialog */}
+      <Dialog open={showAddWidgetDialog} onOpenChange={setShowAddWidgetDialog}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Add Dashboard Widgets</DialogTitle>
+            <DialogDescription>
+              Select widgets to add to your dashboard view
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4 space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="revenue-chart" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="revenue-chart" className="font-medium">Revenue Chart</Label>
+                    <p className="text-sm text-neutral-500">
+                      Monthly revenue trends and comparisons
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="expense-breakdown" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="expense-breakdown" className="font-medium">Expense Breakdown</Label>
+                    <p className="text-sm text-neutral-500">
+                      Expense categories and distribution
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="budget-vs-actual" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="budget-vs-actual" className="font-medium">Budget vs Actual</Label>
+                    <p className="text-sm text-neutral-500">
+                      Budget performance by department
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="financial-forecast" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="financial-forecast" className="font-medium">Financial Forecast</Label>
+                    <p className="text-sm text-neutral-500">
+                      Future financial projections
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="cash-flow-forecast" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="cash-flow-forecast" className="font-medium">Cash Flow Forecast</Label>
+                    <p className="text-sm text-neutral-500">
+                      Cash flow projections and analysis
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="driver-analysis" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="driver-analysis" className="font-medium">Driver Analysis</Label>
+                    <p className="text-sm text-neutral-500">
+                      Key business drivers impact analysis
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="key-insights" />
+                  <div className="grid gap-1">
+                    <Label htmlFor="key-insights" className="font-medium">Key Insights</Label>
+                    <p className="text-sm text-neutral-500">
+                      Automatically generated insights
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="financial-reports" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="financial-reports" className="font-medium">Financial Reports</Label>
+                    <p className="text-sm text-neutral-500">
+                      Recent financial reports and documents
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="recent-activity" defaultChecked />
+                  <div className="grid gap-1">
+                    <Label htmlFor="recent-activity" className="font-medium">Recent Activity</Label>
+                    <p className="text-sm text-neutral-500">
+                      Recent user actions and updates
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2 border rounded-lg p-3">
+                <div className="flex items-start space-x-2">
+                  <Checkbox id="calendar-events" />
+                  <div className="grid gap-1">
+                    <Label htmlFor="calendar-events" className="font-medium">Calendar Events</Label>
+                    <p className="text-sm text-neutral-500">
+                      Upcoming financial events and deadlines
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowAddWidgetDialog(false)}>Cancel</Button>
+            <Button onClick={() => {
+              setShowAddWidgetDialog(false);
+              toast({
+                title: "Widgets Updated",
+                description: "Your dashboard widgets have been updated.",
+              });
+            }}>Apply Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
