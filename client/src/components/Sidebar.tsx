@@ -129,6 +129,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
               </Link>
             </li>
             <li>
+              <Link href="/enhanced-collaboration">
+                <div className={`sidebar-link ${location === "/enhanced-collaboration" ? "active" : ""}`}>
+                  <i className="ri-chat-4-line sidebar-icon"></i>
+                  <span>Enhanced Collaboration</span>
+                </div>
+              </Link>
+            </li>
+            <li>
               <Link href="/data-sources">
                 <div className={`sidebar-link ${location === "/data-sources" ? "active" : ""}`}>
                   <i className="ri-database-2-line sidebar-icon"></i>
