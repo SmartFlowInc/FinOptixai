@@ -97,6 +97,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
               </Link>
             </li>
             <li>
+              <Link href="/workflow-approval">
+                <div className={`sidebar-link ${location === "/workflow-approval" ? "active" : ""}`}>
+                  <i className="ri-flow-chart sidebar-icon"></i>
+                  <span>Workflows</span>
+                </div>
+              </Link>
+            </li>
+            <li>
               <Link href="/forecasting">
                 <div className={`sidebar-link ${location === "/forecasting" ? "active" : ""}`}>
                   <i className="ri-line-chart-line sidebar-icon"></i>

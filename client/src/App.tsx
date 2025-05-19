@@ -11,6 +11,7 @@ import DataIntegration from "@/pages/DataIntegration";
 import ContinuousImprovement from "@/pages/ContinuousImprovement";
 import AnomalyDetection from "@/pages/AnomalyDetection";
 import Insights from "@/pages/Insights";
+import WorkflowApproval from "@/pages/WorkflowApproval";
 import Calendar from "@/pages/Calendar";
 import Settings from "@/pages/Settings";
 import NotFound from "@/pages/not-found";
@@ -30,6 +31,7 @@ function App() {
         <Route path="/continuous-improvement" component={ContinuousImprovement} />
         <Route path="/anomaly-detection" component={AnomalyDetection} />
         <Route path="/insights" component={Insights} />
+        <Route path="/workflow-approval" component={WorkflowApproval} />
         <Route path="/calendar" component={Calendar} />
         <Route path="/settings" component={Settings} />
         <Route component={NotFound} />
