@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
 import { IconWrapper } from "@/components/ui/icon-wrapper";
-import { Link, ExternalLink, RefreshCw, Plus, Settings, Database, Key, AlertTriangle } from "lucide-react";
+import { Link, ExternalLink, RefreshCw, Plus, Settings, Database, Key, AlertTriangle, Clock } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 

@@ -47,12 +47,12 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
         {/* Logo */}
         <div className="p-5 border-b border-neutral-200">
           <Link href="/">
-            <a className="flex items-center space-x-3">
+            <div className="flex items-center space-x-3">
               <div className="rounded-lg bg-primary p-2">
                 <i className="ri-bar-chart-box-line text-xl text-white"></i>
               </div>
               <span className="text-xl font-semibold text-neutral-500">Abacum</span>
-            </a>
+            </div>
           </Link>
         </div>
         
@@ -74,58 +74,58 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
           <ul className="px-3 space-y-1">
             <li>
               <Link href="/">
-                <a className={`sidebar-link ${location === "/" ? "active" : ""}`}>
+                <div className={`sidebar-link ${location === "/" ? "active" : ""}`}>
                   <i className="ri-dashboard-line sidebar-icon"></i>
                   <span>Dashboard</span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/budgeting">
-                <a className={`sidebar-link ${location === "/budgeting" ? "active" : ""}`}>
+                <div className={`sidebar-link ${location === "/budgeting" ? "active" : ""}`}>
                   <i className="ri-money-dollar-circle-line sidebar-icon"></i>
                   <span>Budgeting</span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/forecasting">
-                <a className={`sidebar-link ${location === "/forecasting" ? "active" : ""}`}>
+                <div className={`sidebar-link ${location === "/forecasting" ? "active" : ""}`}>
                   <i className="ri-line-chart-line sidebar-icon"></i>
                   <span>Forecasting</span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/reports">
-                <a className={`sidebar-link ${location === "/reports" ? "active" : ""}`}>
+                <div className={`sidebar-link ${location === "/reports" ? "active" : ""}`}>
                   <i className="ri-file-chart-line sidebar-icon"></i>
                   <span>Reports</span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/collaboration">
-                <a className={`sidebar-link ${location === "/collaboration" ? "active" : ""}`}>
+                <div className={`sidebar-link ${location === "/collaboration" ? "active" : ""}`}>
                   <i className="ri-team-line sidebar-icon"></i>
                   <span>Collaboration</span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/data-sources">
-                <a className={`sidebar-link ${location === "/data-sources" ? "active" : ""}`}>
+                <div className={`sidebar-link ${location === "/data-sources" ? "active" : ""}`}>
                   <i className="ri-database-2-line sidebar-icon"></i>
                   <span>Data Sources</span>
-                </a>
+                </div>
               </Link>
             </li>
             <li>
               <Link href="/settings">
-                <a className={`sidebar-link ${location === "/settings" ? "active" : ""}`}>
+                <div className={`sidebar-link ${location === "/settings" ? "active" : ""}`}>
                   <i className="ri-settings-3-line sidebar-icon"></i>
                   <span>Settings</span>
-                </a>
+                </div>
               </Link>
             </li>
           </ul>
