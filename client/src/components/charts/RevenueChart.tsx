@@ -102,7 +102,7 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
         <div style={{ height }}>
           <ResponsiveLine
             data={chartData}
-            margin={{ top: 20, right: 20, bottom: 60, left: 80 }}
+            margin={{ top: 50, right: 50, bottom: 70, left: 60 }}
             xScale={{ type: 'point' }}
             yScale={{
               type: 'linear',
@@ -127,35 +127,38 @@ const RevenueChart: React.FC<RevenueChartProps> = ({
               tickPadding: 5,
               tickRotation: 0,
               legend: 'Revenue',
-              legendOffset: -60,
+              legendOffset: -45,
               legendPosition: 'middle',
               format: (value) => 
                 `$${Math.abs(value) >= 1000000 
                   ? `${(value / 1000000).toFixed(1)}M` 
                   : `${(value / 1000).toFixed(0)}K`}`
             }}
+            enableGridX={false}
+            gridYValues={5}
             colors={['#3498db', '#D4E5F5', '#9CA3AF']}
-            pointSize={10}
+            lineWidth={3}
+            pointSize={8}
             pointColor={{ theme: 'background' }}
             pointBorderWidth={2}
             pointBorderColor={{ from: 'serieColor' }}
             pointLabelYOffset={-12}
             useMesh={true}
+            enableSlices="x"
             legends={[
               {
                 anchor: 'bottom',
                 direction: 'row',
                 justify: false,
                 translateX: 0,
-                translateY: 50,
+                translateY: 60,
                 itemsSpacing: 30,
                 itemDirection: 'left-to-right',
-                itemWidth: 80,
+                itemWidth: 100,
                 itemHeight: 20,
-                itemOpacity: 0.75,
-                symbolSize: 12,
+                symbolSize: 10,
                 symbolShape: 'circle',
-                symbolBorderColor: 'rgba(0, 0, 0, .5)',
+                symbolBorderColor: 'rgba(0, 0, 0, .3)',
                 effects: [
                   {
                     on: 'hover',
