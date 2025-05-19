@@ -237,13 +237,13 @@ const Dashboard = () => {
           insightsPanelExpanded ? "lg:col-span-1" : "lg:col-span-2"
         } grid grid-cols-1 ${dashboardLayout === "expanded" ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6`}>
           <RevenueChart
-            data={data?.revenueData ? transformRevenueData(data.revenueData) : undefined}
+            data={transformRevenueData()}
             isLoading={isLoading}
             title="Revenue Trend"
           />
           
           <ExpenseChart
-            data={data?.expenseData ? transformExpenseData(data.expenseData) : undefined}
+            data={transformExpenseData()}
             isLoading={isLoading}
             title="Expense Breakdown"
             description="By category"
