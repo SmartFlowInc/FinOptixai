@@ -1,476 +1,408 @@
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import FinancialForecast from "@/components/dashboard/FinancialForecast";
-import CashFlowForecast from "@/components/dashboard/CashFlowForecast";
-import { useQuery } from "@tanstack/react-query";
-import { ForecastData, CashFlowData } from "@shared/schema";
-import QuickFilters from "@/components/filters/QuickFilters";
-import { defaultFilters } from "@/data/finance";
+import {
+  BarChart4,
+  Clock,
+  Download,
+  Edit,
+  FileText,
+  Lightbulb,
+  LineChart,
+  ListChecks,
+  Plus,
+  Settings,
+  TrendingUp,
+  Users
+} from "lucide-react";
+import CollaborativeForecast from "@/components/forecasting/CollaborativeForecast";
 
 const Forecasting = () => {
-  const [filters, setFilters] = useState({
-    period: defaultFilters.period,
-    department: defaultFilters.department,
-    region: defaultFilters.region
-  });
-  
-  const [forecastTimeframe, setForecastTimeframe] = useState<string>("6_months");
-  
-  const { data: forecastData, isLoading: forecastLoading } = useQuery<ForecastData>({
-    queryKey: ["/api/forecast", filters.period, forecastTimeframe],
-    queryFn: async () => {
-      const queryParams = new URLSearchParams({
-        period: filters.period,
-        timeframe: forecastTimeframe
-      });
-      
-      const response = await fetch(`/api/forecast?${queryParams.toString()}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch forecast data');
-      }
-      
-      return response.json();
-    }
-  });
-  
-  const { data: cashFlowData, isLoading: cashFlowLoading } = useQuery<CashFlowData>({
-    queryKey: ["/api/cashflow", filters.period],
-    queryFn: async () => {
-      const queryParams = new URLSearchParams({
-        period: filters.period
-      });
-      
-      const response = await fetch(`/api/cashflow?${queryParams.toString()}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch cash flow data');
-      }
-      
-      return response.json();
-    }
-  });
-  
-  const handleFilterChange = (type: 'period' | 'department' | 'region', value: string) => {
-    setFilters(prev => ({
-      ...prev,
-      [type]: value
-    }));
-  };
-  
-  const handleTimeframeChange = (timeframe: string) => {
-    setForecastTimeframe(timeframe);
-  };
+  const [activeTab, setActiveTab] = useState<string>("collaborative");
 
   return (
-    <>
-      <QuickFilters 
-        period={filters.period}
-        department={filters.department}
-        region={filters.region}
-        onFilterChange={handleFilterChange}
-      />
-      
-      <Tabs defaultValue="financials" className="mb-6">
-        <TabsList>
-          <TabsTrigger value="financials">Financial Forecasts</TabsTrigger>
-          <TabsTrigger value="cashflow">Cash Flow Analysis</TabsTrigger>
-          <TabsTrigger value="scenarios">Scenario Planning</TabsTrigger>
+    <div className="space-y-6">
+      <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+        <div>
+          <h1 className="text-2xl font-bold">Financial Forecasting</h1>
+          <p className="text-neutral-600">
+            Create and analyze financial forecasts with collaborative input
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <Button variant="outline">
+            <Download className="h-4 w-4 mr-2" />
+            Export
+          </Button>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            New Forecast
+          </Button>
+        </div>
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <TabsList className="grid grid-cols-1 md:grid-cols-4 h-auto gap-4">
+          <TabsTrigger value="collaborative" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <Users className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Collaborative Forecast</div>
+              <div className="text-xs text-neutral-500">Multi-stakeholder input</div>
+            </div>
+          </TabsTrigger>
+          
+          <TabsTrigger value="driver-analysis" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <TrendingUp className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Driver Analysis</div>
+              <div className="text-xs text-neutral-500">Growth drivers & impact</div>
+            </div>
+          </TabsTrigger>
+          
+          <TabsTrigger value="scenarios" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <BarChart4 className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Scenario Analysis</div>
+              <div className="text-xs text-neutral-500">What-if scenarios</div>
+            </div>
+          </TabsTrigger>
+          
+          <TabsTrigger value="settings" className="data-[state=active]:bg-primary/5 flex items-center gap-2 h-14">
+            <div className="bg-primary/10 rounded-full p-1.5 flex-shrink-0">
+              <Settings className="h-5 w-5 text-primary" />
+            </div>
+            <div className="text-left">
+              <div className="font-medium">Settings</div>
+              <div className="text-xs text-neutral-500">Forecast preferences</div>
+            </div>
+          </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="financials" className="mt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle>Financial Projection</CardTitle>
-                <CardDescription>Projected revenue and expenses</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {forecastData && (
-                  <FinancialForecast 
-                    forecastData={forecastData} 
-                    isLoading={forecastLoading}
-                    onTimeframeChange={handleTimeframeChange}
-                  />
-                )}
-              </CardContent>
-            </Card>
-            
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle>Key Drivers</CardTitle>
-                <CardDescription>Factors influencing your financial forecast</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex gap-2 items-center">
-                      <div className="h-3 w-3 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Labor Costs</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="font-medium">85</div>
-                      <div className="text-xs text-neutral-500">impact</div>
-                    </div>
-                  </div>
-                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
-                    <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: "85%" }}></div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex gap-2 items-center">
-                      <div className="h-3 w-3 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Raw Materials</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="font-medium">75</div>
-                      <div className="text-xs text-neutral-500">impact</div>
-                    </div>
-                  </div>
-                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
-                    <div className="bg-green-500 h-1.5 rounded-full" style={{ width: "75%" }}></div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex gap-2 items-center">
-                      <div className="h-3 w-3 bg-purple-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Energy</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="font-medium">62</div>
-                      <div className="text-xs text-neutral-500">impact</div>
-                    </div>
-                  </div>
-                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
-                    <div className="bg-purple-500 h-1.5 rounded-full" style={{ width: "62%" }}></div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex gap-2 items-center">
-                      <div className="h-3 w-3 bg-amber-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Logistics</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="font-medium">58</div>
-                      <div className="text-xs text-neutral-500">impact</div>
-                    </div>
-                  </div>
-                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
-                    <div className="bg-amber-500 h-1.5 rounded-full" style={{ width: "58%" }}></div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between pt-2">
-                    <div className="flex gap-2 items-center">
-                      <div className="h-3 w-3 bg-red-500 rounded-full"></div>
-                      <span className="text-sm font-medium">Marketing</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <div className="font-medium">45</div>
-                      <div className="text-xs text-neutral-500">impact</div>
-                    </div>
-                  </div>
-                  <div className="w-full bg-neutral-100 rounded-full h-1.5">
-                    <div className="bg-red-500 h-1.5 rounded-full" style={{ width: "45%" }}></div>
-                  </div>
-                  
-                  <div className="pt-4 mt-2 border-t">
-                    <Button variant="outline" size="sm" className="w-full">
-                      View Full Driver Analysis
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+        {/* Collaborative Forecast Tab */}
+        <TabsContent value="collaborative">
+          <CollaborativeForecast />
         </TabsContent>
         
-        <TabsContent value="cashflow" className="mt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle>Cash Flow Projection</CardTitle>
-                <CardDescription>Projected cash position and runway</CardDescription>
-              </CardHeader>
-              <CardContent>
-                {cashFlowData && (
-                  <CashFlowForecast 
-                    cashFlowData={cashFlowData} 
-                    isLoading={cashFlowLoading}
-                  />
-                )}
-              </CardContent>
-            </Card>
-            
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle>Working Capital Analysis</CardTitle>
-                <CardDescription>Cash conversion cycle and working capital requirements</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="rounded-lg bg-neutral-50 p-4 border border-neutral-100">
-                      <div className="text-sm text-neutral-500 mb-1">Cash Conversion Cycle</div>
-                      <div className="text-2xl font-semibold">38 days</div>
-                      <div className="flex items-center text-xs text-green-600 mt-1">
-                        <i className="ri-arrow-down-line mr-1"></i>
-                        <span>↓ 5 days vs previous quarter</span>
-                      </div>
-                    </div>
-                    <div className="rounded-lg bg-neutral-50 p-4 border border-neutral-100">
-                      <div className="text-sm text-neutral-500 mb-1">Working Capital Ratio</div>
-                      <div className="text-2xl font-semibold">1.8</div>
-                      <div className="flex items-center text-xs text-green-600 mt-1">
-                        <i className="ri-arrow-up-line mr-1"></i>
-                        <span>↑ 0.2 vs previous quarter</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="text-sm font-medium mb-3">Cash Conversion Components</div>
-                    <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-neutral-600">Days Inventory Outstanding</span>
-                          <span className="text-neutral-800">25 days</span>
-                        </div>
-                        <div className="w-full h-2 bg-neutral-100 rounded-full">
-                          <div className="h-2 bg-blue-500 rounded-full" style={{ width: '62.5%' }}></div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-neutral-600">Days Sales Outstanding</span>
-                          <span className="text-neutral-800">32 days</span>
-                        </div>
-                        <div className="w-full h-2 bg-neutral-100 rounded-full">
-                          <div className="h-2 bg-orange-500 rounded-full" style={{ width: '80%' }}></div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-neutral-600">Days Payable Outstanding</span>
-                          <span className="text-neutral-800">19 days</span>
-                        </div>
-                        <div className="w-full h-2 bg-neutral-100 rounded-full">
-                          <div className="h-2 bg-green-500 rounded-full" style={{ width: '47.5%' }}></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="pt-2">
-                    <div className="text-sm font-medium mb-3">Working Capital Forecast (6 months)</div>
-                    <div className="h-[150px] w-full bg-neutral-50 border rounded-md p-3 relative">
-                      {/* This would be replaced with a real chart in production */}
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-full h-[100px] border-b border-l relative">
-                          {/* Simplified line chart representation */}
-                          <svg width="100%" height="100%" viewBox="0 0 300 100">
-                            <path 
-                              d="M0,70 C20,65 40,40 60,35 C80,30 100,45 120,40 C140,35 160,20 180,25 C200,30 220,55 240,50 C260,45 280,30 300,20" 
-                              fill="none" 
-                              stroke="#3b82f6" 
-                              strokeWidth="2" 
-                            />
-                          </svg>
-                          
-                          {/* X axis labels */}
-                          <div className="absolute -bottom-6 left-0 w-full flex justify-between text-xs text-neutral-500">
-                            <span>Nov</span>
-                            <span>Dec</span>
-                            <span>Jan</span>
-                            <span>Feb</span>
-                            <span>Mar</span>
-                            <span>Apr</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-        
-        <TabsContent value="scenarios" className="mt-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                  <div>
-                    <CardTitle>Scenario Comparison</CardTitle>
-                    <CardDescription>Compare different financial scenarios</CardDescription>
-                  </div>
-                  <div className="flex gap-2">
-                    <Tabs defaultValue="chart" className="w-[200px]">
-                      <TabsList className="grid w-full grid-cols-2">
-                        <TabsTrigger value="chart">Chart</TabsTrigger>
-                        <TabsTrigger value="table">Table</TabsTrigger>
-                      </TabsList>
-                    </Tabs>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
+        {/* Driver Analysis Tab */}
+        <TabsContent value="driver-analysis">
+          <Card>
+            <CardHeader>
+              <div className="flex justify-between items-center">
                 <div>
-                  <div className="h-[350px] flex items-center justify-center">
-                    <div className="w-full max-w-md">
-                      <div className="flex items-end h-64 border-b border-l relative">
-                        {/* Base Case */}
-                        <div className="absolute bottom-0 left-[20%] w-16 -ml-8">
-                          <div className="h-40 w-12 mx-auto bg-primary rounded-t"></div>
-                          <p className="text-xs text-center mt-2">Base</p>
-                          <p className="text-xs text-center text-neutral-500">$5.8M</p>
-                        </div>
-                        
-                        {/* Optimistic Case */}
-                        <div className="absolute bottom-0 left-[50%] w-16 -ml-8">
-                          <div className="h-60 w-12 mx-auto bg-green-500 rounded-t"></div>
-                          <p className="text-xs text-center mt-2">Optimistic</p>
-                          <p className="text-xs text-center text-neutral-500">$8.7M</p>
-                        </div>
-                        
-                        {/* Conservative Case */}
-                        <div className="absolute bottom-0 left-[80%] w-16 -ml-8">
-                          <div className="h-32 w-12 mx-auto bg-amber-500 rounded-t"></div>
-                          <p className="text-xs text-center mt-2">Conservative</p>
-                          <p className="text-xs text-center text-neutral-500">$4.6M</p>
-                        </div>
-                        
-                        {/* Y-axis labels */}
-                        <div className="absolute left-0 top-0 h-full flex flex-col justify-between -translate-x-6">
-                          <span className="text-xs text-neutral-500">$10M</span>
-                          <span className="text-xs text-neutral-500">$7.5M</span>
-                          <span className="text-xs text-neutral-500">$5M</span>
-                          <span className="text-xs text-neutral-500">$2.5M</span>
-                          <span className="text-xs text-neutral-500">$0</span>
-                        </div>
-                      </div>
-                      
-                      <div className="mt-8 flex justify-center">
-                        <div className="flex items-center gap-8">
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-primary rounded-sm"></div>
-                            <span className="text-sm">Base</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-green-500 rounded-sm"></div>
-                            <span className="text-sm">Optimistic</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-amber-500 rounded-sm"></div>
-                            <span className="text-sm">Conservative</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <CardTitle>Driver Analysis</CardTitle>
+                  <CardDescription>
+                    Analyze growth drivers and their impact on financial projections
+                  </CardDescription>
                 </div>
-              </CardContent>
-            </Card>
-            
-            <div className="space-y-6">
+                <Button variant="outline">
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Analysis
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-neutral-50 p-8 rounded-lg text-center">
+                <TrendingUp className="h-12 w-12 mx-auto mb-3 text-neutral-400" />
+                <h3 className="text-lg font-medium mb-2">Driver Analysis Coming Soon</h3>
+                <p className="text-neutral-500 max-w-md mx-auto mb-4">
+                  Our advanced driver analysis module is under development. It will help identify key growth 
+                  drivers and quantify their impact on your forecasts.
+                </p>
+                <Button>
+                  Schedule Demo
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        {/* Scenario Analysis Tab */}
+        <TabsContent value="scenarios">
+          <Card>
+            <CardHeader>
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle>Scenario Analysis</CardTitle>
+                  <CardDescription>
+                    Create and compare multiple forecast scenarios
+                  </CardDescription>
+                </div>
+                <Button variant="outline">
+                  <Plus className="h-4 w-4 mr-2" />
+                  New Scenario
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-neutral-50 p-8 rounded-lg text-center">
+                <LineChart className="h-12 w-12 mx-auto mb-3 text-neutral-400" />
+                <h3 className="text-lg font-medium mb-2">Scenario Analysis Coming Soon</h3>
+                <p className="text-neutral-500 max-w-md mx-auto mb-4">
+                  Our advanced scenario analysis module is under development. It will allow you to create and
+                  compare multiple what-if scenarios to inform strategic decisions.
+                </p>
+                <Button>
+                  Schedule Demo
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        {/* Settings Tab */}
+        <TabsContent value="settings">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="md:col-span-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Create Scenario</CardTitle>
-                  <CardDescription>Model different business outcomes</CardDescription>
+                  <CardTitle>Forecast Settings</CardTitle>
+                  <CardDescription>Configure forecasting preferences and parameters</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Scenario Name</label>
-                      <Input placeholder="Enter scenario name" />
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Revenue Growth</label>
-                      <div className="flex items-center gap-4">
-                        <Input type="number" defaultValue="12.5" className="w-20" />
-                        <div className="flex-1">
-                          <div className="w-full bg-neutral-100 rounded-full h-2">
-                            <div className="bg-primary h-2 rounded-full" style={{ width: '65%' }}></div>
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-sm font-medium mb-3">General Settings</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Default Forecast Period</div>
+                            <div className="text-sm text-neutral-500">Choose default timeframe for new forecasts</div>
                           </div>
+                          <div className="flex items-center border rounded-md overflow-hidden">
+                            <button className="px-3 py-1 bg-primary text-white">Monthly</button>
+                            <button className="px-3 py-1 hover:bg-neutral-100">Quarterly</button>
+                            <button className="px-3 py-1 hover:bg-neutral-100">Annual</button>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Default View</div>
+                            <div className="text-sm text-neutral-500">Choose default view for forecast data</div>
+                          </div>
+                          <div className="flex items-center border rounded-md overflow-hidden">
+                            <button className="px-3 py-1 bg-primary text-white">Grid</button>
+                            <button className="px-3 py-1 hover:bg-neutral-100">Chart</button>
+                            <button className="px-3 py-1 hover:bg-neutral-100">Summary</button>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Automatic Calculations</div>
+                            <div className="text-sm text-neutral-500">Auto-calculate totals and growth rates</div>
+                          </div>
+                          <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+                            <div className="absolute h-4 w-4 rounded-full bg-white right-1"></div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Currency Display</div>
+                            <div className="text-sm text-neutral-500">Choose default currency format</div>
+                          </div>
+                          <select className="border rounded px-2 py-1">
+                            <option>USD ($)</option>
+                            <option>EUR (€)</option>
+                            <option>GBP (£)</option>
+                            <option>JPY (¥)</option>
+                          </select>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Cost Reduction</label>
-                      <div className="flex items-center gap-4">
-                        <Input type="number" defaultValue="5.0" className="w-20" />
-                        <div className="flex-1">
-                          <div className="w-full bg-neutral-100 rounded-full h-2">
-                            <div className="bg-primary h-2 rounded-full" style={{ width: '40%' }}></div>
+                    <div>
+                      <h3 className="text-sm font-medium mb-3">Collaboration Settings</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Comment Notifications</div>
+                            <div className="text-sm text-neutral-500">Receive notifications for new comments</div>
                           </div>
+                          <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+                            <div className="absolute h-4 w-4 rounded-full bg-white right-1"></div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Change Notifications</div>
+                            <div className="text-sm text-neutral-500">Receive notifications for forecast changes</div>
+                          </div>
+                          <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+                            <div className="absolute h-4 w-4 rounded-full bg-white right-1"></div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Default Visibility</div>
+                            <div className="text-sm text-neutral-500">Default visibility for new forecasts</div>
+                          </div>
+                          <select className="border rounded px-2 py-1">
+                            <option>Team Only</option>
+                            <option>Department</option>
+                            <option>Company-wide</option>
+                            <option>Private</option>
+                          </select>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium">Profit Margin</label>
-                      <div className="flex items-center gap-4">
-                        <Input type="number" defaultValue="24.8" className="w-20" />
-                        <div className="flex-1">
-                          <div className="w-full bg-neutral-100 rounded-full h-2">
-                            <div className="bg-primary h-2 rounded-full" style={{ width: '75%' }}></div>
+                    <div>
+                      <h3 className="text-sm font-medium mb-3">Advanced Settings</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">AI-Powered Suggestions</div>
+                            <div className="text-sm text-neutral-500">Enable AI assistance for forecasting</div>
+                          </div>
+                          <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+                            <div className="absolute h-4 w-4 rounded-full bg-white right-1"></div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between border p-3 rounded-lg">
+                          <div>
+                            <div className="font-medium">Forecast Version Control</div>
+                            <div className="text-sm text-neutral-500">Enable detailed version history</div>
+                          </div>
+                          <div className="relative inline-flex h-6 w-11 items-center rounded-full bg-primary">
+                            <div className="absolute h-4 w-4 rounded-full bg-white right-1"></div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Category Management</CardTitle>
+                  <CardDescription>Manage financial categories for forecasting</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-sm font-medium">Active Categories</h3>
+                    <Button variant="outline" size="sm">
+                      <Plus className="h-4 w-4 mr-1" />
+                      Add
+                    </Button>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div className="border rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-medium">Revenue</div>
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="text-sm text-neutral-500">
+                        10 subcategories
+                      </div>
+                    </div>
                     
-                    <div className="pt-2">
-                      <Button className="w-full">
-                        Run Scenario
-                      </Button>
+                    <div className="border rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-medium">Expenses</div>
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="text-sm text-neutral-500">
+                        15 subcategories
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-medium">Capital Expenditures</div>
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="text-sm text-neutral-500">
+                        5 subcategories
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-lg p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="font-medium">Headcount</div>
+                        <div className="flex items-center gap-1">
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="text-sm text-neutral-500">
+                        8 subcategories
+                      </div>
                     </div>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card>
+              <Card className="mt-4">
                 <CardHeader>
-                  <CardTitle>Scenario Parameters</CardTitle>
-                  <CardDescription>Active scenario variables</CardDescription>
+                  <CardTitle>Forecast Accuracy</CardTitle>
+                  <CardDescription>Track and improve forecast accuracy</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Timeframe</span>
-                      <span className="text-sm">12 months</span>
+                  <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg text-center mb-4">
+                    <Lightbulb className="h-8 w-8 text-blue-500 mx-auto mb-2" />
+                    <p className="text-sm text-blue-700">
+                      Track the accuracy of your forecasts against actuals to improve future forecasting.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="text-sm font-medium">Revenue Accuracy</div>
+                        <div className="text-sm font-medium">92%</div>
+                      </div>
+                      <div className="h-2 w-full bg-neutral-100 rounded-full">
+                        <div className="h-2 bg-green-500 rounded-full" style={{ width: '92%' }}></div>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Confidence Level</span>
-                      <span className="text-sm">85%</span>
+                    
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="text-sm font-medium">Expense Accuracy</div>
+                        <div className="text-sm font-medium">89%</div>
+                      </div>
+                      <div className="h-2 w-full bg-neutral-100 rounded-full">
+                        <div className="h-2 bg-green-500 rounded-full" style={{ width: '89%' }}></div>
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Market Growth</span>
-                      <span className="text-sm">8.5%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Interest Rate</span>
-                      <span className="text-sm">4.25%</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm font-medium">Inflation Rate</span>
-                      <span className="text-sm">2.8%</span>
-                    </div>
-                    <div className="border-t pt-4 mt-4">
-                      <Button variant="link" className="text-primary text-sm w-full">
-                        Edit Default Parameters
-                      </Button>
+                    
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="text-sm font-medium">Headcount Accuracy</div>
+                        <div className="text-sm font-medium">96%</div>
+                      </div>
+                      <div className="h-2 w-full bg-neutral-100 rounded-full">
+                        <div className="h-2 bg-green-500 rounded-full" style={{ width: '96%' }}></div>
+                      </div>
                     </div>
                   </div>
                 </CardContent>
@@ -479,7 +411,7 @@ const Forecasting = () => {
           </div>
         </TabsContent>
       </Tabs>
-    </>
+    </div>
   );
 };
 
