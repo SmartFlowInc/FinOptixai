@@ -137,6 +137,14 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
               </Link>
             </li>
             <li>
+              <Link href="/anomaly-detection">
+                <div className={`sidebar-link ${location === "/anomaly-detection" ? "active" : ""}`}>
+                  <i className="ri-radar-line sidebar-icon"></i>
+                  <span>Anomaly Detection</span>
+                </div>
+              </Link>
+            </li>
+            <li>
               <Link href="/insights">
                 <div className={`sidebar-link ${location === "/insights" ? "active" : ""}`}>
                   <i className="ri-lightbulb-line sidebar-icon"></i>

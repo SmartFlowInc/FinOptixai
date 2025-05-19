@@ -6,10 +6,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// The newest OpenAI model is "gpt-4o" which was released May 13, 2024. Do not change this unless explicitly requested by the user
-const MODEL = "gpt-4o";
-
-// Types for AI service responses
+// Define types
 interface AnomalyDetectionResponse {
   anomalies: Anomaly[];
   analysis: string;
@@ -58,36 +55,26 @@ interface Insight {
  */
 export async function detectAnomalies(financialData: any): Promise<AnomalyDetectionResponse> {
   try {
-    log('Detecting anomalies with AI', 'ai-service');
+    log('Detecting anomalies with financial data', 'ai-services');
 
-    // Construct the prompt for anomaly detection
-    const systemPrompt = `
-      You are an expert financial analyst specializing in anomaly detection.
-      Analyze the provided financial data to identify anomalies, unusual patterns, or significant deviations.
-      Focus on detecting outliers, unexpected trends, variances from forecasts, seasonal pattern disruptions, and any other notable irregularities.
-      
-      For each anomaly, provide:
-      1. A clear title and description
-      2. The type (variance, trend, outlier, pattern, seasonal)
-      3. Severity level (critical, high, medium, low) based on financial impact
-      4. The affected financial metric (revenue, expenses, cashflow, margin, growth, operation)
-      5. Quantified impact (monetary value or percentage)
-      6. Affected time periods
-      7. Historical context when relevant
-      8. Potential causes
-      9. Recommended actions
-      
-      Ensure your analysis is data-driven, focusing on statistically significant anomalies rather than minor fluctuations.
-    `;
-
-    // Prepare financial data for the prompt
-    const userPrompt = `
-      Please analyze the following financial data for anomalies:
+    const prompt = `
+      Analyze the following financial data for anomalies:
       ${JSON.stringify(financialData, null, 2)}
       
-      The current date is ${new Date().toISOString().split('T')[0]}.
+      Identify any unusual patterns, outliers, unexpected variances, or concerning trends.
+      For each anomaly detected, provide:
+      1. A descriptive title
+      2. Detailed description of what makes this an anomaly
+      3. Type (variance, trend, outlier, pattern, seasonal)
+      4. Severity (critical, high, medium, low)
+      5. Which financial metric is affected
+      6. Impact estimation (description and numeric value)
+      7. Affected time periods
+      8. Historical context
+      9. Potential causes
+      10. Recommended actions
       
-      Return your response as a JSON object with the following structure:
+      Format your response as a JSON object with the structure:
       {
         "anomalies": [
           {
@@ -106,46 +93,49 @@ export async function detectAnomalies(financialData: any): Promise<AnomalyDetect
               "isMonetary": boolean
             },
             "affectedPeriods": string[],
-            "historicalContext": string (optional),
-            "potentialCauses": string[] (optional),
-            "recommendedActions": string[] (optional)
+            "historicalContext": string,
+            "potentialCauses": string[],
+            "recommendedActions": string[]
           }
         ],
-        "analysis": string,
-        "confidence": number
+        "analysis": string summarizing overall findings,
+        "confidence": number between 0 and 1
       }
     `;
 
-    // Call OpenAI API
-    const response = await openai.chat.completions.create({
-      model: MODEL,
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
+        { 
+          role: "system", 
+          content: "You are a financial analyst AI specialized in detecting anomalies in financial data. Provide detailed, accurate analysis with actionable insights."
+        },
+        { role: "user", content: prompt }
       ],
-      response_format: { type: "json_object" },
-      temperature: 0.1 // Low temperature for more deterministic responses
+      response_format: { type: "json_object" }
     });
 
-    // Parse the response
-    const content = response.choices[0].message.content;
-    if (!content) {
-      throw new Error('OpenAI returned empty response');
-    }
-
-    const result = JSON.parse(content) as AnomalyDetectionResponse;
+    const result = JSON.parse(completion.choices[0].message.content || '{}');
     
-    // Convert string dates to Date objects
-    result.anomalies = result.anomalies.map(anomaly => ({
-      ...anomaly,
-      detectedAt: new Date(anomaly.detectedAt),
-      updatedAt: new Date(anomaly.updatedAt)
-    }));
+    // Ensure dates are properly formatted as Date objects
+    if (result.anomalies && Array.isArray(result.anomalies)) {
+      result.anomalies = result.anomalies.map((anomaly: any) => ({
+        ...anomaly,
+        detectedAt: new Date(anomaly.detectedAt || new Date()),
+        updatedAt: new Date(anomaly.updatedAt || new Date())
+      }));
+    }
 
     return result;
   } catch (error) {
-    log(`Error in anomaly detection: ${error}`, 'ai-service');
-    throw error;
+    log(`Error detecting anomalies: ${error}`, 'ai-services');
+    
+    // Return a default empty response on error
+    return {
+      anomalies: [],
+      analysis: "Error analyzing financial data. Please try again later.",
+      confidence: 0
+    };
   }
 }
 
@@ -154,39 +144,24 @@ export async function detectAnomalies(financialData: any): Promise<AnomalyDetect
  */
 export async function generateInsights(financialData: any, userPreferences?: any): Promise<InsightGenerationResponse> {
   try {
-    log('Generating insights with AI', 'ai-service');
+    log('Generating insights with financial data', 'ai-services');
 
-    // Construct the prompt for insight generation
-    const systemPrompt = `
-      You are an expert financial advisor specializing in generating actionable insights from financial data.
-      Analyze the provided financial data to identify key trends, opportunities, and risks.
-      Tailor your insights to the user's preferences and business context when provided.
-      
-      For each insight, provide:
-      1. A clear title and description
-      2. The category (strategic, operational, financial, market, customer)
-      3. Importance level (critical, high, medium, low)
-      4. Related metrics
-      5. Specific, actionable recommendations
-      6. A confidence score (0-100)
-      
-      Focus on insights that are:
-      - Actionable with clear next steps
-      - Data-driven rather than generic
-      - Relevant to the business context
-      - Forward-looking rather than just historical
-    `;
-
-    // Prepare financial data and user preferences for the prompt
-    const userPrompt = `
-      Please analyze the following financial data to generate insights:
+    const prompt = `
+      Generate personalized financial insights based on the following data:
       ${JSON.stringify(financialData, null, 2)}
       
       ${userPreferences ? `Consider these user preferences: ${JSON.stringify(userPreferences, null, 2)}` : ''}
       
-      The current date is ${new Date().toISOString().split('T')[0]}.
+      For each insight detected, provide:
+      1. A concise title
+      2. Detailed description of the insight
+      3. Category (strategic, operational, financial, market, customer)
+      4. Importance (critical, high, medium, low)
+      5. Related metrics
+      6. Actionable recommendations
+      7. Confidence score (0-1)
       
-      Return your response as a JSON object with the following structure:
+      Format your response as a JSON object with the structure:
       {
         "insights": [
           {
@@ -197,34 +172,34 @@ export async function generateInsights(financialData: any, userPreferences?: any
             "importance": "critical" | "high" | "medium" | "low",
             "relatedMetrics": string[],
             "actionItems": string[],
-            "confidenceScore": number
+            "confidenceScore": number between 0 and 1
           }
         ],
-        "analysis": string
+        "analysis": string summarizing overall findings
       }
     `;
 
-    // Call OpenAI API
-    const response = await openai.chat.completions.create({
-      model: MODEL,
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
+        { 
+          role: "system", 
+          content: "You are a financial strategy AI specialized in discovering actionable insights from financial data. Provide strategic, helpful recommendations."
+        },
+        { role: "user", content: prompt }
       ],
-      response_format: { type: "json_object" },
-      temperature: 0.2 // Low temperature for more deterministic responses
+      response_format: { type: "json_object" }
     });
 
-    // Parse the response
-    const content = response.choices[0].message.content;
-    if (!content) {
-      throw new Error('OpenAI returned empty response');
-    }
-
-    return JSON.parse(content) as InsightGenerationResponse;
+    return JSON.parse(completion.choices[0].message.content || '{}');
   } catch (error) {
-    log(`Error in insight generation: ${error}`, 'ai-service');
-    throw error;
+    log(`Error generating insights: ${error}`, 'ai-services');
+    
+    // Return a default empty response on error
+    return {
+      insights: [],
+      analysis: "Error generating insights from financial data. Please try again later."
+    };
   }
 }
 
@@ -237,40 +212,35 @@ export async function explainFinancialTrends(
   timeframe: string
 ): Promise<string> {
   try {
-    log('Explaining financial trends with AI', 'ai-service');
+    log(`Explaining ${metric} trend for ${timeframe}`, 'ai-services');
 
-    // Construct the prompt
     const prompt = `
-      Please explain the following ${metric} trend over the ${timeframe} timeframe in clear, natural language:
+      Explain the trends in the following financial data:
       
-      ${JSON.stringify(data, null, 2)}
+      Metric: ${metric}
+      Timeframe: ${timeframe}
+      Data: ${JSON.stringify(data, null, 2)}
       
-      Focus on:
-      1. Key patterns and trends
-      2. Notable changes compared to previous periods
-      3. Potential factors influencing these trends
-      4. What this might mean for the business
-      
-      Keep your explanation clear, concise, and accessible to business users without technical financial expertise.
+      Provide a clear, concise explanation that a finance professional would understand. 
+      Focus on notable patterns, potential causes, and possible implications. 
+      Keep the explanation to 2-3 paragraphs.
     `;
 
-    // Call OpenAI API
-    const response = await openai.chat.completions.create({
-      model: MODEL,
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
         { 
           role: "system", 
-          content: "You are a financial analyst who explains complex financial trends in clear, concise language." 
+          content: "You are a financial analyst specializing in explaining trends in financial data clearly and accurately."
         },
         { role: "user", content: prompt }
-      ],
-      temperature: 0.3
+      ]
     });
 
-    return response.choices[0].message.content || 'Unable to generate explanation';
+    return completion.choices[0].message.content || 'Unable to explain the trend.';
   } catch (error) {
-    log(`Error explaining financial trends: ${error}`, 'ai-service');
-    return 'Unable to generate explanation due to an error.';
+    log(`Error explaining trend: ${error}`, 'ai-services');
+    return "Error generating explanation. Please try again later.";
   }
 }
 
@@ -278,74 +248,49 @@ export async function explainFinancialTrends(
  * Generate forecasts based on historical data
  */
 export async function generateForecast(
-  historicalData: any, 
+  historicalData: any,
   forecastPeriod: string,
   additionalFactors?: any
 ): Promise<any> {
   try {
-    log('Generating forecast with AI', 'ai-service');
+    log(`Generating forecast for ${forecastPeriod}`, 'ai-services');
 
-    // Construct the prompt
-    const systemPrompt = `
-      You are an expert in financial forecasting.
-      Analyze the provided historical data and generate a forecast for the specified period.
-      Consider seasonality, trends, growth patterns, and any additional factors provided.
-      
-      Your forecast should include:
-      1. Projected values for each period in the forecast timeframe
-      2. Confidence intervals or range estimates
-      3. Key assumptions made in the forecast
-      4. Potential risks or variables that could significantly impact the forecast
-      
-      Base your projections on the historical patterns, but incorporate reasonable adjustments based on
-      additional factors when provided.
-    `;
-
-    const userPrompt = `
-      Please generate a ${forecastPeriod} forecast based on this historical data:
+    const prompt = `
+      Generate a financial forecast based on the following historical data:
       ${JSON.stringify(historicalData, null, 2)}
+      
+      Forecast period: ${forecastPeriod}
       
       ${additionalFactors ? `Consider these additional factors: ${JSON.stringify(additionalFactors, null, 2)}` : ''}
       
-      Return your response as a JSON object with the following structure:
-      {
-        "forecast": {
-          "periods": [
-            {
-              "period": string,
-              "value": number,
-              "lowerBound": number,
-              "upperBound": number
-            }
-          ],
-          "assumptions": string[],
-          "risks": string[],
-          "methodology": string,
-          "confidenceScore": number
-        }
-      }
+      Provide a detailed forecast with reasoning and confidence levels. Include:
+      1. Projected values for each period
+      2. Growth/decline rates
+      3. Key inflection points
+      4. Potential scenarios (optimistic, pessimistic, most likely)
+      5. Influential factors
+      
+      Format your response as a JSON object with appropriate structure.
     `;
 
-    // Call OpenAI API
-    const response = await openai.chat.completions.create({
-      model: MODEL,
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
+        { 
+          role: "system", 
+          content: "You are a financial forecasting specialist that uses historical data to make accurate projections with clear reasoning."
+        },
+        { role: "user", content: prompt }
       ],
-      response_format: { type: "json_object" },
-      temperature: 0.1
+      response_format: { type: "json_object" }
     });
 
-    // Parse the response
-    const content = response.choices[0].message.content;
-    if (!content) {
-      throw new Error('OpenAI returned empty response');
-    }
-
-    return JSON.parse(content);
+    return JSON.parse(completion.choices[0].message.content || '{}');
   } catch (error) {
-    log(`Error in forecast generation: ${error}`, 'ai-service');
-    throw error;
+    log(`Error generating forecast: ${error}`, 'ai-services');
+    return {
+      error: "Failed to generate forecast. Please try again later.",
+      status: "error"
+    };
   }
 }
