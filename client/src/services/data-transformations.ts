@@ -28,8 +28,9 @@ export function transformRevenueData(revenueData: RevenueData[]): RevenueChartDa
   }} = {};
   
   revenueData.forEach(item => {
-    // Extract month or period label from period string
-    const periodLabel = item.period.split('_')[0]; // e.g., "Jan_2025" -> "Jan"
+    // Extract month from period string (e.g., "Q3_Jul" -> "Jul")
+    const periodParts = item.period.split('_');
+    const periodLabel = periodParts.length > 1 ? periodParts[1] : periodParts[0];
     
     if (!periodMap[periodLabel]) {
       periodMap[periodLabel] = {
@@ -40,9 +41,9 @@ export function transformRevenueData(revenueData: RevenueData[]): RevenueChartDa
     }
     
     periodMap[periodLabel] = {
-      actualRevenue: item.actualRevenue ? parseFloat(item.actualRevenue) : periodMap[periodLabel].actualRevenue,
-      projectedRevenue: item.projectedRevenue ? parseFloat(item.projectedRevenue) : periodMap[periodLabel].projectedRevenue,
-      previousYearRevenue: item.previousYearRevenue ? parseFloat(item.previousYearRevenue) : periodMap[periodLabel].previousYearRevenue
+      actualRevenue: item.actualRevenue ? Number(item.actualRevenue) : periodMap[periodLabel].actualRevenue,
+      projectedRevenue: item.projectedRevenue ? Number(item.projectedRevenue) : periodMap[periodLabel].projectedRevenue,
+      previousYearRevenue: item.previousYearRevenue ? Number(item.previousYearRevenue) : periodMap[periodLabel].previousYearRevenue
     };
   });
   
@@ -132,25 +133,11 @@ export function transformExpenseData(expenseData: ExpenseData[]): ExpenseChartDa
     'other': '#95a5a6'
   };
   
-  // Group by category
-  const categoryMap: { [category: string]: number } = {};
-  
-  expenseData.forEach(item => {
-    const category = item.category || 'other';
-    const amount = item.amount ? parseFloat(item.amount) : 0;
-    
-    if (!categoryMap[category]) {
-      categoryMap[category] = 0;
-    }
-    
-    categoryMap[category] += amount;
-  });
-  
-  // Convert to the chart data format
-  return Object.entries(categoryMap).map(([category, value]) => ({
-    id: category,
-    label: category.charAt(0).toUpperCase() + category.slice(1), // Capitalize first letter
-    value,
-    color: colorMap[category.toLowerCase()] || '#95a5a6' // Default to gray if no color is defined
+  // Process the expense data
+  return expenseData.map(item => ({
+    id: item.category.toLowerCase(),
+    label: item.category.charAt(0).toUpperCase() + item.category.slice(1), // Capitalize first letter
+    value: Number(item.amount),
+    color: colorMap[item.category.toLowerCase()] || '#95a5a6' // Default to gray if no color is defined
   }));
 }
