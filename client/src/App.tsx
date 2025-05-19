@@ -6,6 +6,7 @@ import Budgeting from "@/pages/Budgeting";
 import Forecasting from "@/pages/Forecasting";
 import Reports from "@/pages/Reports";
 import Collaboration from "@/pages/Collaboration";
+import EnhancedCollaboration from "@/pages/EnhancedCollaboration";
 import DataSources from "@/pages/DataSources";
 import DataIntegration from "@/pages/DataIntegration";
 import ContinuousImprovement from "@/pages/ContinuousImprovement";
@@ -32,6 +33,7 @@ function App() {
         <Route path="/anomaly-detection" component={AnomalyDetection} />
         <Route path="/insights" component={Insights} />
         <Route path="/workflow-approval" component={WorkflowApproval} />
+        <Route path="/enhanced-collaboration" component={EnhancedCollaboration} />
         <Route path="/calendar" component={Calendar} />
         <Route path="/settings" component={Settings} />
         <Route component={NotFound} />
