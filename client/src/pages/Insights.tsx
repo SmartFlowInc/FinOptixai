@@ -453,9 +453,9 @@ const Insights = () => {
               <Filter className="h-4 w-4 mr-2" />
               By Category
             </TabsTrigger>
-            <TabsTrigger value="automated" className="flex-1 data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
-              <Zap className="h-4 w-4 mr-2" />
-              Automated Insights
+            <TabsTrigger value="ai-insights" className="flex-1 data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+              <BrainCircuit className="h-4 w-4 mr-2" />
+              AI Insights
             </TabsTrigger>
           </TabsList>
           

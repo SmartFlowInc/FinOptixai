@@ -68,11 +68,19 @@ const AIInsightsPanel: React.FC<AIInsightsPanelProps> = ({
     queryKey: ['/api/ai/insights'],
     queryFn: async () => {
       try {
-        const response = await apiRequest('/api/ai/insights', {
+        const response = await fetch('/api/ai/insights', {
           method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({ financialData, userPreferences })
         });
-        return response;
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch AI insights');
+        }
+        
+        return await response.json();
       } catch (error) {
         console.error('Error fetching insights:', error);
         throw error;
