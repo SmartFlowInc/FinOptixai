@@ -12,6 +12,13 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { 
   ClipboardList, 
   ClipboardCheck, 
   FileSpreadsheet, 
@@ -329,7 +336,7 @@ const WorkflowApproval = () => {
   };
 
   // Helper function to get priority badge
-  const getPriorityBadge = (priority) => {
+  const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case 'high':
         return <Badge className="bg-red-50 text-red-700">High</Badge>;
@@ -343,7 +350,7 @@ const WorkflowApproval = () => {
   };
 
   // Helper function to get severity badge
-  const getSeverityBadge = (severity) => {
+  const getSeverityBadge = (severity: string) => {
     switch (severity) {
       case 'critical':
         return <Badge className="bg-red-50 text-red-700">Critical</Badge>;
@@ -359,7 +366,7 @@ const WorkflowApproval = () => {
   };
 
   // Helper function to get status badge
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'active':
         return <Badge className="bg-green-50 text-green-700">Active</Badge>;
@@ -715,54 +722,9 @@ const WorkflowApproval = () => {
                     <Label htmlFor="report-description">Description</Label>
                     <Input id="report-description" placeholder="Enter report description" />
                   </div>
-                  
-                  <div>
-                    <Label htmlFor="report-type">Report Type</Label>
-                    <Select>
-                      <SelectTrigger id="report-type">
-                        <SelectValue placeholder="Select report type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="financial">Financial Statement</SelectItem>
-                        <SelectItem value="cashflow">Cash Flow Analysis</SelectItem>
-                        <SelectItem value="budget">Budget vs. Actual</SelectItem>
-                        <SelectItem value="sales">Sales Performance</SelectItem>
-                        <SelectItem value="custom">Custom Report</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
                 
                 <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="report-frequency">Frequency</Label>
-                    <Select>
-                      <SelectTrigger id="report-frequency">
-                        <SelectValue placeholder="Select frequency" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="daily">Daily</SelectItem>
-                        <SelectItem value="weekly">Weekly</SelectItem>
-                        <SelectItem value="monthly">Monthly</SelectItem>
-                        <SelectItem value="quarterly">Quarterly</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div>
-                    <Label htmlFor="report-format">Format</Label>
-                    <Select>
-                      <SelectTrigger id="report-format">
-                        <SelectValue placeholder="Select format" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="pdf">PDF</SelectItem>
-                        <SelectItem value="excel">Excel</SelectItem>
-                        <SelectItem value="csv">CSV</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
                   <div>
                     <Label htmlFor="report-recipients">Recipients</Label>
                     <Input id="report-recipients" placeholder="Enter email addresses (comma separated)" />
@@ -872,70 +834,6 @@ const WorkflowApproval = () => {
                 </div>
               </div>
             </PremiumCard>
-            
-            <PremiumCard className="hover-lift">
-              <div className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Alert Trends</h3>
-                <div className="h-64 bg-slate-50 rounded-lg flex items-center justify-center">
-                  <div className="text-center text-slate-400">
-                    <LineChart className="h-12 w-12 mx-auto mb-2" />
-                    <p className="text-xs">Alert Trends Chart</p>
-                  </div>
-                </div>
-              </div>
-            </PremiumCard>
-            
-            <PremiumCard className="hover-lift">
-              <div className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Rule Categories</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center p-2 rounded-lg border hover:bg-slate-50">
-                    <div className="flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-lg bg-blue-100 flex items-center justify-center text-blue-700">
-                        <BarChart className="h-3.5 w-3.5" />
-                      </div>
-                      <span className="text-sm">Financial</span>
-                    </div>
-                    <span className="font-medium">3</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center p-2 rounded-lg border hover:bg-slate-50">
-                    <div className="flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-lg bg-amber-100 flex items-center justify-center text-amber-700">
-                        <Lock className="h-3.5 w-3.5" />
-                      </div>
-                      <span className="text-sm">Compliance</span>
-                    </div>
-                    <span className="font-medium">2</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center p-2 rounded-lg border hover:bg-slate-50">
-                    <div className="flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-lg bg-green-100 flex items-center justify-center text-green-700">
-                        <Zap className="h-3.5 w-3.5" />
-                      </div>
-                      <span className="text-sm">Operational</span>
-                    </div>
-                    <span className="font-medium">0</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center p-2 rounded-lg border hover:bg-slate-50">
-                    <div className="flex items-center gap-2">
-                      <div className="h-6 w-6 rounded-lg bg-red-100 flex items-center justify-center text-red-700">
-                        <AlertCircle className="h-3.5 w-3.5" />
-                      </div>
-                      <span className="text-sm">Risk</span>
-                    </div>
-                    <span className="font-medium">0</span>
-                  </div>
-                </div>
-                
-                <Button className="w-full mt-6 bg-gradient-to-r from-[#2D71A8] to-[#1D5A8A] text-white shadow-md">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Create New Rule
-                </Button>
-              </div>
-            </PremiumCard>
           </div>
         </TabsContent>
         
@@ -968,44 +866,6 @@ const WorkflowApproval = () => {
                               <span className="absolute h-3 w-3 translate-x-4 rounded-full bg-white transition"></span>
                             </div>
                           </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-sm">Escalation Timeout</div>
-                              <div className="text-xs text-slate-500">Time before auto-escalation</div>
-                            </div>
-                            <Select defaultValue="48hours">
-                              <SelectTrigger className="w-28">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="24hours">24 hours</SelectItem>
-                                <SelectItem value="48hours">48 hours</SelectItem>
-                                <SelectItem value="72hours">72 hours</SelectItem>
-                                <SelectItem value="1week">1 week</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-sm">Delegation</div>
-                              <div className="text-xs text-slate-500">Allow approval delegation</div>
-                            </div>
-                            <div className="relative inline-flex h-4 w-8 items-center rounded-full bg-green-500">
-                              <span className="absolute h-3 w-3 translate-x-4 rounded-full bg-white transition"></span>
-                            </div>
-                          </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-sm">Approval Thresholds</div>
-                              <div className="text-xs text-slate-500">Configure amount thresholds</div>
-                            </div>
-                            <Button variant="outline" size="sm" className="border-[#2D71A8] text-[#2D71A8] text-xs">
-                              Configure
-                            </Button>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -1022,44 +882,6 @@ const WorkflowApproval = () => {
                             <div className="relative inline-flex h-4 w-8 items-center rounded-full bg-green-500">
                               <span className="absolute h-3 w-3 translate-x-4 rounded-full bg-white transition"></span>
                             </div>
-                          </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-sm">Mobile Notifications</div>
-                              <div className="text-xs text-slate-500">Send mobile app notifications</div>
-                            </div>
-                            <div className="relative inline-flex h-4 w-8 items-center rounded-full bg-green-500">
-                              <span className="absolute h-3 w-3 translate-x-4 rounded-full bg-white transition"></span>
-                            </div>
-                          </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-sm">Reminder Frequency</div>
-                              <div className="text-xs text-slate-500">How often to send reminders</div>
-                            </div>
-                            <Select defaultValue="daily">
-                              <SelectTrigger className="w-28">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="hourly">Hourly</SelectItem>
-                                <SelectItem value="daily">Daily</SelectItem>
-                                <SelectItem value="weekly">Weekly</SelectItem>
-                                <SelectItem value="never">Never</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                          
-                          <div className="flex justify-between items-center">
-                            <div>
-                              <div className="font-medium text-sm">Notification Templates</div>
-                              <div className="text-xs text-slate-500">Configure email templates</div>
-                            </div>
-                            <Button variant="outline" size="sm" className="border-[#2D71A8] text-[#2D71A8] text-xs">
-                              Configure
-                            </Button>
                           </div>
                         </div>
                       </div>
