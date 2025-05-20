@@ -59,30 +59,33 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
   return (
     <aside 
       ref={sidebarRef}
-      className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-[#1E293B] to-[#0F172A] shadow-lg z-30 transition-transform duration-300 ease-in-out ${sidebarClass}`}
+      className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-[#172437] via-[#1A2A40] to-[#0F1829] shadow-lg z-30 transition-transform duration-300 ease-in-out ${sidebarClass}`}
     >
       <div className="flex flex-col h-full">
         {/* Logo */}
-        <div className="p-5 border-b border-slate-700/50">
+        <div className="p-5 border-b border-[#2A3646]/50">
           <Link href="/">
             <div className="flex items-center space-x-3">
-              <div className="rounded-lg bg-blue-500 p-2">
+              <div className="rounded-lg bg-gradient-to-br from-[#2D71A8] to-[#1D5A8A] p-2 shadow-sm">
                 <i className="ri-bar-chart-box-line text-xl text-white"></i>
               </div>
-              <span className="text-xl font-semibold text-white">FinOptix</span>
+              <div>
+                <span className="text-xl font-semibold text-white">FinOptix</span>
+                <div className="text-[9px] text-[#4D8EC3] uppercase tracking-wider font-medium">Financial Intelligence</div>
+              </div>
             </div>
           </Link>
         </div>
         
         {/* User */}
-        <div className="p-4 border-b border-slate-700/50">
+        <div className="p-4 border-b border-[#2A3646]/50">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
-              <span className="text-blue-400 font-medium">{user?.avatarInitials || "..."}</span>
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#2D71A8]/20 to-[#1D5A8A]/20 flex items-center justify-center border border-[#2D71A8]/30">
+              <span className="text-[#4D8EC3] font-medium">{user?.avatarInitials || "..."}</span>
             </div>
             <div>
               <p className="text-sm font-medium text-white">{user?.fullName || "Loading..."}</p>
-              <p className="text-xs text-slate-400">{user?.jobTitle || ""}</p>
+              <p className="text-xs text-[#8AA7C5]">{user?.jobTitle || ""}</p>
             </div>
           </div>
         </div>
@@ -317,13 +320,16 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
         </nav>
         
         {/* Bottom Section */}
-        <div className="p-4 border-t border-slate-700/50">
-          <div className="bg-slate-800/70 rounded-lg p-3">
-            <p className="text-xs font-medium text-blue-300 mb-2">Enterprise Plan</p>
-            <div className="w-full bg-slate-700 rounded-full h-1.5">
-              <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: "75%" }}></div>
+        <div className="p-4 border-t border-[#2A3646]/50">
+          <div className="bg-[#1E2B3E] rounded-lg p-3 shadow-inner">
+            <p className="text-xs font-medium text-[#4D8EC3] mb-2">Enterprise Plan</p>
+            <div className="w-full bg-[#121B29] rounded-full h-1.5">
+              <div className="bg-gradient-to-r from-[#2D71A8] to-[#4D8EC3] h-1.5 rounded-full" style={{ width: "75%" }}></div>
             </div>
-            <p className="text-xs text-slate-400 mt-2">75% of storage used</p>
+            <div className="flex justify-between mt-2">
+              <p className="text-xs text-[#8AA7C5]">75% of storage used</p>
+              <p className="text-xs text-white/70 font-medium">Upgrade</p>
+            </div>
           </div>
         </div>
       </div>
