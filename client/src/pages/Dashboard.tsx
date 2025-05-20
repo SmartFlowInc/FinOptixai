@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +26,7 @@ import {
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import QuickFilters from "@/components/filters/QuickFilters";
 import KpiCard from "@/components/dashboard/KpiCard";
@@ -37,9 +39,34 @@ import FinancialReports from "@/components/dashboard/FinancialReports";
 import RecentActivity from "@/components/dashboard/RecentActivity";
 import DriverAnalysis from "@/components/dashboard/DriverAnalysis";
 import InsightsPanel from "@/components/insights/InsightsPanel";
+import PremiumPageHeader from "@/components/ui/premium-page-header";
+import { PremiumCard } from "@/components/ui/premium-card";
 
 import { DashboardData, defaultFilters, getKpiByType, formatCurrency } from "@/data/finance";
 import { transformRevenueData, transformExpenseData } from "@/services/data-transformations";
+import { 
+  LayoutGrid, 
+  LayoutList as LayoutRows, 
+  LayoutPanelTop as LayoutColumns, 
+  MoveHorizontal, 
+  Save, 
+  Plus, 
+  Download, 
+  LineChart, 
+  Percent, 
+  DollarSign, 
+  Landmark,
+  ArrowUpRight,
+  ArrowDownRight,
+  RefreshCw,
+  BarChart,
+  ExternalLink,
+  AlertTriangle,
+  CheckCircle,
+  Users,
+  TrendingUp,
+  ShoppingCart
+} from "lucide-react";
 
 const Dashboard = () => {
   const [filters, setFilters] = useState<{
@@ -134,10 +161,63 @@ const Dashboard = () => {
   const opexKpi = data ? getKpiByType(data.kpis, "opex") : undefined;
   const cashFlowKpi = data ? getKpiByType(data.kpis, "cashFlow") : undefined;
 
+  // Define stats for the premium header
+  const headerStats = [
+    {
+      title: "Revenue",
+      value: formatCurrency(revenueKpi?.value) || "$0",
+      icon: <LineChart className="h-5 w-5" />,
+      iconBgColor: "bg-blue-50",
+      iconColor: "text-[#2D71A8]"
+    },
+    {
+      title: "Profit Margin",
+      value: `${profitMarginKpi?.value || 0}%`,
+      icon: <Percent className="h-5 w-5" />,
+      iconBgColor: "bg-green-50",
+      iconColor: "text-green-500"
+    },
+    {
+      title: "Operating Expenses",
+      value: formatCurrency(opexKpi?.value) || "$0",
+      icon: <DollarSign className="h-5 w-5" />,
+      iconBgColor: "bg-amber-50",
+      iconColor: "text-amber-500"
+    },
+    {
+      title: "Cash Flow",
+      value: formatCurrency(cashFlowKpi?.value) || "$0",
+      icon: <Landmark className="h-5 w-5" />,
+      iconBgColor: "bg-purple-50",
+      iconColor: "text-purple-500"
+    }
+  ];
+
+  const headerActions = (
+    <>
+      <Button variant="outline" className="border-[#2D71A8] text-[#2D71A8]">
+        <Download className="mr-2 h-4 w-4" />
+        Export
+      </Button>
+      <Button className="bg-gradient-to-r from-[#2D71A8] to-[#1D5A8A] hover:from-[#256191] hover:to-[#174B7F] text-white shadow-md">
+        <Plus className="mr-2 h-4 w-4" />
+        Add Widget
+      </Button>
+    </>
+  );
+
   return (
     <>
+      <PremiumPageHeader
+        title="Financial Dashboard"
+        description="Get a complete overview of your financial performance"
+        icon={<BarChart className="h-6 w-6" />}
+        actions={headerActions}
+        stats={headerStats}
+      />
+      
       {/* Quick Filters and Layout Options */}
-      <div className="flex flex-col md:flex-row justify-between items-start mb-4">
+      <div className="mb-6 space-y-4">
         <QuickFilters
           period={filters.period}
           department={filters.department}
@@ -146,405 +226,587 @@ const Dashboard = () => {
           onExport={handleExport}
         />
         
-        <div className="flex flex-wrap items-center gap-2 mt-4 md:mt-0">
-          <div className="flex items-center mr-2">
-            <span className="text-sm mr-2 text-neutral-500">Layout:</span>
+        <div className="flex flex-wrap items-center justify-between gap-2 p-3 bg-slate-50 rounded-lg">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-slate-500">Dashboard Layout:</span>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleLayoutChange("default")} 
+              className={dashboardLayout === "default" ? "bg-white text-[#2D71A8] border-[#2D71A8] shadow-sm" : ""}
+            >
+              <LayoutGrid className="mr-1.5 h-3.5 w-3.5" />
+              Default
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleLayoutChange("compact")} 
+              className={dashboardLayout === "compact" ? "bg-white text-[#2D71A8] border-[#2D71A8] shadow-sm" : ""}
+            >
+              <LayoutRows className="mr-1.5 h-3.5 w-3.5" />
+              Compact
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleLayoutChange("expanded")} 
+              className={dashboardLayout === "expanded" ? "bg-white text-[#2D71A8] border-[#2D71A8] shadow-sm" : ""}
+            >
+              <LayoutColumns className="mr-1.5 h-3.5 w-3.5" />
+              Expanded
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => handleLayoutChange("custom")} 
+              className={dashboardLayout === "custom" ? "bg-white text-[#2D71A8] border-[#2D71A8] shadow-sm" : ""}
+            >
+              <MoveHorizontal className="mr-1.5 h-3.5 w-3.5" />
+              Custom
+            </Button>
           </div>
-          <Button variant="outline" size="sm" onClick={() => handleLayoutChange("default")} className={dashboardLayout === "default" ? "bg-primary/10" : ""}>
-            <i className="ri-layout-grid-line mr-1"></i>
-            Default
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => handleLayoutChange("compact")} className={dashboardLayout === "compact" ? "bg-primary/10" : ""}>
-            <i className="ri-layout-row-line mr-1"></i>
-            Compact
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => handleLayoutChange("expanded")} className={dashboardLayout === "expanded" ? "bg-primary/10" : ""}>
-            <i className="ri-layout-column-line mr-1"></i>
-            Expanded
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => handleLayoutChange("custom")} className={dashboardLayout === "custom" ? "bg-primary/10" : ""}>
-            <i className="ri-drag-move-line mr-1"></i>
-            Custom
-          </Button>
           
-          <div className="border-l mx-2 h-6"></div>
-          
-          <Button variant="outline" size="sm">
-            <i className="ri-save-line mr-1"></i>
-            Save As Custom
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => setShowAddWidgetDialog(true)}>
-            <i className="ri-add-line mr-1"></i>
-            Add Widget
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="border-slate-200 text-slate-600">
+              <Save className="mr-1.5 h-3.5 w-3.5" />
+              Save Layout
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => setShowAddWidgetDialog(true)}
+              className="border-[#2D71A8] text-[#2D71A8]"
+            >
+              <Plus className="mr-1.5 h-3.5 w-3.5" />
+              Add Widget
+            </Button>
+          </div>
         </div>
       </div>
       
-      {/* KPI Cards */}
+      {/* KPI Cards with premium styling */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
-        <KpiCard
-          title="Revenue"
-          value={formatCurrency(revenueKpi?.value)}
-          change={Number(revenueKpi?.changePercentage) || 0}
-          icon="ri-line-chart-line"
-          iconVariant="primary"
-        />
-        
-        <KpiCard
-          title="Profit Margin"
-          value={`${profitMarginKpi?.value || 0}%`}
-          change={Number(profitMarginKpi?.changePercentage) || 0}
-          icon="ri-percent-line"
-          iconVariant="secondary"
-        />
-        
-        <KpiCard
-          title="Operating Expenses"
-          value={formatCurrency(opexKpi?.value)}
-          change={Number(opexKpi?.changePercentage) || 0}
-          icon="ri-money-dollar-circle-line"
-          iconVariant="accent"
-        />
-        
-        <KpiCard
-          title="Cash Flow"
-          value={formatCurrency(cashFlowKpi?.value)}
-          change={Number(cashFlowKpi?.changePercentage) || 0}
-          icon="ri-funds-line"
-          iconVariant="warning"
-        />
-      </div>
-      
-      {/* Insights and Chart Sections */}
-      <div className={`grid grid-cols-1 ${
-        dashboardLayout === "compact" ? "lg:grid-cols-1" : 
-        dashboardLayout === "expanded" ? "lg:grid-cols-1" : 
-        "lg:grid-cols-3"
-      } gap-6 mb-6`}>
-        {/* In compact mode, make insights panel collapsible */}
-        {(dashboardLayout === "default" || dashboardLayout === "compact" || dashboardLayout === "custom") && (
-          <div className={`${insightsPanelExpanded && dashboardLayout === "default" ? 'lg:col-span-2' : ''}`}>
-            <InsightsPanel 
-              isExpanded={insightsPanelExpanded} 
-              onToggleExpand={() => setInsightsPanelExpanded(!insightsPanelExpanded)} 
-            />
+        <PremiumCard 
+          className="overflow-hidden hover-lift"
+          showAccent={true}
+          accentColor="from-[#2D71A8] to-[#4D8EC3]"
+          headerContent={
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-[#2D71A8] to-[#4D8EC3] flex items-center justify-center text-white shadow-sm">
+                  <LineChart className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500">Revenue</div>
+                  <div className="text-2xl font-semibold text-slate-800">{formatCurrency(revenueKpi?.value) || "$0"}</div>
+                </div>
+              </div>
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                Number(revenueKpi?.changePercentage) >= 0 
+                ? "bg-green-50 text-green-700" 
+                : "bg-red-50 text-red-700"
+              }`}>
+                {Number(revenueKpi?.changePercentage) >= 0 
+                  ? <ArrowUpRight className="h-3 w-3" /> 
+                  : <ArrowDownRight className="h-3 w-3" />
+                }
+                {Math.abs(Number(revenueKpi?.changePercentage) || 0)}%
+              </div>
+            </div>
+          }
+        >
+          <div className="h-[70px] flex items-end mt-2 pt-2 px-2">
+            {/* Mini chart would go here */}
+            <div className="w-full h-full bg-gradient-to-t from-transparent to-blue-50 rounded-md">
+              <div className="h-full w-full relative overflow-hidden">
+                {/* Simulated chart line */}
+                <div className="absolute bottom-0 left-0 w-full h-20 overflow-hidden">
+                  <svg width="100%" height="100%" viewBox="0 0 100 20" preserveAspectRatio="none">
+                    <path 
+                      d="M0 20 L5 15 L10 18 L15 10 L20 13 L25 11 L30 14 L35 8 L40 10 L45 5 L50 8 L55 6 L60 11 L65 13 L70 8 L75 7 L80 12 L85 9 L90 14 L95 6 L100 10 L100 20 Z" 
+                      fill="rgba(45, 113, 168, 0.1)"
+                    />
+                    <path 
+                      d="M0 20 L5 15 L10 18 L15 10 L20 13 L25 11 L30 14 L35 8 L40 10 L45 5 L50 8 L55 6 L60 11 L65 13 L70 8 L75 7 L80 12 L85 9 L90 14 L95 6 L100 10" 
+                      fill="none" 
+                      stroke="#2D71A8" 
+                      strokeWidth="2"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
+        </PremiumCard>
         
-        <div className={`${
-          dashboardLayout === "compact" ? "lg:col-span-1" : 
-          dashboardLayout === "expanded" ? "lg:col-span-1" : 
-          insightsPanelExpanded ? "lg:col-span-1" : "lg:col-span-2"
-        } grid grid-cols-1 ${dashboardLayout === "expanded" ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6`}>
-          <RevenueChart
-            data={transformRevenueData()}
-            isLoading={isLoading}
-            title="Revenue Trend"
-          />
+        <PremiumCard 
+          className="overflow-hidden hover-lift"
+          showAccent={true}
+          accentColor="from-green-500 to-green-600"
+          headerContent={
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center text-white shadow-sm">
+                  <Percent className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500">Profit Margin</div>
+                  <div className="text-2xl font-semibold text-slate-800">{profitMarginKpi?.value || 0}%</div>
+                </div>
+              </div>
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                Number(profitMarginKpi?.changePercentage) >= 0 
+                ? "bg-green-50 text-green-700" 
+                : "bg-red-50 text-red-700"
+              }`}>
+                {Number(profitMarginKpi?.changePercentage) >= 0 
+                  ? <ArrowUpRight className="h-3 w-3" /> 
+                  : <ArrowDownRight className="h-3 w-3" />
+                }
+                {Math.abs(Number(profitMarginKpi?.changePercentage) || 0)}%
+              </div>
+            </div>
+          }
+        >
+          <div className="h-[70px] flex items-end mt-2 pt-2 px-2">
+            <div className="w-full h-full bg-gradient-to-t from-transparent to-green-50 rounded-md">
+              <div className="h-full w-full relative overflow-hidden">
+                <svg width="100%" height="100%" viewBox="0 0 100 20" preserveAspectRatio="none">
+                  <path 
+                    d="M0 15 L10 17 L20 14 L30 13 L40 15 L50 10 L60 8 L70 5 L80 8 L90 7 L100 4 L100 20 L0 20 Z" 
+                    fill="rgba(34, 197, 94, 0.1)"
+                  />
+                  <path 
+                    d="M0 15 L10 17 L20 14 L30 13 L40 15 L50 10 L60 8 L70 5 L80 8 L90 7 L100 4" 
+                    fill="none" 
+                    stroke="#22c55e" 
+                    strokeWidth="2"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </PremiumCard>
+        
+        <PremiumCard 
+          className="overflow-hidden hover-lift"
+          showAccent={true}
+          accentColor="from-amber-500 to-amber-600"
+          headerContent={
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-amber-500 to-amber-600 flex items-center justify-center text-white shadow-sm">
+                  <DollarSign className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500">Operating Expenses</div>
+                  <div className="text-2xl font-semibold text-slate-800">{formatCurrency(opexKpi?.value) || "$0"}</div>
+                </div>
+              </div>
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                Number(opexKpi?.changePercentage) <= 0 
+                ? "bg-green-50 text-green-700" 
+                : "bg-red-50 text-red-700"
+              }`}>
+                {Number(opexKpi?.changePercentage) <= 0 
+                  ? <ArrowDownRight className="h-3 w-3" /> 
+                  : <ArrowUpRight className="h-3 w-3" />
+                }
+                {Math.abs(Number(opexKpi?.changePercentage) || 0)}%
+              </div>
+            </div>
+          }
+        >
+          <div className="h-[70px] flex items-end mt-2 pt-2 px-2">
+            <div className="w-full h-full bg-gradient-to-t from-transparent to-amber-50 rounded-md">
+              <div className="h-full w-full relative overflow-hidden">
+                <svg width="100%" height="100%" viewBox="0 0 100 20" preserveAspectRatio="none">
+                  <path 
+                    d="M0 8 L10 10 L20 7 L30 12 L40 13 L50 10 L60 14 L70 15 L80 13 L90 15 L100 12 L100 20 L0 20 Z" 
+                    fill="rgba(245, 158, 11, 0.1)"
+                  />
+                  <path 
+                    d="M0 8 L10 10 L20 7 L30 12 L40 13 L50 10 L60 14 L70 15 L80 13 L90 15 L100 12" 
+                    fill="none" 
+                    stroke="#F59E0B" 
+                    strokeWidth="2"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </PremiumCard>
+        
+        <PremiumCard 
+          className="overflow-hidden hover-lift"
+          showAccent={true}
+          accentColor="from-purple-500 to-purple-600"
+          headerContent={
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-3">
+                <div className="h-9 w-9 rounded-lg bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center text-white shadow-sm">
+                  <Landmark className="h-5 w-5" />
+                </div>
+                <div>
+                  <div className="text-sm text-slate-500">Cash Flow</div>
+                  <div className="text-2xl font-semibold text-slate-800">{formatCurrency(cashFlowKpi?.value) || "$0"}</div>
+                </div>
+              </div>
+              <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+                Number(cashFlowKpi?.changePercentage) >= 0 
+                ? "bg-green-50 text-green-700" 
+                : "bg-red-50 text-red-700"
+              }`}>
+                {Number(cashFlowKpi?.changePercentage) >= 0 
+                  ? <ArrowUpRight className="h-3 w-3" /> 
+                  : <ArrowDownRight className="h-3 w-3" />
+                }
+                {Math.abs(Number(cashFlowKpi?.changePercentage) || 0)}%
+              </div>
+            </div>
+          }
+        >
+          <div className="h-[70px] flex items-end mt-2 pt-2 px-2">
+            <div className="w-full h-full bg-gradient-to-t from-transparent to-purple-50 rounded-md">
+              <div className="h-full w-full relative overflow-hidden">
+                <svg width="100%" height="100%" viewBox="0 0 100 20" preserveAspectRatio="none">
+                  <path 
+                    d="M0 12 L10 14 L20 10 L30 15 L40 12 L50 7 L60 11 L70 6 L80 9 L90 5 L100 7 L100 20 L0 20 Z" 
+                    fill="rgba(168, 85, 247, 0.1)"
+                  />
+                  <path 
+                    d="M0 12 L10 14 L20 10 L30 15 L40 12 L50 7 L60 11 L70 6 L80 9 L90 5 L100 7" 
+                    fill="none" 
+                    stroke="#A855F7" 
+                    strokeWidth="2"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </PremiumCard>
+      </div>
+      
+      {/* Dashboard Tabs */}
+      <Tabs defaultValue="overview" className="mb-6">
+        <TabsList className="bg-slate-100/50 p-1 rounded-lg">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <BarChart className="h-4 w-4 mr-2" />
+            Overview
+          </TabsTrigger>
+          <TabsTrigger value="insights" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <TrendingUp className="h-4 w-4 mr-2" />
+            Insights
+          </TabsTrigger>
+          <TabsTrigger value="forecasts" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <LineChart className="h-4 w-4 mr-2" />
+            Forecasts
+          </TabsTrigger>
+          <TabsTrigger value="budgets" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <DollarSign className="h-4 w-4 mr-2" />
+            Budgets
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="overview" className="mt-4">
+          {/* Insights and Chart Sections */}
+          <div className={`grid grid-cols-1 ${
+            dashboardLayout === "compact" ? "lg:grid-cols-1" : 
+            dashboardLayout === "expanded" ? "lg:grid-cols-1" : 
+            "lg:grid-cols-3"
+          } gap-6 mb-6`}>
+            {/* In compact mode, make insights panel collapsible */}
+            {(dashboardLayout === "default" || dashboardLayout === "compact" || dashboardLayout === "custom") && (
+              <div className={`${insightsPanelExpanded && dashboardLayout === "default" ? 'lg:col-span-2' : ''}`}>
+                <InsightsPanel 
+                  isExpanded={insightsPanelExpanded} 
+                  onToggleExpand={() => setInsightsPanelExpanded(!insightsPanelExpanded)} 
+                />
+              </div>
+            )}
+            
+            <div className={`${
+              dashboardLayout === "compact" ? "lg:col-span-1" : 
+              dashboardLayout === "expanded" ? "lg:col-span-1" : 
+              insightsPanelExpanded ? "lg:col-span-1" : "lg:col-span-2"
+            } grid grid-cols-1 ${dashboardLayout === "expanded" ? "lg:grid-cols-1" : "lg:grid-cols-2"} gap-6`}>
+              <PremiumCard
+                className="hover-lift" 
+                showAccent={true}
+                accentColor="from-[#2D71A8] to-[#4D8EC3]"
+                title="Revenue Trend"
+                description="Monthly revenue analysis"
+                headerRightContent={
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="h-8 gap-1 text-slate-500 hover:text-[#2D71A8] hover:bg-blue-50"
+                  >
+                    <RefreshCw className="h-3.5 w-3.5" />
+                    <span className="text-xs font-medium">Refresh</span>
+                  </Button>
+                }
+              >
+                <RevenueChart
+                  data={transformRevenueData()}
+                  isLoading={isLoading}
+                  title=""
+                />
+              </PremiumCard>
+              
+              <PremiumCard
+                className="hover-lift" 
+                showAccent={true}
+                accentColor="from-amber-500 to-amber-600"
+                title="Expense Breakdown"
+                description="By category"
+                headerRightContent={
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    className="h-8 gap-1 text-slate-500 hover:text-amber-600 hover:bg-amber-50"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    <span className="text-xs font-medium">Details</span>
+                  </Button>
+                }
+              >
+                <ExpenseChart
+                  data={transformExpenseData()}
+                  isLoading={isLoading}
+                  title=""
+                  description=""
+                />
+              </PremiumCard>
+            </div>
+          </div>
           
-          <ExpenseChart
-            data={transformExpenseData()}
-            isLoading={isLoading}
-            title="Expense Breakdown"
-            description="By category"
-          />
-        </div>
-      </div>
-      
-      {/* Financial Planning and Budget Section */}
-      <div className={`grid grid-cols-1 ${
-        dashboardLayout === "compact" ? "lg:grid-cols-1" : 
-        dashboardLayout === "expanded" ? "lg:grid-cols-1" : 
-        "lg:grid-cols-3"
-      } gap-6 mb-6`}>
-        <BudgetVsActual
-          budgetItems={data?.budgetItems || []}
-          department={filters.department}
-          onDepartmentChange={(dept) => handleFilterChange('department', dept)}
-          isLoading={isLoading}
-        />
+          {/* Financial Planning and Budget Section */}
+          <div className={`grid grid-cols-1 ${
+            dashboardLayout === "compact" ? "lg:grid-cols-1" : 
+            dashboardLayout === "expanded" ? "lg:grid-cols-1" : 
+            "lg:grid-cols-3"
+          } gap-6 mb-6`}>
+            <div className="lg:col-span-3">
+              <BudgetVsActual
+                budgetItems={data?.budgetItems || []}
+                department={filters.department}
+                onDepartmentChange={(dept) => handleFilterChange('department', dept)}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
+        </TabsContent>
         
-        <FinancialForecast
-          forecastData={data?.forecastData!}
-          isLoading={isLoading}
-          onTimeframeChange={handleForecastTimeframeChange}
-        />
-        
-        <CashFlowForecast
-          cashFlowData={data?.cashFlowData!}
-          isLoading={isLoading}
-        />
-      </div>
-      
-      {/* Advanced Driver Analysis */}
-      <div className={`grid grid-cols-1 ${
-        dashboardLayout === "compact" ? "lg:grid-cols-1" : 
-        dashboardLayout === "expanded" ? "lg:grid-cols-1" : 
-        "lg:grid-cols-3"
-      } gap-6 mb-6`}>
-        <div className={dashboardLayout === "default" || dashboardLayout === "custom" ? "lg:col-span-2" : ""}>
-          <DriverAnalysis 
-            isLoading={isLoading}
-          />
-        </div>
-        
-        {(dashboardLayout !== "compact") && (
-          <div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Key Insights</CardTitle>
-                <CardDescription>
-                  Automatically generated insights based on driver analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <div className="h-6 w-6 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="12" y1="8" x2="12" y2="12"></line>
-                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-medium text-sm">Rising Labor Costs</div>
-                      <div className="text-sm text-neutral-500">Labor costs increased by 5% this quarter, significantly impacting overall profitability.</div>
-                    </div>
+        <TabsContent value="insights" className="mt-4">
+          {/* Key financial insights */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <PremiumCard
+              className="lg:col-span-2 hover-lift" 
+              showAccent={true}
+              accentColor="from-[#2D71A8] to-[#4D8EC3]"
+              title="AI-Powered Financial Insights"
+              description="Automatically generated insights from your financial data"
+            >
+              <div className="space-y-5 p-1">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-lg bg-amber-100 text-amber-800 flex items-center justify-center flex-shrink-0">
+                    <AlertTriangle className="h-4 w-4" />
                   </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <div className="h-6 w-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-medium text-sm">Decreasing Material Costs</div>
-                      <div className="text-sm text-neutral-500">Raw material costs are trending down by 2%, creating a positive impact on margins.</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <div className="h-6 w-6 rounded-full bg-purple-100 text-purple-800 flex items-center justify-center flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="9" cy="7" r="4"></circle>
-                        <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-medium text-sm">Marketing Efficiency</div>
-                      <div className="text-sm text-neutral-500">Digital marketing channels show 15% higher ROI than traditional channels.</div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-3">
-                    <div className="h-6 w-6 rounded-full bg-blue-100 text-blue-800 flex items-center justify-center flex-shrink-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-medium text-sm">Strong Logistics Correlation</div>
-                      <div className="text-sm text-neutral-500">Logistics costs have a 0.71 correlation with overall profitability.</div>
+                  <div>
+                    <div className="font-medium text-lg mb-0.5">Rising Labor Costs</div>
+                    <div className="text-slate-600">Labor costs increased by 5% this quarter, significantly impacting overall profitability. This trend requires immediate attention as it represents the largest variance from budget in the current period.</div>
+                    <div className="flex items-center mt-2 gap-2">
+                      <Badge className="bg-amber-50 text-amber-700 hover:bg-amber-50">High Priority</Badge>
+                      <Badge className="bg-slate-100 text-slate-500 hover:bg-slate-100">Expenses</Badge>
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-6">
-                  <Button variant="outline" className="w-full">
-                    Generate Full Analysis Report
-                  </Button>
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-lg bg-green-100 text-green-800 flex items-center justify-center flex-shrink-0">
+                    <CheckCircle className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-lg mb-0.5">Decreasing Material Costs</div>
+                    <div className="text-slate-600">Raw material costs are trending down by 2%, creating a positive impact on margins. This appears to be driven by new supplier agreements and bulk purchasing strategies implemented last quarter.</div>
+                    <div className="flex items-center mt-2 gap-2">
+                      <Badge className="bg-green-50 text-green-700 hover:bg-green-50">Positive Trend</Badge>
+                      <Badge className="bg-slate-100 text-slate-500 hover:bg-slate-100">Cost Reduction</Badge>
+                    </div>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        )}
-      </div>
-
-      {/* Financial Reports and Recent Activity */}
-      <div className={`grid grid-cols-1 ${
-        dashboardLayout === "compact" ? "lg:grid-cols-1" : 
-        dashboardLayout === "expanded" ? "lg:grid-cols-1" : 
-        "lg:grid-cols-3"
-      } gap-6`}>
-        <div className={dashboardLayout === "default" || dashboardLayout === "custom" ? "lg:col-span-2" : ""}>
-          <FinancialReports
-            reports={data?.reports || []}
-            onGenerateReport={handleReportGenerated}
-            isLoading={isLoading}
-          />
-        </div>
-        
-        <div>
-          <RecentActivity
-            activities={data?.activities || []}
-            isLoading={isLoading}
-          />
-        </div>
-        
-        {dashboardLayout === "custom" && (
-          <div className="col-span-full mt-4 p-4 border border-dashed rounded-lg bg-neutral-50 text-center">
-            <div className="flex flex-col items-center gap-2">
-              <i className="ri-drag-move-line text-2xl text-neutral-400"></i>
-              <p className="text-sm text-neutral-600">In custom mode, you can drag and drop dashboard widgets to create your own layout.</p>
-              <Button variant="outline" size="sm" className="mt-2">
-                Save Custom Layout
-              </Button>
+                
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-lg bg-purple-100 text-purple-800 flex items-center justify-center flex-shrink-0">
+                    <Users className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-lg mb-0.5">Marketing Efficiency</div>
+                    <div className="text-slate-600">Digital marketing channels show 15% higher ROI than traditional channels. Your social media campaigns are particularly effective with a conversion rate 23% above industry average.</div>
+                    <div className="flex items-center mt-2 gap-2">
+                      <Badge className="bg-purple-50 text-purple-700 hover:bg-purple-50">Marketing</Badge>
+                      <Badge className="bg-slate-100 text-slate-500 hover:bg-slate-100">ROI</Badge>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-lg bg-blue-100 text-blue-800 flex items-center justify-center flex-shrink-0">
+                    <ShoppingCart className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-lg mb-0.5">Strong Logistics Correlation</div>
+                    <div className="text-slate-600">Logistics costs have a 0.71 correlation with overall profitability. Improvements in supply chain efficiency directly impact your bottom line more than most other operational factors.</div>
+                    <div className="flex items-center mt-2 gap-2">
+                      <Badge className="bg-blue-50 text-blue-700 hover:bg-blue-50">Supply Chain</Badge>
+                      <Badge className="bg-slate-100 text-slate-500 hover:bg-slate-100">Correlation</Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 pt-4 border-t">
+                <Button className="w-full bg-gradient-to-r from-[#2D71A8] to-[#1D5A8A] hover:from-[#256191] hover:to-[#174B7F] text-white shadow-md">
+                  Generate Full Analysis Report
+                </Button>
+              </div>
+            </PremiumCard>
+            
+            <div>
+              <DriverAnalysis isLoading={isLoading} />
             </div>
           </div>
-        )}
-      </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <FinancialReports
+                reports={data?.reports || []}
+                onGenerateReport={handleReportGenerated}
+                isLoading={isLoading}
+              />
+            </div>
+            
+            <div>
+              <RecentActivity
+                activities={data?.activities || []}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="forecasts" className="mt-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <FinancialForecast
+              forecastData={data?.forecastData!}
+              isLoading={isLoading}
+              onTimeframeChange={handleForecastTimeframeChange}
+            />
+            
+            <CashFlowForecast
+              cashFlowData={data?.cashFlowData!}
+              isLoading={isLoading}
+            />
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="budgets" className="mt-4">
+          <div className="grid grid-cols-1 gap-6">
+            <BudgetVsActual
+              budgetItems={data?.budgetItems || []}
+              department={filters.department}
+              onDepartmentChange={(dept) => handleFilterChange('department', dept)}
+              isLoading={isLoading}
+            />
+          </div>
+        </TabsContent>
+      </Tabs>
       
       {/* Add Widget Dialog */}
       <Dialog open={showAddWidgetDialog} onOpenChange={setShowAddWidgetDialog}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Add Dashboard Widgets</DialogTitle>
+            <DialogTitle>Add Dashboard Widget</DialogTitle>
             <DialogDescription>
-              Select widgets to add to your dashboard view
+              Select widgets to add to your dashboard.
             </DialogDescription>
           </DialogHeader>
           
-          <div className="py-4 space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="revenue-chart" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="revenue-chart" className="font-medium">Revenue Chart</Label>
-                    <p className="text-sm text-neutral-500">
-                      Monthly revenue trends and comparisons
-                    </p>
-                  </div>
-                </div>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-1 gap-3">
+              <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-slate-50">
+                <Checkbox id="chart" />
+                <Label htmlFor="chart" className="flex-grow cursor-pointer">
+                  <div className="font-medium">Revenue Chart</div>
+                  <div className="text-xs text-slate-500">Monthly revenue visualization</div>
+                </Label>
               </div>
               
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="expense-breakdown" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="expense-breakdown" className="font-medium">Expense Breakdown</Label>
-                    <p className="text-sm text-neutral-500">
-                      Expense categories and distribution
-                    </p>
-                  </div>
-                </div>
+              <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-slate-50">
+                <Checkbox id="expense" />
+                <Label htmlFor="expense" className="flex-grow cursor-pointer">
+                  <div className="font-medium">Expense Breakdown</div>
+                  <div className="text-xs text-slate-500">Categorized expenses</div>
+                </Label>
               </div>
               
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="budget-vs-actual" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="budget-vs-actual" className="font-medium">Budget vs Actual</Label>
-                    <p className="text-sm text-neutral-500">
-                      Budget performance by department
-                    </p>
-                  </div>
-                </div>
+              <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-slate-50">
+                <Checkbox id="budget" />
+                <Label htmlFor="budget" className="flex-grow cursor-pointer">
+                  <div className="font-medium">Budget vs. Actual</div>
+                  <div className="text-xs text-slate-500">Variance analysis</div>
+                </Label>
               </div>
               
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="financial-forecast" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="financial-forecast" className="font-medium">Financial Forecast</Label>
-                    <p className="text-sm text-neutral-500">
-                      Future financial projections
-                    </p>
-                  </div>
-                </div>
+              <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-slate-50">
+                <Checkbox id="forecast" />
+                <Label htmlFor="forecast" className="flex-grow cursor-pointer">
+                  <div className="font-medium">Financial Forecast</div>
+                  <div className="text-xs text-slate-500">Predictive analysis</div>
+                </Label>
               </div>
               
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="cash-flow-forecast" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="cash-flow-forecast" className="font-medium">Cash Flow Forecast</Label>
-                    <p className="text-sm text-neutral-500">
-                      Cash flow projections and analysis
-                    </p>
-                  </div>
-                </div>
+              <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-slate-50">
+                <Checkbox id="cashflow" />
+                <Label htmlFor="cashflow" className="flex-grow cursor-pointer">
+                  <div className="font-medium">Cash Flow</div>
+                  <div className="text-xs text-slate-500">Liquidity tracking</div>
+                </Label>
               </div>
               
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="driver-analysis" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="driver-analysis" className="font-medium">Driver Analysis</Label>
-                    <p className="text-sm text-neutral-500">
-                      Key business drivers impact analysis
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="key-insights" />
-                  <div className="grid gap-1">
-                    <Label htmlFor="key-insights" className="font-medium">Key Insights</Label>
-                    <p className="text-sm text-neutral-500">
-                      Automatically generated insights
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="financial-reports" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="financial-reports" className="font-medium">Financial Reports</Label>
-                    <p className="text-sm text-neutral-500">
-                      Recent financial reports and documents
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="recent-activity" defaultChecked />
-                  <div className="grid gap-1">
-                    <Label htmlFor="recent-activity" className="font-medium">Recent Activity</Label>
-                    <p className="text-sm text-neutral-500">
-                      Recent user actions and updates
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="space-y-2 border rounded-lg p-3">
-                <div className="flex items-start space-x-2">
-                  <Checkbox id="calendar-events" />
-                  <div className="grid gap-1">
-                    <Label htmlFor="calendar-events" className="font-medium">Calendar Events</Label>
-                    <p className="text-sm text-neutral-500">
-                      Upcoming financial events and deadlines
-                    </p>
-                  </div>
-                </div>
+              <div className="flex items-center space-x-2 rounded-md border p-3 hover:bg-slate-50">
+                <Checkbox id="kpi" />
+                <Label htmlFor="kpi" className="flex-grow cursor-pointer">
+                  <div className="font-medium">KPI Cards</div>
+                  <div className="text-xs text-slate-500">Key performance indicators</div>
+                </Label>
               </div>
             </div>
           </div>
           
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddWidgetDialog(false)}>Cancel</Button>
-            <Button onClick={() => {
-              setShowAddWidgetDialog(false);
-              toast({
-                title: "Widgets Updated",
-                description: "Your dashboard widgets have been updated.",
-              });
-            }}>Apply Changes</Button>
+            <Button variant="outline">Cancel</Button>
+            <Button className="bg-gradient-to-r from-[#2D71A8] to-[#1D5A8A]">Add Selected Widgets</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {dashboardLayout === "custom" && (
+        <div className="col-span-full mt-4 p-4 border border-dashed rounded-lg bg-slate-50 text-center">
+          <div className="flex flex-col items-center gap-2">
+            <MoveHorizontal className="h-8 w-8 text-slate-400" />
+            <h3 className="text-lg font-medium text-slate-700">Custom Layout Mode</h3>
+            <p className="text-sm text-slate-500 max-w-md">
+              In custom layout mode, you can drag and resize widgets to create your perfect dashboard. Click and drag widgets to rearrange them.
+            </p>
+            <Button variant="outline" className="mt-2" onClick={() => handleLayoutChange("default")}>
+              Return to Default Layout
+            </Button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
