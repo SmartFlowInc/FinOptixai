@@ -537,15 +537,21 @@ const Dashboard = () => {
                 accentColor="from-[#2D71A8] to-[#4D8EC3]"
                 title="Revenue Trend"
                 description="Monthly revenue analysis"
-                headerRightContent={
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="h-8 gap-1 text-slate-500 hover:text-[#2D71A8] hover:bg-blue-50"
-                  >
-                    <RefreshCw className="h-3.5 w-3.5" />
-                    <span className="text-xs font-medium">Refresh</span>
-                  </Button>
+                headerContent={
+                  <div className="flex justify-between items-center w-full">
+                    <div>
+                      <h3 className="text-lg font-semibold">Revenue Trend</h3>
+                      <p className="text-sm text-slate-500">Monthly revenue analysis</p>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="h-8 gap-1 text-slate-500 hover:text-[#2D71A8] hover:bg-blue-50"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      <span className="text-xs font-medium">Refresh</span>
+                    </Button>
+                  </div>
                 }
               >
                 <RevenueChart
@@ -561,15 +567,21 @@ const Dashboard = () => {
                 accentColor="from-amber-500 to-amber-600"
                 title="Expense Breakdown"
                 description="By category"
-                headerRightContent={
-                  <Button 
-                    variant="ghost" 
-                    size="sm"
-                    className="h-8 gap-1 text-slate-500 hover:text-amber-600 hover:bg-amber-50"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    <span className="text-xs font-medium">Details</span>
-                  </Button>
+                headerContent={
+                  <div className="flex justify-between items-center w-full">
+                    <div>
+                      <h3 className="text-lg font-semibold">Expense Breakdown</h3>
+                      <p className="text-sm text-slate-500">By category</p>
+                    </div>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="h-8 gap-1 text-slate-500 hover:text-amber-600 hover:bg-amber-50"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" />
+                      <span className="text-xs font-medium">Details</span>
+                    </Button>
+                  </div>
                 }
               >
                 <ExpenseChart
