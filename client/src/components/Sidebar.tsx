@@ -282,8 +282,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
                 </li>
                 <li>
                   <Link href="/enhanced-data-integration">
-                    <div className={`sidebar-link ${location === "/enhanced-data-integration" ? "active" : ""}`}>
-                      <i className="ri-cloud-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/enhanced-data-integration" ? "active" : ""}`}>
+                      <i className="ri-cloud-line text-lg"></i>
                       <span>Advanced Integrations</span>
                     </div>
                   </Link>
@@ -294,19 +294,19 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
 
           <div className="px-3">
             <div 
-              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              className="sidebar-section-header"
               onClick={() => toggleSection('system')}
             >
-              <h3 className="uppercase text-xs font-semibold text-neutral-400">System</h3>
-              <i className={`ri-arrow-${expandedSections.system ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+              <h3 className="sidebar-section-title">System</h3>
+              <i className={`ri-arrow-${expandedSections.system ? 'down' : 'right'}-s-line text-blue-300 text-xs`}></i>
             </div>
             
             {expandedSections.system && (
               <ul className="space-y-1">
                 <li>
                   <Link href="/settings">
-                    <div className={`sidebar-link ${location === "/settings" ? "active" : ""}`}>
-                      <i className="ri-settings-3-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/settings" ? "active" : ""}`}>
+                      <i className="ri-settings-3-line text-lg"></i>
                       <span>Settings</span>
                     </div>
                   </Link>
@@ -317,13 +317,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
         </nav>
         
         {/* Bottom Section */}
-        <div className="p-4 border-t border-neutral-200">
-          <div className="bg-[#F8F9FA] rounded-lg p-3">
-            <p className="text-xs font-medium text-neutral-500 mb-2">Enterprise Plan</p>
-            <div className="w-full bg-neutral-200 rounded-full h-1.5">
-              <div className="bg-primary h-1.5 rounded-full" style={{ width: "75%" }}></div>
+        <div className="p-4 border-t border-slate-700/50">
+          <div className="bg-slate-800/70 rounded-lg p-3">
+            <p className="text-xs font-medium text-blue-300 mb-2">Enterprise Plan</p>
+            <div className="w-full bg-slate-700 rounded-full h-1.5">
+              <div className="bg-blue-500 h-1.5 rounded-full" style={{ width: "75%" }}></div>
             </div>
-            <p className="text-xs text-neutral-400 mt-2">75% of storage used</p>
+            <p className="text-xs text-slate-400 mt-2">75% of storage used</p>
           </div>
         </div>
       </div>
