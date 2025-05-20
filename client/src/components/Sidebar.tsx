@@ -130,35 +130,35 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
 
           <div className="px-3 mb-4">
             <div 
-              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              className="sidebar-section-header"
               onClick={() => toggleSection('financialPlanning')}
             >
-              <h3 className="uppercase text-xs font-semibold text-neutral-400">Financial Planning</h3>
-              <i className={`ri-arrow-${expandedSections.financialPlanning ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+              <h3 className="sidebar-section-title">Financial Planning</h3>
+              <i className={`ri-arrow-${expandedSections.financialPlanning ? 'down' : 'right'}-s-line text-blue-300 text-xs`}></i>
             </div>
             
             {expandedSections.financialPlanning && (
               <ul className="space-y-1">
                 <li>
                   <Link href="/budgeting">
-                    <div className={`sidebar-link ${location === "/budgeting" ? "active" : ""}`}>
-                      <i className="ri-money-dollar-circle-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/budgeting" ? "active" : ""}`}>
+                      <i className="ri-money-dollar-circle-line text-lg"></i>
                       <span>Budgeting</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/forecasting">
-                    <div className={`sidebar-link ${location === "/forecasting" ? "active" : ""}`}>
-                      <i className="ri-line-chart-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/forecasting" ? "active" : ""}`}>
+                      <i className="ri-line-chart-line text-lg"></i>
                       <span>Forecasting</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/reports">
-                    <div className={`sidebar-link ${location === "/reports" ? "active" : ""}`}>
-                      <i className="ri-file-chart-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/reports" ? "active" : ""}`}>
+                      <i className="ri-file-chart-line text-lg"></i>
                       <span>Reports</span>
                     </div>
                   </Link>
@@ -169,35 +169,35 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
 
           <div className="px-3 mb-4">
             <div 
-              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              className="sidebar-section-header"
               onClick={() => toggleSection('aiInsights')}
             >
-              <h3 className="uppercase text-xs font-semibold text-neutral-400">AI Insights</h3>
-              <i className={`ri-arrow-${expandedSections.aiInsights ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+              <h3 className="sidebar-section-title">AI Insights</h3>
+              <i className={`ri-arrow-${expandedSections.aiInsights ? 'down' : 'right'}-s-line text-blue-300 text-xs`}></i>
             </div>
             
             {expandedSections.aiInsights && (
               <ul className="space-y-1">
                 <li>
                   <Link href="/insights">
-                    <div className={`sidebar-link ${location === "/insights" ? "active" : ""}`}>
-                      <i className="ri-lightbulb-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/insights" ? "active" : ""}`}>
+                      <i className="ri-lightbulb-line text-lg"></i>
                       <span>Insights</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/anomaly-detection">
-                    <div className={`sidebar-link ${location === "/anomaly-detection" ? "active" : ""}`}>
-                      <i className="ri-radar-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/anomaly-detection" ? "active" : ""}`}>
+                      <i className="ri-radar-line text-lg"></i>
                       <span>Anomaly Detection</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/continuous-improvement">
-                    <div className={`sidebar-link ${location === "/continuous-improvement" ? "active" : ""}`}>
-                      <i className="ri-loop-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/continuous-improvement" ? "active" : ""}`}>
+                      <i className="ri-loop-line text-lg"></i>
                       <span>Continuous Improvement</span>
                     </div>
                   </Link>
