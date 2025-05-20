@@ -644,7 +644,7 @@ async function sendFinancialAlert(userId, alertData) {
 
 ## Testing Strategy
 
-Demystifi employs a comprehensive testing strategy to ensure reliability.
+FinOptix employs a comprehensive testing strategy to ensure reliability.
 
 ### Testing Pyramid
 
@@ -686,7 +686,7 @@ Continuous Integration includes:
 
 ### Deployment Architecture
 
-Demystifi is designed for deployment on Replit:
+FinOptix is designed for deployment on Replit:
 
 ```
 ┌─────────────────────────┐
