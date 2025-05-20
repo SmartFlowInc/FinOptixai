@@ -24,8 +24,8 @@ function App() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={EnhancedDashboard} />
-        <Route path="/classic-dashboard" component={Dashboard} />
+        <Route path="/" component={Dashboard} />
+        <Route path="/enhanced-dashboard" component={Dashboard} />
         <Route path="/advanced-dashboard" component={AdvancedDashboard} />
         <Route path="/budgeting" component={Budgeting} />
         <Route path="/forecasting" component={Forecasting} />
