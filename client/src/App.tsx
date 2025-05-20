@@ -17,13 +17,15 @@ import WorkflowApproval from "@/pages/WorkflowApproval";
 import Calendar from "@/pages/Calendar";
 import Settings from "@/pages/Settings";
 import MobileDashboard from "@/pages/MobileDashboard";
+import EnhancedDashboard from "@/pages/EnhancedDashboard";
 import NotFound from "@/pages/not-found";
 
 function App() {
   return (
     <Layout>
       <Switch>
-        <Route path="/" component={Dashboard} />
+        <Route path="/" component={EnhancedDashboard} />
+        <Route path="/classic-dashboard" component={Dashboard} />
         <Route path="/advanced-dashboard" component={AdvancedDashboard} />
         <Route path="/budgeting" component={Budgeting} />
         <Route path="/forecasting" component={Forecasting} />
