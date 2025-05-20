@@ -1,5 +1,5 @@
 import { useLocation, Link } from "wouter";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { User } from "@shared/schema";
 
@@ -12,9 +12,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
   const [location] = useLocation();
   const sidebarRef = useRef<HTMLDivElement>(null);
   
+  // State to track expanded/collapsed sections
+  const [expandedSections, setExpandedSections] = useState({
+    dashboards: true,
+    financialPlanning: true,
+    aiInsights: true,
+    teamCollaboration: true,
+    dataManagement: true,
+    system: true
+  });
+  
   const { data: user } = useQuery<User>({
     queryKey: ["/api/user"],
   });
+  
+  // Toggle a section's expanded state
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   useEffect(() => {
     // Close sidebar when clicking outside on mobile
@@ -72,175 +90,229 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
         {/* Navigation Links */}
         <nav className="flex-1 overflow-y-auto py-4">
           <div className="px-3 mb-4">
-            <h3 className="uppercase text-xs font-semibold text-neutral-400 mb-2 px-2">Dashboards</h3>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/">
-                  <div className={`sidebar-link ${location === "/" ? "active" : ""}`}>
-                    <i className="ri-dashboard-line sidebar-icon"></i>
-                    <span>Main Dashboard</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/advanced-dashboard">
-                  <div className={`sidebar-link ${location === "/advanced-dashboard" ? "active" : ""}`}>
-                    <i className="ri-bar-chart-2-line sidebar-icon"></i>
-                    <span>Advanced Analytics</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/mobile-dashboard">
-                  <div className={`sidebar-link ${location === "/mobile-dashboard" ? "active" : ""}`}>
-                    <i className="ri-smartphone-line sidebar-icon"></i>
-                    <span>Mobile View</span>
-                  </div>
-                </Link>
-              </li>
-            </ul>
+            <div 
+              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              onClick={() => toggleSection('dashboards')}
+            >
+              <h3 className="uppercase text-xs font-semibold text-neutral-400">Dashboards</h3>
+              <i className={`ri-arrow-${expandedSections.dashboards ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+            </div>
+            
+            {expandedSections.dashboards && (
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/">
+                    <div className={`sidebar-link ${location === "/" ? "active" : ""}`}>
+                      <i className="ri-dashboard-line sidebar-icon"></i>
+                      <span>Main Dashboard</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/advanced-dashboard">
+                    <div className={`sidebar-link ${location === "/advanced-dashboard" ? "active" : ""}`}>
+                      <i className="ri-bar-chart-2-line sidebar-icon"></i>
+                      <span>Advanced Analytics</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/mobile-dashboard">
+                    <div className={`sidebar-link ${location === "/mobile-dashboard" ? "active" : ""}`}>
+                      <i className="ri-smartphone-line sidebar-icon"></i>
+                      <span>Mobile View</span>
+                    </div>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
 
           <div className="px-3 mb-4">
-            <h3 className="uppercase text-xs font-semibold text-neutral-400 mb-2 px-2">Financial Planning</h3>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/budgeting">
-                  <div className={`sidebar-link ${location === "/budgeting" ? "active" : ""}`}>
-                    <i className="ri-money-dollar-circle-line sidebar-icon"></i>
-                    <span>Budgeting</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/forecasting">
-                  <div className={`sidebar-link ${location === "/forecasting" ? "active" : ""}`}>
-                    <i className="ri-line-chart-line sidebar-icon"></i>
-                    <span>Forecasting</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/reports">
-                  <div className={`sidebar-link ${location === "/reports" ? "active" : ""}`}>
-                    <i className="ri-file-chart-line sidebar-icon"></i>
-                    <span>Reports</span>
-                  </div>
-                </Link>
-              </li>
-            </ul>
+            <div 
+              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              onClick={() => toggleSection('financialPlanning')}
+            >
+              <h3 className="uppercase text-xs font-semibold text-neutral-400">Financial Planning</h3>
+              <i className={`ri-arrow-${expandedSections.financialPlanning ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+            </div>
+            
+            {expandedSections.financialPlanning && (
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/budgeting">
+                    <div className={`sidebar-link ${location === "/budgeting" ? "active" : ""}`}>
+                      <i className="ri-money-dollar-circle-line sidebar-icon"></i>
+                      <span>Budgeting</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/forecasting">
+                    <div className={`sidebar-link ${location === "/forecasting" ? "active" : ""}`}>
+                      <i className="ri-line-chart-line sidebar-icon"></i>
+                      <span>Forecasting</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/reports">
+                    <div className={`sidebar-link ${location === "/reports" ? "active" : ""}`}>
+                      <i className="ri-file-chart-line sidebar-icon"></i>
+                      <span>Reports</span>
+                    </div>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
 
           <div className="px-3 mb-4">
-            <h3 className="uppercase text-xs font-semibold text-neutral-400 mb-2 px-2">AI Insights</h3>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/insights">
-                  <div className={`sidebar-link ${location === "/insights" ? "active" : ""}`}>
-                    <i className="ri-lightbulb-line sidebar-icon"></i>
-                    <span>Insights</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/anomaly-detection">
-                  <div className={`sidebar-link ${location === "/anomaly-detection" ? "active" : ""}`}>
-                    <i className="ri-radar-line sidebar-icon"></i>
-                    <span>Anomaly Detection</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/continuous-improvement">
-                  <div className={`sidebar-link ${location === "/continuous-improvement" ? "active" : ""}`}>
-                    <i className="ri-loop-line sidebar-icon"></i>
-                    <span>Continuous Improvement</span>
-                  </div>
-                </Link>
-              </li>
-            </ul>
+            <div 
+              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              onClick={() => toggleSection('aiInsights')}
+            >
+              <h3 className="uppercase text-xs font-semibold text-neutral-400">AI Insights</h3>
+              <i className={`ri-arrow-${expandedSections.aiInsights ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+            </div>
+            
+            {expandedSections.aiInsights && (
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/insights">
+                    <div className={`sidebar-link ${location === "/insights" ? "active" : ""}`}>
+                      <i className="ri-lightbulb-line sidebar-icon"></i>
+                      <span>Insights</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/anomaly-detection">
+                    <div className={`sidebar-link ${location === "/anomaly-detection" ? "active" : ""}`}>
+                      <i className="ri-radar-line sidebar-icon"></i>
+                      <span>Anomaly Detection</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/continuous-improvement">
+                    <div className={`sidebar-link ${location === "/continuous-improvement" ? "active" : ""}`}>
+                      <i className="ri-loop-line sidebar-icon"></i>
+                      <span>Continuous Improvement</span>
+                    </div>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
 
           <div className="px-3 mb-4">
-            <h3 className="uppercase text-xs font-semibold text-neutral-400 mb-2 px-2">Team Collaboration</h3>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/collaboration">
-                  <div className={`sidebar-link ${location === "/collaboration" ? "active" : ""}`}>
-                    <i className="ri-team-line sidebar-icon"></i>
-                    <span>Team Workspace</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/enhanced-collaboration">
-                  <div className={`sidebar-link ${location === "/enhanced-collaboration" ? "active" : ""}`}>
-                    <i className="ri-chat-4-line sidebar-icon"></i>
-                    <span>Enhanced Collaboration</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/workflow-approval">
-                  <div className={`sidebar-link ${location === "/workflow-approval" ? "active" : ""}`}>
-                    <i className="ri-flow-chart sidebar-icon"></i>
-                    <span>Approval Workflows</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/calendar">
-                  <div className={`sidebar-link ${location === "/calendar" ? "active" : ""}`}>
-                    <i className="ri-calendar-line sidebar-icon"></i>
-                    <span>Calendar</span>
-                  </div>
-                </Link>
-              </li>
-            </ul>
+            <div 
+              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              onClick={() => toggleSection('teamCollaboration')}
+            >
+              <h3 className="uppercase text-xs font-semibold text-neutral-400">Team Collaboration</h3>
+              <i className={`ri-arrow-${expandedSections.teamCollaboration ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+            </div>
+            
+            {expandedSections.teamCollaboration && (
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/collaboration">
+                    <div className={`sidebar-link ${location === "/collaboration" ? "active" : ""}`}>
+                      <i className="ri-team-line sidebar-icon"></i>
+                      <span>Team Workspace</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/enhanced-collaboration">
+                    <div className={`sidebar-link ${location === "/enhanced-collaboration" ? "active" : ""}`}>
+                      <i className="ri-chat-4-line sidebar-icon"></i>
+                      <span>Enhanced Collaboration</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/workflow-approval">
+                    <div className={`sidebar-link ${location === "/workflow-approval" ? "active" : ""}`}>
+                      <i className="ri-flow-chart sidebar-icon"></i>
+                      <span>Approval Workflows</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/calendar">
+                    <div className={`sidebar-link ${location === "/calendar" ? "active" : ""}`}>
+                      <i className="ri-calendar-line sidebar-icon"></i>
+                      <span>Calendar</span>
+                    </div>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
 
           <div className="px-3 mb-4">
-            <h3 className="uppercase text-xs font-semibold text-neutral-400 mb-2 px-2">Data Management</h3>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/data-sources">
-                  <div className={`sidebar-link ${location === "/data-sources" ? "active" : ""}`}>
-                    <i className="ri-database-2-line sidebar-icon"></i>
-                    <span>Data Sources</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/data-integration">
-                  <div className={`sidebar-link ${location === "/data-integration" ? "active" : ""}`}>
-                    <i className="ri-exchange-line sidebar-icon"></i>
-                    <span>Data Integration</span>
-                  </div>
-                </Link>
-              </li>
-              <li>
-                <Link href="/enhanced-data-integration">
-                  <div className={`sidebar-link ${location === "/enhanced-data-integration" ? "active" : ""}`}>
-                    <i className="ri-cloud-line sidebar-icon"></i>
-                    <span>Advanced Integrations</span>
-                  </div>
-                </Link>
-              </li>
-            </ul>
+            <div 
+              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              onClick={() => toggleSection('dataManagement')}
+            >
+              <h3 className="uppercase text-xs font-semibold text-neutral-400">Data Management</h3>
+              <i className={`ri-arrow-${expandedSections.dataManagement ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+            </div>
+            
+            {expandedSections.dataManagement && (
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/data-sources">
+                    <div className={`sidebar-link ${location === "/data-sources" ? "active" : ""}`}>
+                      <i className="ri-database-2-line sidebar-icon"></i>
+                      <span>Data Sources</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/data-integration">
+                    <div className={`sidebar-link ${location === "/data-integration" ? "active" : ""}`}>
+                      <i className="ri-exchange-line sidebar-icon"></i>
+                      <span>Data Integration</span>
+                    </div>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/enhanced-data-integration">
+                    <div className={`sidebar-link ${location === "/enhanced-data-integration" ? "active" : ""}`}>
+                      <i className="ri-cloud-line sidebar-icon"></i>
+                      <span>Advanced Integrations</span>
+                    </div>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
 
           <div className="px-3">
-            <h3 className="uppercase text-xs font-semibold text-neutral-400 mb-2 px-2">System</h3>
-            <ul className="space-y-1">
-              <li>
-                <Link href="/settings">
-                  <div className={`sidebar-link ${location === "/settings" ? "active" : ""}`}>
-                    <i className="ri-settings-3-line sidebar-icon"></i>
-                    <span>Settings</span>
-                  </div>
-                </Link>
-              </li>
-            </ul>
+            <div 
+              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              onClick={() => toggleSection('system')}
+            >
+              <h3 className="uppercase text-xs font-semibold text-neutral-400">System</h3>
+              <i className={`ri-arrow-${expandedSections.system ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+            </div>
+            
+            {expandedSections.system && (
+              <ul className="space-y-1">
+                <li>
+                  <Link href="/settings">
+                    <div className={`sidebar-link ${location === "/settings" ? "active" : ""}`}>
+                      <i className="ri-settings-3-line sidebar-icon"></i>
+                      <span>Settings</span>
+                    </div>
+                  </Link>
+                </li>
+              </ul>
+            )}
           </div>
         </nav>
         
