@@ -126,6 +126,68 @@
   opacity: 1;
 }
 
+/* DataSources card animations */
+.datasource-card {
+  transition: transform 0.3s ease, opacity 0.5s ease, box-shadow 0.3s ease;
+}
+
+.card-visible {
+  opacity: 1 !important;
+}
+
+.datasource-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Data source status indicators */
+.status-healthy {
+  animation: pulse-green 2s infinite;
+}
+
+.status-warning {
+  animation: pulse-orange 2s infinite;
+}
+
+.status-error {
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% {
+    box-shadow: 0 0 0 0 rgba(45, 180, 120, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(45, 180, 120, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(45, 180, 120, 0);
+  }
+}
+
+@keyframes pulse-orange {
+  0% {
+    box-shadow: 0 0 0 0 rgba(240, 150, 30, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(240, 150, 30, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(240, 150, 30, 0);
+  }
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(240, 50, 50, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(240, 50, 50, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(240, 50, 50, 0);
+  }
+}
+
 :root {
   --background: 0 0% 100%;
   --foreground: 20 14.3% 4.1%;

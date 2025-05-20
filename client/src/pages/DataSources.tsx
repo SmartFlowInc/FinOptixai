@@ -12,8 +12,27 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Progress } from "@/components/ui/progress";
 import { IconWrapper } from "@/components/ui/icon-wrapper";
-import { Link, ExternalLink, RefreshCw, Plus, Settings, Database, Key, AlertTriangle, Clock } from "lucide-react";
-import { useState } from "react";
+import { 
+  Link, 
+  ExternalLink, 
+  RefreshCw, 
+  Plus, 
+  Settings, 
+  Database, 
+  Key, 
+  AlertTriangle, 
+  Clock, 
+  CheckCircle, 
+  Cloud, 
+  FileSpreadsheet,
+  LucideIcon,
+  Shield,
+  BarChart,
+  ArrowRight,
+  Zap,
+  AlertCircle
+} from "lucide-react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 const DataSources = () => {
@@ -54,95 +73,225 @@ const DataSources = () => {
     });
   };
   
+  // Stats for the overview cards
+  const [stats, setStats] = useState({
+    activeSources: 4,
+    totalSources: 5,
+    dataSynced: '4.17 GB',
+    lastSync: '30 min ago',
+    syncRate: 95
+  });
+  
+  // Add animation effect when page loads
+  useEffect(() => {
+    const cards = document.querySelectorAll('.datasource-card');
+    cards.forEach((card, index) => {
+      setTimeout(() => {
+        card.classList.add('card-visible');
+      }, 100 * index);
+    });
+  }, []);
+  
   return (
     <>
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-xl font-semibold text-neutral-500">Data Sources</h2>
-          <p className="text-sm text-neutral-400">Manage your financial data connections</p>
+      {/* Header section with premium styling */}
+      <div className="relative mb-10">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-transparent rounded-xl -z-10"></div>
+        
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center px-6 py-8">
+          <div>
+            <h2 className="text-2xl font-bold text-[#0F1829]">Data Sources</h2>
+            <p className="text-[#4D8EC3] mt-1">Centralize and manage your financial data connections</p>
+          </div>
+          
+          <div className="flex gap-3 mt-4 md:mt-0">
+            <Button variant="outline" className="border-[#2D71A8] text-[#2D71A8]">
+              <Cloud className="mr-2 h-4 w-4" />
+              View Data Catalog
+            </Button>
+            <Button className="bg-gradient-to-r from-[#2D71A8] to-[#1D5A8A] hover:from-[#256191] hover:to-[#174B7F] text-white shadow-md">
+              <Plus className="mr-2 h-4 w-4" />
+              Connect New Source
+            </Button>
+          </div>
         </div>
         
-        <div className="flex gap-2">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" />
-            Connect New Source
-          </Button>
+        {/* Overview Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 px-6 -mt-4 mb-8">
+          <Card className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-500">Active Sources</p>
+                  <div className="flex items-baseline gap-2">
+                    <h3 className="text-2xl font-bold text-[#0F1829]">{stats.activeSources}</h3>
+                    <p className="text-sm text-slate-400">of {stats.totalSources}</p>
+                  </div>
+                </div>
+                <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center">
+                  <Database className="h-5 w-5 text-[#2D71A8]" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-500">Total Data Synced</p>
+                  <div className="flex items-baseline gap-2">
+                    <h3 className="text-2xl font-bold text-[#0F1829]">{stats.dataSynced}</h3>
+                  </div>
+                </div>
+                <div className="h-10 w-10 rounded-full bg-green-50 flex items-center justify-center">
+                  <BarChart className="h-5 w-5 text-green-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-500">Last Sync</p>
+                  <div className="flex items-baseline gap-2">
+                    <h3 className="text-2xl font-bold text-[#0F1829]">{stats.lastSync}</h3>
+                  </div>
+                </div>
+                <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center">
+                  <Clock className="h-5 w-5 text-[#2D71A8]" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <Card className="bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-slate-500">Sync Success Rate</p>
+                  <div className="flex items-baseline gap-2">
+                    <h3 className="text-2xl font-bold text-[#0F1829]">{stats.syncRate}%</h3>
+                  </div>
+                </div>
+                <div className="h-10 w-10 rounded-full bg-blue-50 flex items-center justify-center">
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
       
       <Tabs defaultValue="integrations" className="mb-6">
-        <TabsList>
-          <TabsTrigger value="integrations">Integrations</TabsTrigger>
-          <TabsTrigger value="imports">Data Imports</TabsTrigger>
-          <TabsTrigger value="exports">Data Exports</TabsTrigger>
-          <TabsTrigger value="api">API Access</TabsTrigger>
+        <TabsList className="bg-slate-100/50 p-1 rounded-lg">
+          <TabsTrigger value="integrations" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <Database className="h-4 w-4 mr-2" />
+            Integrations
+          </TabsTrigger>
+          <TabsTrigger value="imports" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <ArrowRight className="h-4 w-4 mr-2" />
+            Data Imports
+          </TabsTrigger>
+          <TabsTrigger value="exports" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <FileSpreadsheet className="h-4 w-4 mr-2" />
+            Data Exports
+          </TabsTrigger>
+          <TabsTrigger value="api" className="data-[state=active]:bg-white data-[state=active]:text-[#2D71A8] data-[state=active]:shadow-sm">
+            <Key className="h-4 w-4 mr-2" />
+            API Access
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="integrations" className="mt-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
+            {/* ERP System - Enhanced Card */}
+            <Card className="datasource-card border border-slate-100 shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden opacity-0 transition-opacity duration-300 ease-in-out">
+              <div className="h-1.5 w-full bg-gradient-to-r from-[#2D71A8] to-[#4D8EC3]"></div>
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <IconWrapper variant="primary">
-                      <i className="ri-database-2-line"></i>
-                    </IconWrapper>
+                    <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-[#2D71A8] to-[#4D8EC3] flex items-center justify-center text-white shadow-md">
+                      <Database className="h-5 w-5" />
+                    </div>
                     <div>
-                      <CardTitle>ERP System</CardTitle>
-                      <CardDescription>SAP Integration</CardDescription>
+                      <CardTitle className="text-[#0F1829]">ERP System</CardTitle>
+                      <CardDescription className="text-[#4D8EC3]">SAP Integration</CardDescription>
                     </div>
                   </div>
-                  <Badge variant={syncStatus["erp"] ? "default" : "outline"}>
+                  <Badge className={`${
+                    syncStatus["erp"]
+                      ? "bg-green-50 text-green-700 hover:bg-green-50"
+                      : "bg-slate-100 text-slate-500 hover:bg-slate-100"
+                  }`}>
                     {syncStatus["erp"] ? "Active" : "Inactive"}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent className="mt-2">
                 <div className="flex flex-col gap-3">
-                  <div>
+                  {/* Stats with enhanced styling */}
+                  <div className="p-3 bg-slate-50 rounded-lg">
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm text-neutral-500">Last sync</span>
-                      <span className="text-sm text-neutral-400">30 min ago</span>
+                      <span className="text-sm font-medium text-slate-600">Last sync</span>
+                      <span className="text-sm text-slate-600 flex items-center">
+                        <Clock className="h-3 w-3 mr-1 text-[#2D71A8]" />
+                        30 min ago
+                      </span>
                     </div>
                     <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm text-neutral-500">Status</span>
+                      <span className="text-sm font-medium text-slate-600">Status</span>
                       <div className="flex items-center gap-1">
-                        <div className="h-2 w-2 rounded-full bg-success"></div>
-                        <span className="text-sm text-neutral-400">Healthy</span>
+                        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+                        <span className="text-sm text-slate-600">Healthy</span>
                       </div>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-neutral-500">Data size</span>
-                      <span className="text-sm text-neutral-400">1.2 GB</span>
+                      <span className="text-sm font-medium text-slate-600">Data size</span>
+                      <span className="text-sm text-slate-600">1.2 GB</span>
                     </div>
                   </div>
                   
+                  {/* Sync Progress with enhanced styling */}
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm text-neutral-500">Sync Progress</span>
-                      <span className="text-xs text-neutral-400">100%</span>
+                      <span className="text-sm font-medium text-slate-700">Sync Progress</span>
+                      <span className="text-xs text-green-600 font-medium">Complete</span>
                     </div>
-                    <Progress value={100} className="h-1" />
+                    <Progress value={100} className="h-1.5 bg-slate-100" 
+                      style={{ 
+                        backgroundImage: 'linear-gradient(to right, #2D71A8, #4D8EC3)'
+                      }} 
+                    />
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between border-t pt-4">
+              <CardFooter className="flex justify-between border-t border-slate-100 pt-4">
                 <div className="flex items-center gap-2">
                   <Switch 
                     checked={syncStatus["erp"]} 
                     onCheckedChange={() => handleSyncToggle("erp")} 
+                    className="data-[state=checked]:bg-[#2D71A8]"
                   />
-                  <span className="text-sm">Auto-sync</span>
+                  <span className="text-sm font-medium text-slate-600">Auto-sync</span>
                 </div>
                 <div className="flex gap-2">
                   <Button 
-                    variant="ghost" 
+                    variant="outline" 
                     size="sm" 
                     onClick={() => handleRefreshData("erp")}
+                    className="border-[#2D71A8] text-[#2D71A8] hover:bg-blue-50"
                   >
                     <RefreshCw className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="sm">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="border-slate-200 text-slate-600 hover:bg-slate-50"
+                  >
                     <Settings className="h-4 w-4" />
                   </Button>
                 </div>
