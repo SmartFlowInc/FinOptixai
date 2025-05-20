@@ -34,7 +34,9 @@ import {
   PlayCircle,
   PauseCircle,
   File,
-  ArrowUpDown
+  ArrowUpDown,
+  ArrowRight,
+  BarChart
 } from "lucide-react";
 
 import { 
