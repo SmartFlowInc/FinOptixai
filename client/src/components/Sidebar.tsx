@@ -59,30 +59,30 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
   return (
     <aside 
       ref={sidebarRef}
-      className={`fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-30 transition-transform duration-300 ease-in-out ${sidebarClass}`}
+      className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-[#1E293B] to-[#0F172A] shadow-lg z-30 transition-transform duration-300 ease-in-out ${sidebarClass}`}
     >
       <div className="flex flex-col h-full">
         {/* Logo */}
-        <div className="p-5 border-b border-neutral-200">
+        <div className="p-5 border-b border-slate-700/50">
           <Link href="/">
             <div className="flex items-center space-x-3">
-              <div className="rounded-lg bg-primary p-2">
+              <div className="rounded-lg bg-blue-500 p-2">
                 <i className="ri-bar-chart-box-line text-xl text-white"></i>
               </div>
-              <span className="text-xl font-semibold text-neutral-500">FinOptix</span>
+              <span className="text-xl font-semibold text-white">FinOptix</span>
             </div>
           </Link>
         </div>
         
         {/* User */}
-        <div className="p-4 border-b border-neutral-200">
+        <div className="p-4 border-b border-slate-700/50">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-medium">{user?.avatarInitials || "..."}</span>
+            <div className="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+              <span className="text-blue-400 font-medium">{user?.avatarInitials || "..."}</span>
             </div>
             <div>
-              <p className="text-sm font-medium text-neutral-500">{user?.fullName || "Loading..."}</p>
-              <p className="text-xs text-neutral-400">{user?.jobTitle || ""}</p>
+              <p className="text-sm font-medium text-white">{user?.fullName || "Loading..."}</p>
+              <p className="text-xs text-slate-400">{user?.jobTitle || ""}</p>
             </div>
           </div>
         </div>
