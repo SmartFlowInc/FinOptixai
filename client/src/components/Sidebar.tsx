@@ -208,43 +208,43 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
 
           <div className="px-3 mb-4">
             <div 
-              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              className="sidebar-section-header"
               onClick={() => toggleSection('teamCollaboration')}
             >
-              <h3 className="uppercase text-xs font-semibold text-neutral-400">Team Collaboration</h3>
-              <i className={`ri-arrow-${expandedSections.teamCollaboration ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+              <h3 className="sidebar-section-title">Team Collaboration</h3>
+              <i className={`ri-arrow-${expandedSections.teamCollaboration ? 'down' : 'right'}-s-line text-blue-300 text-xs`}></i>
             </div>
             
             {expandedSections.teamCollaboration && (
               <ul className="space-y-1">
                 <li>
                   <Link href="/collaboration">
-                    <div className={`sidebar-link ${location === "/collaboration" ? "active" : ""}`}>
-                      <i className="ri-team-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/collaboration" ? "active" : ""}`}>
+                      <i className="ri-team-line text-lg"></i>
                       <span>Team Workspace</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/enhanced-collaboration">
-                    <div className={`sidebar-link ${location === "/enhanced-collaboration" ? "active" : ""}`}>
-                      <i className="ri-chat-4-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/enhanced-collaboration" ? "active" : ""}`}>
+                      <i className="ri-chat-4-line text-lg"></i>
                       <span>Enhanced Collaboration</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/workflow-approval">
-                    <div className={`sidebar-link ${location === "/workflow-approval" ? "active" : ""}`}>
-                      <i className="ri-flow-chart sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/workflow-approval" ? "active" : ""}`}>
+                      <i className="ri-flow-chart text-lg"></i>
                       <span>Approval Workflows</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/calendar">
-                    <div className={`sidebar-link ${location === "/calendar" ? "active" : ""}`}>
-                      <i className="ri-calendar-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/calendar" ? "active" : ""}`}>
+                      <i className="ri-calendar-line text-lg"></i>
                       <span>Calendar</span>
                     </div>
                   </Link>
@@ -255,27 +255,27 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
 
           <div className="px-3 mb-4">
             <div 
-              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              className="sidebar-section-header"
               onClick={() => toggleSection('dataManagement')}
             >
-              <h3 className="uppercase text-xs font-semibold text-neutral-400">Data Management</h3>
-              <i className={`ri-arrow-${expandedSections.dataManagement ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+              <h3 className="sidebar-section-title">Data Management</h3>
+              <i className={`ri-arrow-${expandedSections.dataManagement ? 'down' : 'right'}-s-line text-blue-300 text-xs`}></i>
             </div>
             
             {expandedSections.dataManagement && (
               <ul className="space-y-1">
                 <li>
                   <Link href="/data-sources">
-                    <div className={`sidebar-link ${location === "/data-sources" ? "active" : ""}`}>
-                      <i className="ri-database-2-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/data-sources" ? "active" : ""}`}>
+                      <i className="ri-database-2-line text-lg"></i>
                       <span>Data Sources</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/data-integration">
-                    <div className={`sidebar-link ${location === "/data-integration" ? "active" : ""}`}>
-                      <i className="ri-exchange-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/data-integration" ? "active" : ""}`}>
+                      <i className="ri-exchange-line text-lg"></i>
                       <span>Data Integration</span>
                     </div>
                   </Link>
