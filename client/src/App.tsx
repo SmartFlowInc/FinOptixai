@@ -23,29 +23,35 @@ import NotFound from "@/pages/not-found";
 
 function App() {
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" component={Dashboard} />
-        <Route path="/enhanced-dashboard" component={Dashboard} />
-        <Route path="/advanced-dashboard" component={AdvancedDashboard} />
-        <Route path="/budgeting" component={Budgeting} />
-        <Route path="/forecasting" component={Forecasting} />
-        <Route path="/reports" component={Reports} />
-        <Route path="/collaboration" component={Collaboration} />
-        <Route path="/data-sources" component={DataSources} />
-        <Route path="/data-integration" component={DataIntegration} />
-        <Route path="/enhanced-data-integration" component={EnhancedDataIntegration} />
-        <Route path="/continuous-improvement" component={ContinuousImprovement} />
-        <Route path="/anomaly-detection" component={AnomalyDetection} />
-        <Route path="/insights" component={Insights} />
-        <Route path="/workflow-approval" component={WorkflowApproval} />
-        <Route path="/enhanced-collaboration" component={EnhancedCollaboration} />
-        <Route path="/calendar" component={Calendar} />
-        <Route path="/settings" component={Settings} />
-        <Route path="/mobile-dashboard" component={MobileDashboard} />
-        <Route component={NotFound} />
-      </Switch>
-    </Layout>
+    <Switch>
+      <Route path="/landing" component={LandingPage} />
+      
+      <Route>
+        <Layout>
+          <Switch>
+            <Route path="/" component={Dashboard} />
+            <Route path="/enhanced-dashboard" component={Dashboard} />
+            <Route path="/advanced-dashboard" component={AdvancedDashboard} />
+            <Route path="/budgeting" component={Budgeting} />
+            <Route path="/forecasting" component={Forecasting} />
+            <Route path="/reports" component={Reports} />
+            <Route path="/collaboration" component={Collaboration} />
+            <Route path="/data-sources" component={DataSources} />
+            <Route path="/data-integration" component={DataIntegration} />
+            <Route path="/enhanced-data-integration" component={EnhancedDataIntegration} />
+            <Route path="/continuous-improvement" component={ContinuousImprovement} />
+            <Route path="/anomaly-detection" component={AnomalyDetection} />
+            <Route path="/insights" component={Insights} />
+            <Route path="/workflow-approval" component={WorkflowApproval} />
+            <Route path="/enhanced-collaboration" component={EnhancedCollaboration} />
+            <Route path="/calendar" component={Calendar} />
+            <Route path="/settings" component={Settings} />
+            <Route path="/mobile-dashboard" component={MobileDashboard} />
+            <Route component={NotFound} />
+          </Switch>
+        </Layout>
+      </Route>
+    </Switch>
   );
 }
 
