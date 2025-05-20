@@ -15,7 +15,7 @@ export interface Notification {
 }
 
 // Local storage key for notifications
-const NOTIFICATIONS_STORAGE_KEY = 'demystifi_notifications';
+const NOTIFICATIONS_STORAGE_KEY = 'finoptix_notifications';
 
 // Function to get notifications from local storage
 export const getStoredNotifications = (): Notification[] => {

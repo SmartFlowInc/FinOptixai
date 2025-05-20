@@ -1,15 +1,15 @@
-# Demystifi API Documentation
+# FinOptix API Documentation
 
-This document provides detailed specifications for all API endpoints in the Demystifi platform.
+This document provides detailed specifications for all API endpoints in the FinOptix platform.
 
 ## API Overview
 
-The Demystifi API follows RESTful principles with JSON as the primary data exchange format. All endpoints are prefixed with `/api`.
+The FinOptix API follows RESTful principles with JSON as the primary data exchange format. All endpoints are prefixed with `/api`.
 
 ### Base URL
 
 ```
-https://demystifi.repl.app/api
+https://finoptix.repl.app/api
 ```
 
 ### Authentication

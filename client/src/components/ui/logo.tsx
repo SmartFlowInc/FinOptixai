@@ -28,7 +28,7 @@ const Logo: React.FC<LogoProps> = ({
     }
   };
 
-  // Inspired by Abacum's logo (blue square with an icon)
+  // Inspired by FinOptix's logo (blue square with an icon)
   if (variant === 'minimal') {
     return (
       <div className={`flex items-center justify-center rounded-lg bg-blue-600 text-white font-semibold ${sizeMap[size].container}`}>
