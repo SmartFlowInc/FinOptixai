@@ -18,6 +18,7 @@ import Calendar from "@/pages/Calendar";
 import Settings from "@/pages/Settings";
 import MobileDashboard from "@/pages/MobileDashboard";
 import EnhancedDashboard from "@/pages/EnhancedDashboard";
+import LandingPage from "@/pages/LandingPage";
 import NotFound from "@/pages/not-found";
 
 function App() {
