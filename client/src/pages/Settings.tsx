@@ -689,7 +689,7 @@ export const Settings = () => {
                   </div>
                   
                   <Button variant="outline" className="w-full mt-4">
-                    <Upload className="mr-2 h-4 w-4" />
+                    <FileText className="mr-2 h-4 w-4" />
                     Upload Photo
                   </Button>
                 </div>
