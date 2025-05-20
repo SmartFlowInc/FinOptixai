@@ -1237,14 +1237,35 @@ const LandingPage = () => {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="pricing" className="py-28 bg-gradient-to-b from-white to-slate-50 relative overflow-hidden">
+        {/* Background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Subtle background shapes */}
+          <div className="absolute top-0 left-0 w-full h-64 bg-gradient-to-b from-blue-500/5 to-transparent"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full bg-blue-500/5 blur-3xl -mb-48 -mr-48"></div>
+          <div className="absolute top-1/4 left-20 w-64 h-64 rounded-full border border-blue-200/20"></div>
+          <div className="absolute bottom-1/3 right-20 w-40 h-40 rounded-full border border-blue-300/10"></div>
+          
+          {/* Abstract grid pattern */}
+          <div className="absolute inset-0 opacity-[0.02]" 
+            style={{
+              backgroundImage: 'radial-gradient(#2D71A8 1px, transparent 1px)',
+              backgroundSize: '40px 40px'
+            }}>
+          </div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Section header */}
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#1A2A40]">
-              Simple, Transparent Pricing
+            <div className="inline-block">
+              <span className="bg-blue-50 text-blue-600 text-xs font-medium tracking-wider uppercase px-3 py-1 rounded-full mb-4 inline-block">Pricing</span>
+            </div>
+            <h2 className="mt-4 text-3xl md:text-4xl lg:text-5xl font-bold text-[#0F1829] leading-tight">
+              Simple, <span className="gradient-text-animated">Transparent Pricing</span>
             </h2>
-            <p className="mt-4 text-lg text-slate-600">
-              Choose the plan that's right for your business needs.
+            <p className="mt-6 text-lg text-slate-600 leading-relaxed">
+              Choose the plan that best fits your business needs. All plans include a 14-day trial with no credit card required.
             </p>
           </div>
           
@@ -1253,11 +1274,13 @@ const LandingPage = () => {
               {
                 name: "Starter",
                 price: "$99",
-                description: "Perfect for small businesses and startups",
+                description: "Perfect for small teams just getting started",
                 features: [
                   "Financial dashboards",
-                  "Basic forecasting tools",
-                  "Up to 3 users",
+                  "Basic reporting",
+                  "Limited data visualization",
+                  "Up to 3 team members",
+                  "Basic access controls",
                   "Data import/export",
                   "Email support"
                 ],
@@ -1267,13 +1290,15 @@ const LandingPage = () => {
               {
                 name: "Professional",
                 price: "$299",
-                description: "Ideal for growing companies",
+                description: "Ideal for growing companies with advanced needs",
                 features: [
                   "Everything in Starter",
                   "AI-powered insights",
                   "Scenario planning",
-                  "Up to 10 users",
-                  "API access",
+                  "Advanced analytics",
+                  "Up to 10 team members",
+                  "Role-based access",
+                  "Workflow approvals",
                   "Priority support"
                 ],
                 cta: "Start free trial",
@@ -1282,14 +1307,15 @@ const LandingPage = () => {
               {
                 name: "Enterprise",
                 price: "Custom",
-                description: "For large organizations with complex needs",
+                description: "For organizations with complex financial operations",
                 features: [
                   "Everything in Professional",
-                  "Unlimited users",
+                  "Unlimited team members",
                   "Custom integrations",
+                  "Premium on-site training",
                   "Dedicated account manager",
-                  "Training & onboarding",
-                  "SLA guarantees"
+                  "SLA guarantees",
+                  "Custom security controls"
                 ],
                 cta: "Contact sales",
                 highlight: false
@@ -1297,49 +1323,100 @@ const LandingPage = () => {
             ].map((plan, index) => (
               <div 
                 key={index} 
-                className={`rounded-xl p-8 border ${
+                className={`group relative rounded-xl overflow-hidden hover-lift transition-all duration-300 ${
                   plan.highlight 
-                    ? 'border-[#2D71A8] shadow-xl shadow-[#2D71A8]/10 relative' 
-                    : 'border-slate-200 shadow-md'
+                    ? 'shadow-xl shadow-blue-500/10 z-10 scale-105 md:scale-100 md:hover:scale-105' 
+                    : 'shadow-lg hover:shadow-xl'
                 }`}
               >
+                {/* Card background and border effect */}
+                <div className="absolute inset-0 bg-white"></div>
+                <div className={`absolute inset-0 border-2 rounded-xl transition-colors ${
+                  plan.highlight ? 'border-blue-500' : 'border-slate-200 group-hover:border-slate-300'
+                }`}></div>
                 {plan.highlight && (
-                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#2D71A8] text-white text-xs font-bold px-4 py-1 rounded-full uppercase">
-                    Most Popular
-                  </div>
+                  <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-blue-500 to-blue-600"></div>
                 )}
                 
-                <h3 className="text-xl font-semibold text-[#1A2A40] mb-1">{plan.name}</h3>
-                <div className="flex items-baseline">
-                  <span className="text-4xl font-bold text-[#1A2A40]">{plan.price}</span>
-                  {plan.price !== "Custom" && <span className="text-slate-500 ml-2">/month</span>}
+                {/* Card content */}
+                <div className="relative p-8">
+                  {plan.highlight && (
+                    <div className="inline-block bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4">
+                      MOST POPULAR
+                    </div>
+                  )}
+                  
+                  <h3 className="text-xl font-bold text-[#0F1829] mb-2">{plan.name}</h3>
+                  <div className="flex items-baseline mb-4">
+                    <span className="text-4xl font-bold text-[#0F1829]">{plan.price}</span>
+                    {plan.price !== "Custom" && <span className="text-slate-500 ml-2">/month</span>}
+                  </div>
+                  <p className="text-slate-600 mb-6">{plan.description}</p>
+                  
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start">
+                        <CheckCircle className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" />
+                        <span className="text-slate-700">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <Button 
+                    className={`w-full py-6 ${
+                      plan.highlight 
+                        ? 'bg-gradient-to-r from-[#2D71A8] to-[#1D5A8A] text-white hover:shadow-lg transition-shadow'
+                        : 'bg-white border border-[#2D71A8] text-[#2D71A8] hover:bg-slate-50'
+                    }`}
+                    onClick={() => navigate("/")}
+                  >
+                    {plan.cta}
+                  </Button>
                 </div>
-                <p className="text-slate-600 mb-6 mt-2">{plan.description}</p>
-                
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start">
-                      <svg className="h-5 w-5 text-green-500 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      <span className="text-slate-600">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                
-                <Button 
-                  className={`w-full py-6 ${
-                    plan.highlight 
-                      ? 'bg-gradient-to-r from-[#2D71A8] to-[#1D5A8A] text-white shadow-lg' 
-                      : 'bg-white text-[#2D71A8] border border-[#2D71A8]'
-                  }`}
-                  variant={plan.highlight ? 'default' : 'outline'}
-                  onClick={() => navigate("/")}
-                >
-                  {plan.cta}
-                </Button>
               </div>
             ))}
+          </div>
+          
+          {/* FAQ Section */}
+          <div className="mt-24">
+            <div className="text-center mb-12">
+              <h3 className="text-2xl md:text-3xl font-bold text-[#0F1829]">Frequently Asked Questions</h3>
+              <p className="mt-4 text-slate-600">Everything you need to know about our pricing and plans</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+              {[
+                {
+                  question: "Do you offer a free trial?",
+                  answer: "Yes, all plans include a 14-day free trial with full access to all features. No credit card required."
+                },
+                {
+                  question: "Can I change plans later?",
+                  answer: "Absolutely! You can upgrade, downgrade, or cancel your plan at any time. Changes take effect at the start of your next billing cycle."
+                },
+                {
+                  question: "How does billing work?",
+                  answer: "We offer monthly and annual billing options. Annual plans receive a 15% discount compared to monthly billing."
+                },
+                {
+                  question: "What payment methods do you accept?",
+                  answer: "We accept all major credit cards, ACH transfers, and wire transfers for enterprise customers."
+                },
+                {
+                  question: "Do you offer educational or non-profit discounts?",
+                  answer: "Yes, we offer special pricing for qualified educational institutions and non-profit organizations. Contact our sales team for details."
+                },
+                {
+                  question: "How secure is my financial data?",
+                  answer: "FinOptix is SOC 2 compliant and uses bank-level encryption to protect your data. We never share your information with third parties."
+                }
+              ].map((faq, i) => (
+                <div key={i} className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                  <h4 className="text-lg font-semibold text-[#0F1829] mb-2">{faq.question}</h4>
+                  <p className="text-slate-600">{faq.answer}</p>
+                </div>
+              ))}
+            </div>
           </div>
           
           <div className="mt-12 text-center text-slate-600">
