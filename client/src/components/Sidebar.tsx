@@ -91,35 +91,35 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, closeSidebar }) => {
         <nav className="flex-1 overflow-y-auto py-4">
           <div className="px-3 mb-4">
             <div 
-              className="flex justify-between items-center cursor-pointer px-2 py-1 mb-1 hover:bg-neutral-100 rounded-md"
+              className="sidebar-section-header"
               onClick={() => toggleSection('dashboards')}
             >
-              <h3 className="uppercase text-xs font-semibold text-neutral-400">Dashboards</h3>
-              <i className={`ri-arrow-${expandedSections.dashboards ? 'down' : 'right'}-s-line text-neutral-400 text-xs`}></i>
+              <h3 className="sidebar-section-title">Dashboards</h3>
+              <i className={`ri-arrow-${expandedSections.dashboards ? 'down' : 'right'}-s-line text-blue-300 text-xs`}></i>
             </div>
             
             {expandedSections.dashboards && (
               <ul className="space-y-1">
                 <li>
                   <Link href="/">
-                    <div className={`sidebar-link ${location === "/" ? "active" : ""}`}>
-                      <i className="ri-dashboard-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/" ? "active" : ""}`}>
+                      <i className="ri-dashboard-line text-lg"></i>
                       <span>Main Dashboard</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/advanced-dashboard">
-                    <div className={`sidebar-link ${location === "/advanced-dashboard" ? "active" : ""}`}>
-                      <i className="ri-bar-chart-2-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/advanced-dashboard" ? "active" : ""}`}>
+                      <i className="ri-bar-chart-2-line text-lg"></i>
                       <span>Advanced Analytics</span>
                     </div>
                   </Link>
                 </li>
                 <li>
                   <Link href="/mobile-dashboard">
-                    <div className={`sidebar-link ${location === "/mobile-dashboard" ? "active" : ""}`}>
-                      <i className="ri-smartphone-line sidebar-icon"></i>
+                    <div className={`sidebar-nav-item ${location === "/mobile-dashboard" ? "active" : ""}`}>
+                      <i className="ri-smartphone-line text-lg"></i>
                       <span>Mobile View</span>
                     </div>
                   </Link>
