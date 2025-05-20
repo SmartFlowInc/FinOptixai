@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Sidebar from "./Sidebar";
+import EnhancedSidebar from "./EnhancedSidebar";
 import Header from "./Header";
 import { useLocation } from "wouter";
 
@@ -57,7 +58,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   return (
     <div className="flex h-screen bg-[#F8F9FA] overflow-hidden">
-      <Sidebar isOpen={isSidebarOpen} closeSidebar={() => setIsSidebarOpen(false)} />
+      <EnhancedSidebar isOpen={isSidebarOpen} closeSidebar={() => setIsSidebarOpen(false)} />
       
       <div className="flex-1 ml-0 md:ml-64 flex flex-col">
         <Header 
