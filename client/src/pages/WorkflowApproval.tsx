@@ -46,6 +46,28 @@ import {
   Bell
 } from 'lucide-react';
 
+// Define interfaces for approval requests
+interface ApprovalRequest {
+  id: number;
+  title: string;
+  requestor: string;
+  requestorDepartment: string;
+  dateSubmitted: string;
+  amount: number;
+  description: string;
+  status: 'pending' | 'approved' | 'rejected';
+  currentApprover?: string;
+  approvalStep: number;
+  totalSteps: number;
+  priority: 'high' | 'medium' | 'low';
+  documents: number;
+  approvedBy?: string;
+  approvedDate?: string;
+  rejectedBy?: string;
+  rejectedDate?: string;
+  rejectionReason?: string;
+}
+
 // Defining interfaces for report scheduling
 interface ScheduledReport {
   id: number;
@@ -555,9 +577,11 @@ const WorkflowApproval = () => {
                               </div>
                               <div className="flex items-center gap-1">
                                 <Clock className="h-3.5 w-3.5" />
-                                <span>{request.status === 'approved' ? 
+                                <span>{request.status === 'approved' && request.approvedDate ? 
                                   `Approved on ${new Date(request.approvedDate).toLocaleDateString()}` : 
-                                  `Rejected on ${new Date(request.rejectedDate).toLocaleDateString()}`
+                                  request.status === 'rejected' && request.rejectedDate ?
+                                  `Rejected on ${new Date(request.rejectedDate).toLocaleDateString()}` :
+                                  `${request.status.charAt(0).toUpperCase() + request.status.slice(1)}`
                                 }</span>
                               </div>
                             </div>

@@ -292,7 +292,7 @@ const DataIntegration = () => {
   ];
 
   // Helper function to render status badges
-  const getStatusBadge = (status) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
       case 'connected':
       case 'active':
@@ -456,16 +456,20 @@ const DataIntegration = () => {
                         'text-red-600'
                       }`}>{connector.health}%</span>
                     </div>
-                    <Progress value={connector.health} className={`h-1.5 ${
+                    <div className={`h-1.5 w-full rounded-full ${
                       connector.health === 100 ? 'bg-green-100' : 
                       connector.health > 60 ? 'bg-amber-100' : 
                       'bg-red-100'
-                    }`} 
-                    indicatorClassName={
-                      connector.health === 100 ? 'bg-green-500' : 
-                      connector.health > 60 ? 'bg-amber-500' : 
-                      'bg-red-500'
-                    } />
+                    }`}>
+                      <div 
+                        className={`h-full rounded-full ${
+                          connector.health === 100 ? 'bg-green-500' : 
+                          connector.health > 60 ? 'bg-amber-500' : 
+                          'bg-red-500'
+                        }`}
+                        style={{ width: `${connector.health}%` }}
+                      />
+                    </div>
                   </div>
                 </div>
               </PremiumCard>

@@ -31,7 +31,8 @@ import {
   PieChart,
   Zap,
   Brain,
-  Gauge
+  Gauge,
+  BrainCircuit
 } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -40,6 +41,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import PremiumPageHeader from "@/components/ui/premium-page-header";
 import { PremiumCard } from "@/components/ui/premium-card";
+import AIInsightsPanel from "@/components/ai/AIInsightsPanel";
 
 // Types for insights
 type InsightCategory = 'strategic' | 'operational' | 'financial' | 'market' | 'customer';
