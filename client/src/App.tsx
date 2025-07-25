@@ -27,32 +27,61 @@ function App() {
     <Switch>
       <Route path="/" component={LandingPage} />
       <Route path="/system-architecture" component={SystemArchitecture} />
-      
-      <Route>
-        <Layout>
-          <Switch>
-            <Route path="/dashboard" component={Dashboard} />
-            <Route path="/enhanced-dashboard" component={Dashboard} />
-            <Route path="/advanced-dashboard" component={AdvancedDashboard} />
-            <Route path="/budgeting" component={Budgeting} />
-            <Route path="/forecasting" component={Forecasting} />
-            <Route path="/reports" component={Reports} />
-            <Route path="/collaboration" component={Collaboration} />
-            <Route path="/data-sources" component={DataSources} />
-            <Route path="/data-integration" component={DataIntegration} />
-            <Route path="/enhanced-data-integration" component={EnhancedDataIntegration} />
-            <Route path="/continuous-improvement" component={ContinuousImprovement} />
-            <Route path="/anomaly-detection" component={AnomalyDetection} />
-            <Route path="/insights" component={Insights} />
-            <Route path="/workflow-approval" component={WorkflowApproval} />
-            <Route path="/enhanced-collaboration" component={EnhancedCollaboration} />
-            <Route path="/calendar" component={Calendar} />
-            <Route path="/settings" component={Settings} />
-            <Route path="/mobile-dashboard" component={MobileDashboard} />
-            <Route component={NotFound} />
-          </Switch>
-        </Layout>
+      <Route path="/dashboard">
+        <Layout><Dashboard /></Layout>
       </Route>
+      <Route path="/enhanced-dashboard">
+        <Layout><Dashboard /></Layout>
+      </Route>
+      <Route path="/advanced-dashboard">
+        <Layout><AdvancedDashboard /></Layout>
+      </Route>
+      <Route path="/budgeting">
+        <Layout><Budgeting /></Layout>
+      </Route>
+      <Route path="/forecasting">
+        <Layout><Forecasting /></Layout>
+      </Route>
+      <Route path="/reports">
+        <Layout><Reports /></Layout>
+      </Route>
+      <Route path="/collaboration">
+        <Layout><Collaboration /></Layout>
+      </Route>
+      <Route path="/data-sources">
+        <Layout><DataSources /></Layout>
+      </Route>
+      <Route path="/data-integration">
+        <Layout><DataIntegration /></Layout>
+      </Route>
+      <Route path="/enhanced-data-integration">
+        <Layout><EnhancedDataIntegration /></Layout>
+      </Route>
+      <Route path="/continuous-improvement">
+        <Layout><ContinuousImprovement /></Layout>
+      </Route>
+      <Route path="/anomaly-detection">
+        <Layout><AnomalyDetection /></Layout>
+      </Route>
+      <Route path="/insights">
+        <Layout><Insights /></Layout>
+      </Route>
+      <Route path="/workflow-approval">
+        <Layout><WorkflowApproval /></Layout>
+      </Route>
+      <Route path="/enhanced-collaboration">
+        <Layout><EnhancedCollaboration /></Layout>
+      </Route>
+      <Route path="/calendar">
+        <Layout><Calendar /></Layout>
+      </Route>
+      <Route path="/settings">
+        <Layout><Settings /></Layout>
+      </Route>
+      <Route path="/mobile-dashboard">
+        <Layout><MobileDashboard /></Layout>
+      </Route>
+      <Route component={NotFound} />
     </Switch>
   );
 }
