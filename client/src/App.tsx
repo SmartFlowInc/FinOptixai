@@ -26,6 +26,7 @@ function App() {
   return (
     <Switch>
       <Route path="/" component={LandingPage} />
+      <Route path="/system-architecture" component={SystemArchitecture} />
       
       <Route>
         <Layout>
@@ -48,7 +49,6 @@ function App() {
             <Route path="/calendar" component={Calendar} />
             <Route path="/settings" component={Settings} />
             <Route path="/mobile-dashboard" component={MobileDashboard} />
-            <Route path="/system-architecture" component={SystemArchitecture} />
             <Route component={NotFound} />
           </Switch>
         </Layout>
