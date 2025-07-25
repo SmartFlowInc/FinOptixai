@@ -11,6 +11,7 @@ Preferred communication style: Simple, everyday language.
 ## Recent Changes
 
 - **Landing Page as Default Route (January 2025):** Updated routing structure to make LandingPage the default route at `/` instead of Dashboard, providing better user onboarding experience
+- **Platform-Agnostic Branding (January 2025):** Removed all platform-specific references and branding to make FinOptix platform-independent, updated authentication to use generic OAuth 2.0/OpenID Connect terminology
 
 ## System Architecture
 
@@ -29,7 +30,7 @@ The frontend follows a component-based architecture with dedicated contexts for 
 The backend uses a Node.js Express server with the following key components:
 - **Express 4.18.0** web framework for API endpoints
 - **Drizzle ORM** for type-safe database operations with PostgreSQL
-- **Passport.js** with OpenID Connect for authentication via Replit
+- **Passport.js** with OpenID Connect for authentication
 - **OpenAI GPT-4o integration** for AI-powered insights and anomaly detection
 - **Session-based authentication** with PostgreSQL session storage
 
@@ -83,7 +84,7 @@ Team collaboration features include:
 ## External Dependencies
 
 ### Authentication
-- **Replit OpenID Connect**: Primary authentication provider
+- **OAuth 2.0 / OpenID Connect**: Primary authentication provider
 - **Passport.js**: Authentication middleware and session management
 
 ### AI Services
@@ -102,7 +103,7 @@ Team collaboration features include:
 ## Deployment Strategy
 
 ### Hosting Platform
-- **Replit**: Primary hosting platform for development and production
+- **Cloud Platform**: Primary hosting platform for development and production
 - **Automatic Deployments**: Git-based deployment workflow
 - **Environment Management**: Separate development and production environments
 

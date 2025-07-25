@@ -6,7 +6,7 @@
 
 FinOptix is an enterprise-grade financial planning and analysis platform designed to streamline financial workflows, provide actionable insights, and enable collaborative decision-making. The platform combines advanced data visualization, AI-powered analytics, and a mobile-first approach to deliver a comprehensive financial management solution.
 
-- **Live Demo:** [https://finoptix.repl.app](https://finoptix.repl.app)
+- **Live Demo:** [https://finoptix.app](https://finoptix.app)
 - **Platform Version:** 1.0.0
 - **Last Updated:** May 19, 2025
 
@@ -28,7 +28,7 @@ FinOptix is an enterprise-grade financial planning and analysis platform designe
 - **Drizzle ORM**: Type-safe database queries with PostgreSQL
 - **OpenAI API**: GPT-4o integration for AI-powered insights
 - **Passport.js**: Authentication middleware for OIDC
-- **Replit Authentication**: OpenID Connect provider
+- **OAuth Authentication**: OpenID Connect provider
 
 ### Database
 - **PostgreSQL**: Relational database for data storage
@@ -40,7 +40,7 @@ FinOptix is an enterprise-grade financial planning and analysis platform designe
 - **Vite**: Fast bundling and development server
 - **ESBuild**: JavaScript bundler and minifier
 - **PostCSS**: CSS processing with plugins
-- **Replit**: Hosting and deployment platform
+- **Cloud Platform**: Hosting and deployment platform
 
 ## Table of Contents
 1. [Core Features](#core-features)
@@ -141,7 +141,7 @@ The backend uses Express.js with a service-oriented architecture:
 - **API Layer**: Express routes for handling HTTP requests
 - **Service Layer**: Business logic and domain services
 - **Data Access Layer**: Drizzle ORM for database operations
-- **Authentication Layer**: OIDC integration with Replit for user authentication
+- **Authentication Layer**: OIDC integration for user authentication
 - **AI Services Layer**: Integration with OpenAI for advanced analytics
 
 ### Data Flow
@@ -197,7 +197,7 @@ For real-time updates and notifications, we use a pub/sub pattern:
 │   ├── ai-routes.ts          # AI feature routes
 │   ├── ai-services.ts        # AI-related services
 │   ├── vite.ts               # Vite server configuration
-│   └── replitAuth.ts         # Authentication implementation
+│   └── auth.ts               # Authentication implementation
 ├── shared                    # Shared code between client and server
 │   └── schema.ts             # Database schema and types
 ├── components.json           # Shadcn UI configuration
@@ -215,7 +215,7 @@ For real-time updates and notifications, we use a pub/sub pattern:
 
 - Node.js v18+ 
 - PostgreSQL database
-- Replit account (for authentication)
+- OAuth account (for authentication)
 - OpenAI API key (for AI features)
 
 ### Installation Steps
@@ -248,7 +248,7 @@ PGPORT=5432
 
 # Authentication
 SESSION_SECRET=your-session-secret
-REPLIT_DOMAINS=your-domain.replit.app
+ALLOWED_DOMAINS=your-domain.finoptix.app
 
 # AI Features
 OPENAI_API_KEY=your-openai-api-key
@@ -415,12 +415,12 @@ Data visualization is powered by Nivo.js with standardized configurations:
 
 ### Authentication System
 
-Financial Hub uses OpenID Connect with Replit as the identity provider:
+Financial Hub uses OpenID Connect with OAuth 2.0 as the identity provider:
 
 1. **Authentication Flow**:
    - User clicks "Log In"
-   - Redirected to Replit for authentication
-   - Replit returns auth code after successful login
+   - Redirected to OAuth provider for authentication
+   - Provider returns auth code after successful login
    - Server exchanges code for tokens
    - User session is established
 
@@ -434,7 +434,7 @@ Financial Hub uses OpenID Connect with Replit as the identity provider:
 
 User profiles include the following information:
 
-- Unique user ID (from Replit)
+- Unique user ID (from OAuth provider)
 - Email address
 - First and last name
 - Profile image URL
@@ -686,11 +686,11 @@ Continuous Integration includes:
 
 ### Deployment Architecture
 
-FinOptix is designed for deployment on Replit:
+FinOptix is designed for cloud deployment:
 
 ```
 ┌─────────────────────────┐
-│      Replit Platform    │
+│    Cloud Platform       │
 │                         │
 │  ┌─────────────────┐    │
 │  │ Node.js Runtime │    │
@@ -725,7 +725,7 @@ FinOptix is designed for deployment on Replit:
    - Verify database connection
 
 3. **Deployment**
-   - Deploy to Replit environment
+   - Deploy to cloud environment
    - Configure environment variables
    - Set up custom domain (if applicable)
 
@@ -753,7 +753,7 @@ PGPORT=5432
 
 # Authentication
 SESSION_SECRET=your-session-secret
-REPLIT_DOMAINS=your-domain.replit.app,your-custom-domain.com
+ALLOWED_DOMAINS=your-domain.finoptix.app,your-custom-domain.com
 
 # API Keys
 OPENAI_API_KEY=your-openai-api-key

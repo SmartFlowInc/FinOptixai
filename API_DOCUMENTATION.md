@@ -9,12 +9,12 @@ The FinOptix API follows RESTful principles with JSON as the primary data exchan
 ### Base URL
 
 ```
-https://finoptix.repl.app/api
+https://finoptix.app/api
 ```
 
 ### Authentication
 
-All API requests (except authentication endpoints) require authentication using session cookies. Authentication is handled through Replit's OpenID Connect service.
+All API requests (except authentication endpoints) require authentication using session cookies. Authentication is handled through OAuth 2.0 / OpenID Connect.
 
 ### Response Format
 
@@ -72,11 +72,11 @@ Get the currently authenticated user.
 
 #### GET /api/login
 
-Initiates the authentication flow with Replit. Redirects to Replit for authentication.
+Initiates the authentication flow via OAuth 2.0 / OpenID Connect. Redirects to the authentication provider.
 
 #### GET /api/callback
 
-Callback endpoint for Replit authentication. Redirects to the application after successful authentication.
+Callback endpoint for OAuth authentication. Redirects to the application after successful authentication.
 
 #### GET /api/logout
 

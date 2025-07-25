@@ -8,15 +8,15 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
 
-if (!process.env.REPLIT_DOMAINS) {
-  throw new Error("Environment variable REPLIT_DOMAINS not provided");
+if (!process.env.ALLOWED_DOMAINS) {
+  throw new Error("Environment variable ALLOWED_DOMAINS not provided");
 }
 
 const getOidcConfig = memoize(
   async () => {
     return await client.discovery(
-      new URL(process.env.ISSUER_URL ?? "https://replit.com/oidc"),
-      process.env.REPL_ID!
+      new URL(process.env.ISSUER_URL ?? "https://auth.finoptix.com/oidc"),
+      process.env.CLIENT_ID!
     );
   },
   { maxAge: 3600 * 1000 }
@@ -57,12 +57,15 @@ function updateUserSession(
 async function upsertUser(
   claims: any,
 ) {
+  const fullName = `${claims["first_name"] || ""} ${claims["last_name"] || ""}`.trim() || claims["email"] || "User";
+  const username = claims["email"] || `user_${claims["sub"]}`;
+  
   await storage.upsertUser({
-    id: claims["sub"],
-    email: claims["email"],
-    firstName: claims["first_name"],
-    lastName: claims["last_name"],
-    profileImageUrl: claims["profile_image_url"],
+    username: username,
+    password: "oauth_user", // OAuth users don't use password authentication
+    fullName: fullName,
+    jobTitle: null,
+    avatarInitials: null,
   });
 }
 
@@ -85,10 +88,10 @@ export async function setupAuth(app: Express) {
   };
 
   for (const domain of process.env
-    .REPLIT_DOMAINS!.split(",")) {
+    .ALLOWED_DOMAINS!.split(",")) {
     const strategy = new Strategy(
       {
-        name: `replitauth:${domain}`,
+        name: `oauth:${domain}`,
         config,
         scope: "openid email profile offline_access",
         callbackURL: `https://${domain}/api/callback`,
@@ -102,14 +105,14 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    passport.authenticate(`oauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
+    passport.authenticate(`oauth:${req.hostname}`, {
       successReturnToOrRedirect: "/",
       failureRedirect: "/api/login",
     })(req, res, next);
@@ -119,7 +122,7 @@ export async function setupAuth(app: Express) {
     req.logout(() => {
       res.redirect(
         client.buildEndSessionUrl(config, {
-          client_id: process.env.REPL_ID!,
+          client_id: process.env.CLIENT_ID!,
           post_logout_redirect_uri: `${req.protocol}://${req.hostname}`,
         }).href
       );
