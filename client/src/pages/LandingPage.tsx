@@ -130,6 +130,16 @@ const LandingPage = () => {
                     ? 'text-[#2D71A8] hover:text-[#1D5A8A]'
                     : 'text-blue-100 hover:text-white'
                 }`}
+                onClick={() => navigate("/system-architecture")}
+              >
+                Architecture
+              </button>
+              <button 
+                className={`text-sm font-medium transition-all ${
+                  scrollPosition > 50 
+                    ? 'text-[#2D71A8] hover:text-[#1D5A8A]'
+                    : 'text-blue-100 hover:text-white'
+                }`}
                 onClick={() => navigate("/")}
               >
                 Sign in
@@ -191,6 +201,15 @@ const LandingPage = () => {
               </a>
             ))}
             <div className="pt-2 flex flex-col space-y-3">
+              <button 
+                className="w-full py-2 text-center text-[#2D71A8] hover:text-[#1D5A8A] font-medium"
+                onClick={() => {
+                  navigate("/system-architecture");
+                  setIsMenuOpen(false);
+                }}
+              >
+                System Architecture
+              </button>
               <button 
                 className="w-full py-2 text-center text-[#2D71A8] hover:text-[#1D5A8A] font-medium"
                 onClick={() => navigate("/")}

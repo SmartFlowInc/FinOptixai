@@ -19,6 +19,7 @@ import Settings from "@/pages/Settings";
 import MobileDashboard from "@/pages/MobileDashboard";
 import EnhancedDashboard from "@/pages/EnhancedDashboard";
 import LandingPage from "@/pages/LandingPage";
+import SystemArchitecture from "@/pages/SystemArchitecture";
 import NotFound from "@/pages/not-found";
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
             <Route path="/calendar" component={Calendar} />
             <Route path="/settings" component={Settings} />
             <Route path="/mobile-dashboard" component={MobileDashboard} />
+            <Route path="/system-architecture" component={SystemArchitecture} />
             <Route component={NotFound} />
           </Switch>
         </Layout>
