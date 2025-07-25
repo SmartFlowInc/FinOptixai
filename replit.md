@@ -13,6 +13,7 @@ Preferred communication style: Simple, everyday language.
 - **Landing Page as Default Route (January 2025):** Updated routing structure to make LandingPage the default route at `/` instead of Dashboard, providing better user onboarding experience
 - **Platform-Agnostic Branding (January 2025):** Removed all platform-specific references and branding to make FinOptix platform-independent, updated authentication to use generic OAuth 2.0/OpenID Connect terminology
 - **Complete Branding Update (January 2025):** Changed all references from "Financial Hub" to "FinOptix" throughout documentation, updated database names and repository references for consistency
+- **System Architecture Documentation (January 2025):** Added comprehensive enterprise-grade system architecture section to README.md with detailed diagrams, performance specs, security architecture, scalability strategy, technology stack details, data flow diagrams, monitoring setup, and disaster recovery procedures
 
 ## System Architecture
 
