@@ -8,6 +8,10 @@ FinOptix is an enterprise-grade financial planning and analysis platform that pr
 
 Preferred communication style: Simple, everyday language.
 
+## Recent Changes
+
+- **Landing Page as Default Route (January 2025):** Updated routing structure to make LandingPage the default route at `/` instead of Dashboard, providing better user onboarding experience
+
 ## System Architecture
 
 ### Frontend Architecture

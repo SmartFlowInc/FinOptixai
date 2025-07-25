@@ -24,12 +24,12 @@ import NotFound from "@/pages/not-found";
 function App() {
   return (
     <Switch>
-      <Route path="/landing" component={LandingPage} />
+      <Route path="/" component={LandingPage} />
       
       <Route>
         <Layout>
           <Switch>
-            <Route path="/" component={Dashboard} />
+            <Route path="/dashboard" component={Dashboard} />
             <Route path="/enhanced-dashboard" component={Dashboard} />
             <Route path="/advanced-dashboard" component={AdvancedDashboard} />
             <Route path="/budgeting" component={Budgeting} />
