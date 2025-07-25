@@ -100,7 +100,7 @@ FinOptix is an enterprise-grade financial planning and analysis platform designe
 
 ### High-Level Architecture
 
-Financial Hub follows a modern web application architecture with clean separation of concerns:
+FinOptix follows a modern web application architecture with clean separation of concerns:
 
 ```
 ┌─────────────────────────────────┐        ┌───────────────────────────────┐
@@ -223,8 +223,8 @@ For real-time updates and notifications, we use a pub/sub pattern:
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/financial-hub.git
-cd financial-hub
+git clone https://github.com/yourusername/finoptix.git
+cd finoptix
 ```
 
 2. **Install dependencies**
@@ -239,11 +239,11 @@ Create a `.env` file in the root directory with the following variables:
 
 ```
 # Database
-DATABASE_URL=postgresql://username:password@localhost:5432/financial_hub
+DATABASE_URL=postgresql://username:password@localhost:5432/finoptix
 PGHOST=localhost
 PGUSER=username
 PGPASSWORD=password
-PGDATABASE=financial_hub
+PGDATABASE=finoptix
 PGPORT=5432
 
 # Authentication
@@ -268,7 +268,7 @@ npm run dev
 
 ## Data Integration
 
-Financial Hub provides robust data integration capabilities to connect with external financial systems.
+FinOptix provides robust data integration capabilities to connect with external financial systems.
 
 ### Supported Integration Sources
 
@@ -341,7 +341,7 @@ const etlPipeline = {
 
 ## UI & Component System
 
-Financial Hub uses a component-based UI architecture for maintainability and consistency.
+FinOptix uses a component-based UI architecture for maintainability and consistency.
 
 ### Core Component System
 
@@ -415,7 +415,7 @@ Data visualization is powered by Nivo.js with standardized configurations:
 
 ### Authentication System
 
-Financial Hub uses OpenID Connect with OAuth 2.0 as the identity provider:
+FinOptix uses OpenID Connect with OAuth 2.0 as the identity provider:
 
 1. **Authentication Flow**:
    - User clicks "Log In"
@@ -463,7 +463,7 @@ The platform implements role-based access control (RBAC):
 
 ## AI Features Implementation
 
-Financial Hub leverages OpenAI's powerful models to provide intelligent financial insights.
+FinOptix leverages OpenAI's powerful models to provide intelligent financial insights.
 
 ### AI Capabilities
 
@@ -555,7 +555,7 @@ Format the response as a JSON object with the following structure:
 
 ## Mobile Experience
 
-Financial Hub provides a comprehensive mobile experience for on-the-go financial management.
+FinOptix provides a comprehensive mobile experience for on-the-go financial management.
 
 ### Mobile Architecture
 
@@ -744,11 +744,11 @@ NODE_ENV=production
 PORT=3000
 
 # Database Configuration
-DATABASE_URL=postgresql://username:password@localhost:5432/financial_hub
+DATABASE_URL=postgresql://username:password@localhost:5432/finoptix
 PGHOST=localhost
 PGUSER=username
 PGPASSWORD=password
-PGDATABASE=financial_hub
+PGDATABASE=finoptix
 PGPORT=5432
 
 # Authentication
@@ -780,7 +780,7 @@ For larger deployments, consider:
 
 ## Contributing
 
-We welcome contributions to the Demystifi platform!
+We welcome contributions to the FinOptix platform!
 
 ### Contribution Guidelines
 
@@ -812,9 +812,9 @@ We welcome contributions to the Demystifi platform!
 
 ## License
 
-Financial Hub is licensed under the [MIT License](LICENSE).
+FinOptix is licensed under the [MIT License](LICENSE).
 
-Copyright (c) 2025 Financial Hub Team
+Copyright (c) 2025 FinOptix Team
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
